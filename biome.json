@@ -23,6 +23,9 @@
 			"style": {
 				"useImportType": "off",
 				"useSelfClosingElements": "warn"
+			},
+			"complexity": {
+				"noForEach": "warn"
 			}
 		}
 	},
