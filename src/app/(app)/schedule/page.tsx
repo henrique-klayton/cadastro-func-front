@@ -22,29 +22,23 @@ export default async function SchedulePage() {
 	const columns: ListingTableProps<ScheduleDto>["columns"] = [
 		{
 			dataIndex: "id",
-			key: "id",
 			title: "Id",
 		},
 		{
 			dataIndex: "startTime",
-			key: "startTime",
 			title: "Hora Início",
 		},
 		{
 			dataIndex: "endTime",
-			key: "endTime",
 			title: "Hora Fim",
 		},
 		{
 			dataIndex: "type",
-			key: "type",
 			title: "Tipo",
 		},
 		{
 			dataIndex: "status",
-			key: "status",
 			title: "Status",
-			
 		},
 	];
 

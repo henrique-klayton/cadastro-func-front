@@ -2,16 +2,15 @@
 import { Table } from "antd";
 import { ColumnProps } from "antd/es/table";
 
-interface RequiredProps {
-	title: string;
-	dataIndex: string;
-	key: string;
-}
+export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
+export type RequiredColumnProps<T> = Required<
+	Pick<ColumnProps<T>, "title" | "dataIndex">
+>;
 
 export interface ListingTableProps<T extends { [key: string]: unknown }> {
 	data: T[];
 	rowKey: keyof T;
-	columns: Array<ColumnProps<T> & RequiredProps>;
+	columns: Array<TableColumn<T>>;
 }
 
 export default function ListingTable<T extends { [key: string]: unknown }>({
@@ -21,7 +20,7 @@ export default function ListingTable<T extends { [key: string]: unknown }>({
 }: ListingTableProps<T>) {
 	const tableColumns = [];
 	for (const item of columns) {
-		tableColumns.push(<Table.Column {...item} key={item.key} />);
+		tableColumns.push(<Table.Column {...item} />);
 	}
 
 	return (
