@@ -29,8 +29,8 @@ export default function Sidebar() {
 	};
 
 	return (
-		<nav className="w-100 h-100">
-			<Menu onClick={onClick} mode="inline" items={items} />
+		<nav className="contents">
+			<Menu className="h-full" onClick={onClick} mode="inline" items={items} />
 		</nav>
 	);
 }
