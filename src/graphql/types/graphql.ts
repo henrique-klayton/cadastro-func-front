@@ -16,7 +16,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format. */
   DateTime: { input: any; output: any; }
-  /** Format representating time with timezone */
+  /** Format representating time with timezone in the format HH:mm:ss.sssZ */
   Time: { input: any; output: any; }
 };
 
@@ -235,7 +235,7 @@ export type GetSchedulesQuery = { __typename?: 'Query', scheduleList: Array<(
     & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
   )> };
 
-export type ScheduleFragment = { __typename?: 'ScheduleDto', id: number, startTime: any, endTime: any, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
+export type ScheduleFragment = { __typename?: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -256,6 +256,7 @@ export const ScheduleFragmentDoc = new TypedDocumentString(`
   id
   startTime
   endTime
+  type
   status
 }
     `, {"fragmentName":"Schedule"}) as unknown as TypedDocumentString<ScheduleFragment, unknown>;
@@ -269,5 +270,6 @@ export const GetSchedulesDocument = new TypedDocumentString(`
   id
   startTime
   endTime
+  type
   status
 }`) as unknown as TypedDocumentString<GetSchedulesQuery, GetSchedulesQueryVariables>;

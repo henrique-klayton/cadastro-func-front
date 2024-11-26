@@ -16,7 +16,7 @@ import * as types from './graphql';
  */
 const documents = {
     "\n\t\tquery GetSchedules {\n\t\t\tscheduleList {\n\t\t\t\t...Schedule\n\t\t\t}\n\t\t}\n\t": types.GetSchedulesDocument,
-    "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
+    "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
 };
 
 /**
@@ -26,7 +26,7 @@ export function graphql(source: "\n\t\tquery GetSchedules {\n\t\t\tscheduleList 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\tstatus\n\t}\n"): typeof import('./graphql').ScheduleFragmentDoc;
+export function graphql(source: "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n"): typeof import('./graphql').ScheduleFragmentDoc;
 
 
 export function graphql(source: string) {
