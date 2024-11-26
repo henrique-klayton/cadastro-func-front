@@ -1,0 +1,6 @@
+- [x] Table component
+- [x] Schedules table
+- [ ] Employees table
+- [ ] Skills table
+- [ ] Add table filtering
+- [ ] Add table pagination
