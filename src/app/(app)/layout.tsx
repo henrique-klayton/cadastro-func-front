@@ -1,7 +1,7 @@
 import Sidebar from "@components/sidebar";
 import { Layout } from "antd";
-import { Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
+import { Content } from "antd/es/layout/layout";
 
 export default function AppLayout({
 	children,
@@ -13,7 +13,7 @@ export default function AppLayout({
 			<Sider width="20%">
 				<Sidebar />
 			</Sider>
-			<Content>{children}</Content>
+			<Content className="m-2">{children}</Content>
 		</Layout>
 	);
 }
