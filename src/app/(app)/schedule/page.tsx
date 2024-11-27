@@ -1,4 +1,4 @@
-import ListingTable, { ListingTableProps } from "@components/table";
+import DataTable, { DataTableProps } from "@components/data-table";
 import getUrqlClient from "@graphql/client";
 import Schedule from "@graphql/fragments/schedule";
 import { graphql } from "@graphql/types/gql";
@@ -18,8 +18,7 @@ export default async function SchedulePage() {
 		.query(getSchedulesListQuery.toString(), {})
 		.toPromise();
 	const schedules = queryResult?.scheduleList.map((item) => Schedule(item));
-	console.log(schedules);
-	const columns: ListingTableProps<ScheduleDto>["columns"] = [
+	const columns: DataTableProps<ScheduleDto>["columns"] = [
 		{
 			dataIndex: "id",
 			title: "Id",
@@ -42,5 +41,5 @@ export default async function SchedulePage() {
 		},
 	];
 
-	return <ListingTable data={schedules ?? []} rowKey="id" columns={columns} />;
+	return <DataTable data={schedules ?? []} rowKey="id" columns={columns} />;
 }
