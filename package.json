@@ -7,13 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-graphql": "graphql-codegen --watcher --config codegen.ts",
-    "predev": "ts-node --project ./tsconfig.node.json ./scripts/genAntdCss.tsx",
-    "prebuild": "cross-env NODE_ENV=production ts-node --project ./tsconfig.node.json ./scripts/genAntdCss.tsx"
+    "generate-graphql": "graphql-codegen --watcher --config codegen.ts"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.2",
-    "@ant-design/static-style-extract": "^1.0.3",
     "antd": "^5.22.2",
     "autoprefixer": "^10.4.20",
     "graphql": "^16.9.0",
@@ -31,11 +28,8 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "cross-env": "^7.0.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "ts-node": "^10.9.2",
-    "tslib": "^2.8.1",
     "typescript": "^5"
   }
 }
