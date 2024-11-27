@@ -9,7 +9,7 @@ export default function AppLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<Layout>
+		<Layout hasSider className="h-full w-full">
 			<Sider width="20%">
 				<Sidebar />
 			</Sider>
