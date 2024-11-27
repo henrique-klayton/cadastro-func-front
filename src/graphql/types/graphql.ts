@@ -217,7 +217,6 @@ export type SkillCreateDto = {
 export type SkillDto = {
   __typename?: 'SkillDto';
   description: Scalars['String']['output'];
-  employees?: Maybe<Array<EmployeeDto>>;
   id: Scalars['Int']['output'];
   status: Scalars['Boolean']['output'];
 };
@@ -235,7 +234,17 @@ export type GetSchedulesQuery = { __typename?: 'Query', scheduleList: Array<(
     & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
   )> };
 
+export type GetSkillsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSkillsQuery = { __typename?: 'Query', skillList: Array<(
+    { __typename?: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  )> };
+
 export type ScheduleFragment = { __typename?: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
+
+export type SkillFragment = { __typename?: 'SkillDto', id: number, description: string, status: boolean } & { ' $fragmentName'?: 'SkillFragment' };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -260,6 +269,13 @@ export const ScheduleFragmentDoc = new TypedDocumentString(`
   status
 }
     `, {"fragmentName":"Schedule"}) as unknown as TypedDocumentString<ScheduleFragment, unknown>;
+export const SkillFragmentDoc = new TypedDocumentString(`
+    fragment Skill on SkillDto {
+  id
+  description
+  status
+}
+    `, {"fragmentName":"Skill"}) as unknown as TypedDocumentString<SkillFragment, unknown>;
 export const GetSchedulesDocument = new TypedDocumentString(`
     query GetSchedules {
   scheduleList {
@@ -273,3 +289,14 @@ export const GetSchedulesDocument = new TypedDocumentString(`
   type
   status
 }`) as unknown as TypedDocumentString<GetSchedulesQuery, GetSchedulesQueryVariables>;
+export const GetSkillsDocument = new TypedDocumentString(`
+    query GetSkills {
+  skillList {
+    ...Skill
+  }
+}
+    fragment Skill on SkillDto {
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<GetSkillsQuery, GetSkillsQueryVariables>;
