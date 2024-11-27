@@ -1,6 +1,7 @@
 "use client";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { ColumnProps } from "antd/es/table";
+import { ReactNode } from "react";
 
 export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
 export interface RequiredColumnProps<T > {
@@ -21,6 +22,11 @@ export default function ListingTable<T extends object>({
 }: ListingTableProps<T>) {
 	const tableColumns = [];
 	for (const item of columns) {
+		if (item.dataIndex === "status") {
+			console.log(item.dataIndex);
+			item.render = renderStatus as () => ReactNode;
+		}
+
 		tableColumns.push(
 			<Table.Column {...item} key={item.key ?? item.dataIndex} />,
 		);
@@ -32,3 +38,8 @@ export default function ListingTable<T extends object>({
 		</Table>
 	);
 }
+
+export const renderStatus = (_: unknown, { status }: { status: boolean }) => {
+	const color = status ? "green" : "red";
+	return <Tag color={color}>{status ? "Ativo" : "Inativo"}</Tag>;
+};
