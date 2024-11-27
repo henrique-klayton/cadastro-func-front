@@ -1,6 +1,10 @@
 - [x] Table component
 - [x] Schedules table
-- [ ] Employees table
-- [ ] Skills table
+- [x] Employees table
+- [x] Skills table
+- [ ] Add table actions
+  - [ ] Add
+  - [ ] Edit
+  - [ ] Delete
 - [ ] Add table filtering
 - [ ] Add table pagination

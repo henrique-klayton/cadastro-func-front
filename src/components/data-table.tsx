@@ -26,9 +26,9 @@ export default function DataTable<T extends object>({
 	columns: columnsProps,
 }: DataTableProps<T>) {
 	const columns = columnsProps.map((item) => {
-		if (item.dataIndex === "status") {
+		if (item.dataIndex === "status")
 			item.render = renderStatus as () => ReactNode;
-		}
+		if (item.align != null) item.align = "center";
 		return <Table.Column {...item} key={item.key ?? item.dataIndex} />;
 	});
 

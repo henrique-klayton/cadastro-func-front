@@ -226,6 +226,14 @@ export type SkillUpdateDto = {
   status?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type GetEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEmployeesQuery = { __typename?: 'Query', employeeList: Array<(
+    { __typename?: 'EmployeeDto' }
+    & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
+  )> };
+
 export type GetSchedulesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -241,6 +249,8 @@ export type GetSkillsQuery = { __typename?: 'Query', skillList: Array<(
     { __typename?: 'SkillDto' }
     & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
   )> };
+
+export type EmployeeFragment = { __typename?: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean } & { ' $fragmentName'?: 'EmployeeFragment' };
 
 export type ScheduleFragment = { __typename?: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
 
@@ -260,6 +270,15 @@ export class TypedDocumentString<TResult, TVariables>
     return this.value;
   }
 }
+export const EmployeeFragmentDoc = new TypedDocumentString(`
+    fragment Employee on EmployeeDto {
+  id
+  firstName
+  lastName
+  birthDate
+  status
+}
+    `, {"fragmentName":"Employee"}) as unknown as TypedDocumentString<EmployeeFragment, unknown>;
 export const ScheduleFragmentDoc = new TypedDocumentString(`
     fragment Schedule on ScheduleDto {
   id
@@ -276,6 +295,19 @@ export const SkillFragmentDoc = new TypedDocumentString(`
   status
 }
     `, {"fragmentName":"Skill"}) as unknown as TypedDocumentString<SkillFragment, unknown>;
+export const GetEmployeesDocument = new TypedDocumentString(`
+    query GetEmployees {
+  employeeList {
+    ...Employee
+  }
+}
+    fragment Employee on EmployeeDto {
+  id
+  firstName
+  lastName
+  birthDate
+  status
+}`) as unknown as TypedDocumentString<GetEmployeesQuery, GetEmployeesQueryVariables>;
 export const GetSchedulesDocument = new TypedDocumentString(`
     query GetSchedules {
   scheduleList {
