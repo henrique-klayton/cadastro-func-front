@@ -15,12 +15,18 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
+    "\n\t\tquery GetEmployees {\n\t\t\temployeeList {\n\t\t\t\t...Employee\n\t\t\t}\n\t\t}\n\t": types.GetEmployeesDocument,
     "\n\t\tquery GetSchedules {\n\t\t\tscheduleList {\n\t\t\t\t...Schedule\n\t\t\t}\n\t\t}\n\t": types.GetSchedulesDocument,
     "\n\t\tquery GetSkills {\n\t\t\tskillList {\n\t\t\t\t...Skill\n\t\t\t}\n\t\t}\n\t": types.GetSkillsDocument,
+    "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t}\n": types.EmployeeFragmentDoc,
     "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
     "\n\tfragment Skill on SkillDto {\n\t\tid\n\t\tdescription\n\t\tstatus\n\t}\n": types.SkillFragmentDoc,
 };
 
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\t\tquery GetEmployees {\n\t\t\temployeeList {\n\t\t\t\t...Employee\n\t\t\t}\n\t\t}\n\t"): typeof import('./graphql').GetEmployeesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -29,6 +35,10 @@ export function graphql(source: "\n\t\tquery GetSchedules {\n\t\t\tscheduleList 
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\t\tquery GetSkills {\n\t\t\tskillList {\n\t\t\t\t...Skill\n\t\t\t}\n\t\t}\n\t"): typeof import('./graphql').GetSkillsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t}\n"): typeof import('./graphql').EmployeeFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
