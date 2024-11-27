@@ -15,31 +15,26 @@ export interface DataTableProps<T> {
 	columns: Array<TableColumn<T>>;
 }
 
-export default function DataTable<T extends object>({
-	data,
-	rowKey,
-	columns,
-}: DataTableProps<T>) {
-	const tableColumns = [];
-	for (const item of columns) {
-		if (item.dataIndex === "status") {
-			console.log(item.dataIndex);
-			item.render = renderStatus as () => ReactNode;
-		}
-
-		tableColumns.push(
-			<Table.Column {...item} key={item.key ?? item.dataIndex} />,
-		);
-	}
-
-	return (
-		<Table<T> dataSource={data} rowKey={rowKey}>
-			{tableColumns}
-		</Table>
-	);
-}
-
-export const renderStatus = (_: unknown, { status }: { status: boolean }) => {
+const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";
 	return <Tag color={color}>{status ? "Ativo" : "Inativo"}</Tag>;
 };
+
+export default function DataTable<T extends object>({
+	data,
+	rowKey,
+	columns: columnsProps,
+}: DataTableProps<T>) {
+	const columns = columnsProps.map((item) => {
+		if (item.dataIndex === "status") {
+			item.render = renderStatus as () => ReactNode;
+		}
+		return <Table.Column {...item} key={item.key ?? item.dataIndex} />;
+	});
+
+	return (
+		<Table<T> dataSource={data} rowKey={rowKey}>
+			{columns}
+		</Table>
+	);
+}
