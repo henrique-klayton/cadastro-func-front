@@ -1,8 +1,8 @@
 import DataTable, { DataTableProps } from "@components/data-table";
 import getUrqlClient from "@graphql/client";
-import Schedule from "@graphql/fragments/schedule";
-import { graphql } from "@graphql/types/gql";
-import { ScheduleDto } from "@graphql/types/graphql";
+import Schedule from "@fragments/schedule";
+import { graphql } from "@graphql-types/gql";
+import { ScheduleDto } from "@graphql-types/graphql";
 
 export default async function SchedulePage() {
 	const getSchedulesListQuery = graphql(`

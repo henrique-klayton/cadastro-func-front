@@ -1,6 +1,6 @@
 "use client";
 import DataTable, { DataTableProps } from "@components/data-table";
-import { EmployeeType } from "@graphql/fragments/employee";
+import { EmployeeType } from "@fragments/employee";
 import { useEffect, useState } from "react";
 import { getEmployees } from "./actions";
 

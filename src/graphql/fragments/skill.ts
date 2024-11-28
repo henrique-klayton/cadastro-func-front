@@ -1,6 +1,6 @@
-import { FragmentType, useFragment } from "@graphql/types/fragment-masking";
-import { graphql } from "@graphql/types/gql";
-import { SkillDto } from "@graphql/types/graphql";
+import { FragmentType, useFragment } from "@graphql-types/fragment-masking";
+import { graphql } from "@graphql-types/gql";
+import { SkillDto } from "@graphql-types/graphql";
 
 export const SkillFragment = graphql(`
 	fragment Skill on SkillDto {

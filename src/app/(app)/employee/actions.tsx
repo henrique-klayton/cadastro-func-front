@@ -1,7 +1,7 @@
 "use server";
+import { graphql } from "@graphql-types/gql";
 import getUrqlClient from "@graphql/client";
-import Employee from "@graphql/fragments/employee";
-import { graphql } from "@graphql/types";
+import Employee from "@fragments/employee";
 
 export async function getEmployees() {
 	const getEmployeesListQuery = graphql(`
