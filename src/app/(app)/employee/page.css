@@ -1,0 +1,9 @@
+.create-button {
+	width: 60px;
+	height: 60px;
+
+	.ant-float-btn-icon {
+		font-size: 1.5rem;
+		width: 1.5rem;
+	}
+}
