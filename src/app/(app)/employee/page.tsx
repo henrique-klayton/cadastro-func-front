@@ -1,8 +1,12 @@
 "use client";
 import DataTable, { DataTableProps } from "@components/data-table";
+import FormModal from "@components/form-modal";
 import { EmployeeType } from "@fragments/employee";
+import { FloatButton } from "antd";
 import { useEffect, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { getEmployees } from "./actions";
+import "./page.css";
 
 export default function EmployeePage() {
 	const [isFormOpen, setIsFormOpen] = useState(false);
@@ -59,5 +63,15 @@ export default function EmployeePage() {
 		},
 	];
 
-	return <DataTable data={employees} rowKey="id" columns={columns} />;
+	return (
+		<>
+			<DataTable data={employees} rowKey="id" columns={columns} />
+			<FloatButton
+				className="create-button"
+				type="primary"
+				icon={<AiOutlinePlus />}
+			/>
+			<FormModal title="Cadastrar Funcionário" openState={isFormOpen} />
+		</>
+	);
 }
