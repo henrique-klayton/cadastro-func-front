@@ -22,12 +22,11 @@ export default function EmployeePage() {
 
 	useEffect(() => {
 		const getEmployeesList = async () => {
-			try {
-				const employees = await getEmployees();
-				setEmployees(employees);
-			} catch (err) {
+			const employees = await getEmployees().catch((err) => {
 				console.error(err);
-			}
+				return [];
+			});
+			setEmployees(employees);
 		};
 
 		getEmployeesList();
