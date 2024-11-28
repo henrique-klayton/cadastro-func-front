@@ -1,10 +1,10 @@
 import { FragmentType, useFragment } from "@graphql-types/fragment-masking";
 import { graphql } from "@graphql-types/gql";
-import { EmployeeDto } from "@graphql-types/graphql";
+import { EmployeeFragment as EmployeeFragmentType } from "@graphql-types/graphql";
 
 export type EmployeeType = Omit<
-	EmployeeDto,
-	"createdAt" | "updatedAt" | "scheduleId"
+	EmployeeFragmentType,
+	"createdAt" | "updatedAt"
 >;
 
 export const EmployeeFragment = graphql(`
