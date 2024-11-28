@@ -1,5 +1,5 @@
 "use server";
-import Employee from "@fragments/employee";
+import Employee, { EmployeeType } from "@fragments/employee";
 import { graphql } from "@graphql-types/gql";
 import { EmployeeCreateDto } from "@graphql-types/graphql";
 import getUrqlClient from "@graphql/client";
@@ -44,9 +44,11 @@ const deleteEmployeeMutation = graphql(`
 	}
 `).toString();
 
-export async function getEmployees() {
+export async function getEmployees(
+	filterStatus = false,
+): Promise<EmployeeType[]> {
 	const { data: queryResult } = await getUrqlClient()
-		.query(getEmployeesListQuery, {})
+		.query(getEmployeesListQuery, { filterStatus })
 		.toPromise();
 	const employees = queryResult?.employeeList.map((item) => Employee(item));
 	return employees ?? [];
