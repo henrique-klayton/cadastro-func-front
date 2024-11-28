@@ -1,4 +1,5 @@
 import { CodegenConfig } from "@graphql-codegen/cli";
+import { addTypenameSelectionDocumentTransform } from "@graphql-codegen/client-preset";
 import graphqlConfig from "./graphql.config";
 
 const config: CodegenConfig = {
@@ -10,8 +11,9 @@ const config: CodegenConfig = {
 			preset: "client",
 			config: {
 				fragmentMasking: { unmaskFunctionName: "getFragmentData" },
-				documentMode: "string"
+				documentMode: "string",
 			},
+			documentTransforms: [addTypenameSelectionDocumentTransform],
 		},
 	},
 };
