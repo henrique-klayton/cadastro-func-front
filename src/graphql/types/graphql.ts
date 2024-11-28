@@ -229,32 +229,32 @@ export type SkillUpdateDto = {
 export type GetEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEmployeesQuery = { __typename?: 'Query', employeeList: Array<(
-    { __typename?: 'EmployeeDto' }
+export type GetEmployeesQuery = { __typename: 'Query', employeeList: Array<(
+    { __typename: 'EmployeeDto' }
     & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
   )> };
 
 export type GetSchedulesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSchedulesQuery = { __typename?: 'Query', scheduleList: Array<(
-    { __typename?: 'ScheduleDto' }
+export type GetSchedulesQuery = { __typename: 'Query', scheduleList: Array<(
+    { __typename: 'ScheduleDto' }
     & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
   )> };
 
 export type GetSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSkillsQuery = { __typename?: 'Query', skillList: Array<(
-    { __typename?: 'SkillDto' }
+export type GetSkillsQuery = { __typename: 'Query', skillList: Array<(
+    { __typename: 'SkillDto' }
     & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
   )> };
 
-export type EmployeeFragment = { __typename?: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean } & { ' $fragmentName'?: 'EmployeeFragment' };
+export type EmployeeFragment = { __typename: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean } & { ' $fragmentName'?: 'EmployeeFragment' };
 
-export type ScheduleFragment = { __typename?: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
+export type ScheduleFragment = { __typename: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
 
-export type SkillFragment = { __typename?: 'SkillDto', id: number, description: string, status: boolean } & { ' $fragmentName'?: 'SkillFragment' };
+export type SkillFragment = { __typename: 'SkillDto', id: number, description: string, status: boolean } & { ' $fragmentName'?: 'SkillFragment' };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -272,6 +272,7 @@ export class TypedDocumentString<TResult, TVariables>
 }
 export const EmployeeFragmentDoc = new TypedDocumentString(`
     fragment Employee on EmployeeDto {
+  __typename
   id
   firstName
   lastName
@@ -281,6 +282,7 @@ export const EmployeeFragmentDoc = new TypedDocumentString(`
     `, {"fragmentName":"Employee"}) as unknown as TypedDocumentString<EmployeeFragment, unknown>;
 export const ScheduleFragmentDoc = new TypedDocumentString(`
     fragment Schedule on ScheduleDto {
+  __typename
   id
   startTime
   endTime
@@ -290,6 +292,7 @@ export const ScheduleFragmentDoc = new TypedDocumentString(`
     `, {"fragmentName":"Schedule"}) as unknown as TypedDocumentString<ScheduleFragment, unknown>;
 export const SkillFragmentDoc = new TypedDocumentString(`
     fragment Skill on SkillDto {
+  __typename
   id
   description
   status
@@ -297,11 +300,14 @@ export const SkillFragmentDoc = new TypedDocumentString(`
     `, {"fragmentName":"Skill"}) as unknown as TypedDocumentString<SkillFragment, unknown>;
 export const GetEmployeesDocument = new TypedDocumentString(`
     query GetEmployees {
+  __typename
   employeeList {
+    __typename
     ...Employee
   }
 }
     fragment Employee on EmployeeDto {
+  __typename
   id
   firstName
   lastName
@@ -310,11 +316,14 @@ export const GetEmployeesDocument = new TypedDocumentString(`
 }`) as unknown as TypedDocumentString<GetEmployeesQuery, GetEmployeesQueryVariables>;
 export const GetSchedulesDocument = new TypedDocumentString(`
     query GetSchedules {
+  __typename
   scheduleList {
+    __typename
     ...Schedule
   }
 }
     fragment Schedule on ScheduleDto {
+  __typename
   id
   startTime
   endTime
@@ -323,11 +332,14 @@ export const GetSchedulesDocument = new TypedDocumentString(`
 }`) as unknown as TypedDocumentString<GetSchedulesQuery, GetSchedulesQueryVariables>;
 export const GetSkillsDocument = new TypedDocumentString(`
     query GetSkills {
+  __typename
   skillList {
+    __typename
     ...Skill
   }
 }
     fragment Skill on SkillDto {
+  __typename
   id
   description
   status
