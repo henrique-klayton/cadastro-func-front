@@ -19,6 +19,8 @@
     ],
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@fragments/*": ["./src/graphql/fragments/*"],
+      "@graphql-types/*": ["./src/graphql/types/*"],
       "@graphql/*": ["./src/graphql/*"]
     }
   },

@@ -1,8 +1,8 @@
 import DataTable, { TableColumn } from "@components/data-table";
 import getUrqlClient from "@graphql/client";
-import Skill from "@graphql/fragments/skill";
-import { graphql } from "@graphql/types/gql";
-import { SkillDto } from "@graphql/types/graphql";
+import Skill from "@fragments/skill";
+import { graphql } from "@graphql-types/gql";
+import { SkillDto } from "@graphql-types/graphql";
 
 export default async function SchedulePage() {
 	const getSkillsListQuery = graphql(`
