@@ -1,22 +1,38 @@
+"use client";
 import DataTable, { DataTableProps } from "@components/data-table";
-import getUrqlClient from "@graphql/client";
-import Employee, { EmployeeType } from "@graphql/fragments/employee";
-import { graphql } from "@graphql/types/gql";
+import { EmployeeType } from "@graphql/fragments/employee";
+import { useEffect, useState } from "react";
+import { getEmployees } from "./actions";
 
-export default async function EmployeePage() {
-	const getEmployeesListQuery = graphql(`
-		query GetEmployees {
-			employeeList {
-				...Employee
+export default function EmployeePage() {
+	const [isFormOpen, setIsFormOpen] = useState(false);
+	const [employees, setEmployees] = useState<EmployeeType[]>([]);
+
+	const showFormModal = () => {
+		setIsFormOpen(true);
+	};
+
+	const handleOk = () => {
+		setIsFormOpen(false);
+	};
+
+	const handleCancel = () => {
+		setIsFormOpen(false);
+	};
+
+	useEffect(() => {
+		const getEmployeesList = async () => {
+			try {
+				const employees = await getEmployees();
+				setEmployees(employees);
+			} catch (err) {
+				console.error(err);
 			}
-		}
-	`);
+		};
 
-	const client = getUrqlClient();
-	const { data: queryResult } = await client
-		.query(getEmployeesListQuery.toString(), {})
-		.toPromise();
-	const employee = queryResult?.employeeList.map((item) => Employee(item));
+		getEmployeesList();
+	}, []);
+
 	const columns: DataTableProps<EmployeeType>["columns"] = [
 		{
 			dataIndex: "id",
@@ -44,5 +60,5 @@ export default async function EmployeePage() {
 		},
 	];
 
-	return <DataTable data={employee ?? []} rowKey="id" columns={columns} />;
+	return <DataTable data={employees} rowKey="id" columns={columns} />;
 }
