@@ -40,6 +40,20 @@ export type EmployeeDto = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type EmployeeFullDto = {
+  __typename?: 'EmployeeFullDto';
+  birthDate: Scalars['DateTime']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  firstName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  lastName: Scalars['String']['output'];
+  schedule: ScheduleDto;
+  scheduleId?: Maybe<Scalars['Int']['output']>;
+  skills: Array<SkillDto>;
+  status: Scalars['Boolean']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
 export type EmployeeUpdateDto = {
   birthDate?: InputMaybe<Scalars['DateTime']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
@@ -138,6 +152,7 @@ export type Query = {
   __typename?: 'Query';
   employee: EmployeeDto;
   employeeList: Array<EmployeeDto>;
+  employeeWithRelations: EmployeeFullDto;
   schedule: ScheduleDto;
   scheduleList: Array<ScheduleDto>;
   skill: SkillDto;
@@ -154,6 +169,11 @@ export type QueryEmployeeListArgs = {
   filterStatus?: Scalars['Boolean']['input'];
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
+};
+
+
+export type QueryEmployeeWithRelationsArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -226,13 +246,56 @@ export type SkillUpdateDto = {
   status?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type GetEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetFullEmployeeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type GetFullEmployeeQuery = { __typename: 'Query', employeeWithRelations: (
+    { __typename: 'EmployeeFullDto' }
+    & { ' $fragmentRefs'?: { 'FullEmployeeFragment': FullEmployeeFragment } }
+  ) };
+
+export type GetEmployeesQueryVariables = Exact<{
+  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
 
 
 export type GetEmployeesQuery = { __typename: 'Query', employeeList: Array<(
     { __typename: 'EmployeeDto' }
     & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
   )> };
+
+export type CreateEmployeeMutationVariables = Exact<{
+  employee: EmployeeCreateDto;
+}>;
+
+
+export type CreateEmployeeMutation = { __typename: 'Mutation', createEmployee: (
+    { __typename: 'EmployeeDto' }
+    & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
+  ) };
+
+export type UpdateEmployeeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+  employee: EmployeeUpdateDto;
+}>;
+
+
+export type UpdateEmployeeMutation = { __typename: 'Mutation', updateEmployee: (
+    { __typename: 'EmployeeDto' }
+    & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
+  ) };
+
+export type DeleteEmployeeMutationVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteEmployeeMutation = { __typename: 'Mutation', deleteEmployee: (
+    { __typename: 'EmployeeDto' }
+    & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
+  ) };
 
 export type GetSchedulesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -251,6 +314,14 @@ export type GetSkillsQuery = { __typename: 'Query', skillList: Array<(
   )> };
 
 export type EmployeeFragment = { __typename: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean } & { ' $fragmentName'?: 'EmployeeFragment' };
+
+export type FullEmployeeFragment = { __typename: 'EmployeeFullDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean, schedule: (
+    { __typename: 'ScheduleDto' }
+    & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
+  ), skills: Array<(
+    { __typename: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  )> } & { ' $fragmentName'?: 'FullEmployeeFragment' };
 
 export type ScheduleFragment = { __typename: 'ScheduleDto', id: number, startTime: any, endTime: any, type: ScheduleType, status: boolean } & { ' $fragmentName'?: 'ScheduleFragment' };
 
@@ -298,10 +369,79 @@ export const SkillFragmentDoc = new TypedDocumentString(`
   status
 }
     `, {"fragmentName":"Skill"}) as unknown as TypedDocumentString<SkillFragment, unknown>;
-export const GetEmployeesDocument = new TypedDocumentString(`
-    query GetEmployees {
+export const FullEmployeeFragmentDoc = new TypedDocumentString(`
+    fragment FullEmployee on EmployeeFullDto {
   __typename
-  employeeList {
+  id
+  firstName
+  lastName
+  birthDate
+  status
+  schedule {
+    __typename
+    ...Schedule
+  }
+  skills {
+    __typename
+    ...Skill
+  }
+}
+    fragment Schedule on ScheduleDto {
+  __typename
+  id
+  startTime
+  endTime
+  type
+  status
+}
+fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`, {"fragmentName":"FullEmployee"}) as unknown as TypedDocumentString<FullEmployeeFragment, unknown>;
+export const GetFullEmployeeDocument = new TypedDocumentString(`
+    query GetFullEmployee($id: ID!) {
+  __typename
+  employeeWithRelations(id: $id) {
+    __typename
+    ...FullEmployee
+  }
+}
+    fragment FullEmployee on EmployeeFullDto {
+  __typename
+  id
+  firstName
+  lastName
+  birthDate
+  status
+  schedule {
+    __typename
+    ...Schedule
+  }
+  skills {
+    __typename
+    ...Skill
+  }
+}
+fragment Schedule on ScheduleDto {
+  __typename
+  id
+  startTime
+  endTime
+  type
+  status
+}
+fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<GetFullEmployeeQuery, GetFullEmployeeQueryVariables>;
+export const GetEmployeesDocument = new TypedDocumentString(`
+    query GetEmployees($filterStatus: Boolean) {
+  __typename
+  employeeList(filterStatus: $filterStatus) {
     __typename
     ...Employee
   }
@@ -314,6 +454,54 @@ export const GetEmployeesDocument = new TypedDocumentString(`
   birthDate
   status
 }`) as unknown as TypedDocumentString<GetEmployeesQuery, GetEmployeesQueryVariables>;
+export const CreateEmployeeDocument = new TypedDocumentString(`
+    mutation CreateEmployee($employee: EmployeeCreateDto!) {
+  __typename
+  createEmployee(employee: $employee) {
+    __typename
+    ...Employee
+  }
+}
+    fragment Employee on EmployeeDto {
+  __typename
+  id
+  firstName
+  lastName
+  birthDate
+  status
+}`) as unknown as TypedDocumentString<CreateEmployeeMutation, CreateEmployeeMutationVariables>;
+export const UpdateEmployeeDocument = new TypedDocumentString(`
+    mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {
+  __typename
+  updateEmployee(id: $id, employee: $employee) {
+    __typename
+    ...Employee
+  }
+}
+    fragment Employee on EmployeeDto {
+  __typename
+  id
+  firstName
+  lastName
+  birthDate
+  status
+}`) as unknown as TypedDocumentString<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
+export const DeleteEmployeeDocument = new TypedDocumentString(`
+    mutation DeleteEmployee($id: ID!) {
+  __typename
+  deleteEmployee(id: $id) {
+    __typename
+    ...Employee
+  }
+}
+    fragment Employee on EmployeeDto {
+  __typename
+  id
+  firstName
+  lastName
+  birthDate
+  status
+}`) as unknown as TypedDocumentString<DeleteEmployeeMutation, DeleteEmployeeMutationVariables>;
 export const GetSchedulesDocument = new TypedDocumentString(`
     query GetSchedules {
   __typename
