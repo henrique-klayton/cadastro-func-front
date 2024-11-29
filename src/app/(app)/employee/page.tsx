@@ -1,6 +1,5 @@
 "use client";
 import DataTable, { DataTableProps } from "@components/data-table";
-import FormModal from "@components/form-modal";
 import { EmployeeType } from "@fragments/employee";
 import { FloatButton } from "antd";
 import { useEffect, useState } from "react";
@@ -71,7 +70,11 @@ export default function EmployeePage() {
 				type="primary"
 				icon={<AiOutlinePlus />}
 			/>
-			<FormModal title="Cadastrar Funcionário" openState={isFormOpen} />
+			{/* <FormModal
+				action={Actions.CREATE}
+				objectName="Funcionário"
+				openState={isFormOpen}
+			/> */}
 		</>
 	);
 }

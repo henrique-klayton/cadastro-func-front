@@ -3,13 +3,14 @@ import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { ColumnProps } from "antd/es/table";
 import { ReactNode } from "react";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
+import { HaveId } from "../../app/interfaces/have-id";
 
-export interface DataTableActions<T> {
+export interface DataTableActions<T extends HaveId> {
 	create?: (data: T) => Promise<unknown>;
 	update?: (data: T) => Promise<unknown>;
 	delete?: (data: T) => Promise<unknown>;
-	onUpdateClick: () => unknown;
-	onDeleteClick: () => unknown;
+	onUpdateClick: (id: T["id"]) => unknown;
+	onDeleteClick: (id: T["id"]) => unknown;
 }
 
 export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
@@ -18,7 +19,7 @@ export interface RequiredColumnProps<T> {
 	dataIndex: Extract<keyof T, string | number>;
 }
 
-export interface DataTableProps<T> {
+export interface DataTableProps<T extends HaveId> {
 	data: T[];
 	rowKey: keyof T;
 	columns: Array<TableColumn<T>>;
@@ -27,10 +28,14 @@ export interface DataTableProps<T> {
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";
-	return <Tag color={color}>{status ? "Ativo" : "Inativo"}</Tag>;
+	return (
+		<Tag className="leading-6" color={color}>
+			{status ? "ATIVO" : "INATIVO"}
+		</Tag>
+	);
 };
 
-export default function DataTable<T extends object>({
+export default function DataTable<T extends HaveId>({
 	data,
 	rowKey,
 	columns: columnsProps,
@@ -43,33 +48,24 @@ export default function DataTable<T extends object>({
 		return <Table.Column {...item} key={item.key ?? item.dataIndex} />;
 	});
 
-	const renderActions = () => {
+	const renderActions = (_: unknown, { id }: T) => {
 		return (
 			<>
-				<Flex
-					justify="flex-start"
-					align="center"
-					gap="0.5rem"
-					// className="text-2xl"
-				>
+				<Flex justify="flex-start" align="center" gap="0.5rem">
 					<Tooltip title="Editar">
 						<Button
 							icon={<AiOutlineForm />}
-							size="large"
 							color="primary"
 							variant="outlined"
-							// className="text-blue-600"
-							// onClick={actions.onUpdateClick}
+							onClick={() => actions?.onUpdateClick(id)}
 						/>
 					</Tooltip>
 					<Tooltip title="Remover">
 						<Button
 							danger
 							icon={<AiOutlineDelete />}
-							size="large"
 							variant="outlined"
-							// className="text-red-600"
-							// onClick={actions.onDeleteClick}
+							onClick={() => actions?.onDeleteClick(id)}
 						/>
 					</Tooltip>
 				</Flex>
@@ -82,7 +78,7 @@ export default function DataTable<T extends object>({
 	);
 
 	return (
-		<Table<T> dataSource={data} rowKey={rowKey}>
+		<Table<T> className="flex-auto" dataSource={data} rowKey={rowKey}>
 			{columns}
 		</Table>
 	);

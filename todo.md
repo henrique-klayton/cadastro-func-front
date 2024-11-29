@@ -2,10 +2,15 @@
 - [x] Schedules table
 - [x] Employees table
 - [x] Skills table
-- [ ] Create form modal to manipulate data for crud
-- [ ] Add table actions
-  - [ ] Add
-  - [ ] Edit
-  - [ ] Delete
+- [ ] CRUD Operations
+  - [x] Add table actions
+    - [x] Add
+    - [x] Edit
+    - [x] Delete
+  - [x] Create form modal to manipulate data for crud
+  - [ ] Create forms for each entity
+  - [ ] Initialize form on update
+  - [ ] Call server actions on form submit
+- [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
 - [ ] Add table pagination
