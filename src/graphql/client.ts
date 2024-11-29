@@ -1,16 +1,15 @@
-import { cacheExchange, Client, createClient, fetchExchange } from "urql";
+import { registerUrql } from "@urql/next/rsc";
+import { cacheExchange, createClient, fetchExchange } from "urql";
 import graphqlConfig from "../../graphql.config";
 
-declare global {
-	var urqlClient: Client | undefined;
-}
+const makeClient = () => {
+	return createClient({
+		url: graphqlConfig.schema,
+		exchanges: [cacheExchange, fetchExchange],
+	});
+};
 
 export default function getUrqlClient() {
-	if (!global.urqlClient) {
-		global.urqlClient = createClient({
-			url: graphqlConfig.schema,
-			exchanges: [cacheExchange, fetchExchange],
-		});
-	}
-	return global.urqlClient;
+	const { getClient } = registerUrql(makeClient);
+	return getClient();
 }
