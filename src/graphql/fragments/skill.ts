@@ -12,9 +12,7 @@ export const SkillFragment = graphql(`
 	}
 `);
 
-export default function Skill(
-	fragment: FragmentType<typeof SkillFragment>,
-): SkillType {
+export function Skill(fragment: FragmentType<typeof SkillFragment>): SkillType {
 	const skill = useFragment(SkillFragment, fragment);
 	return skill;
 }

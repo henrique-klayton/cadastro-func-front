@@ -2,6 +2,7 @@
 - [x] Schedules table
 - [x] Employees table
 - [x] Skills table
+- [ ] Create form modal to manipulate data for crud
 - [ ] Add table actions
   - [ ] Add
   - [ ] Edit
