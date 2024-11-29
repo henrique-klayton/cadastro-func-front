@@ -16,7 +16,6 @@ import * as types from './graphql';
  */
 const documents = {
     "\n\t\tquery GetSchedules {\n\t\t\tscheduleList {\n\t\t\t\t...Schedule\n\t\t\t}\n\t\t}\n\t": types.GetSchedulesDocument,
-    "\n\t\tquery GetSkills {\n\t\t\tskillList {\n\t\t\t\t...Skill\n\t\t\t}\n\t\t}\n\t": types.GetSkillsDocument,
     "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t}\n": types.EmployeeFragmentDoc,
     "\n\tfragment FullEmployee on EmployeeFullDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t\tschedule { ...Schedule }\n\t\tskills { ...Skill }\n\t}\n": types.FullEmployeeFragmentDoc,
     "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
@@ -26,7 +25,11 @@ const documents = {
     "\n\tmutation CreateEmployee($employee: EmployeeCreateDto!) {\n\t\tcreateEmployee(employee: $employee) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.CreateEmployeeDocument,
     "\n\tmutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {\n\t\tupdateEmployee(id: $id, employee: $employee) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.UpdateEmployeeDocument,
     "\n\tmutation DeleteEmployee($id: ID!) {\n\t\tdeleteEmployee(id: $id) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.DeleteEmployeeDocument,
+    "\n\tquery GetSchedule($id: Int!) {\n\t\tschedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.GetScheduleDocument,
     "\n\tquery GetSchedules {\n\t\tscheduleList {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.GetSchedulesDocument,
+    "\n\tmutation CreateSchedule($schedule: ScheduleCreateDto!) {\n\t\tcreateSchedule(schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.CreateScheduleDocument,
+    "\n\tmutation UpdateSchedule($id: Int!, $schedule: ScheduleUpdateDto!) {\n\t\tupdateSchedule(id: $id, schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.UpdateScheduleDocument,
+    "\n\tmutation DeleteSchedule($id: Int!) {\n\t\tdeleteSchedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.DeleteScheduleDocument,
     "\n\tquery GetSkills {\n\t\tskillList {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.GetSkillsDocument,
 };
 
@@ -34,10 +37,6 @@ const documents = {
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\t\tquery GetSchedules {\n\t\t\tscheduleList {\n\t\t\t\t...Schedule\n\t\t\t}\n\t\t}\n\t"): typeof import('./graphql').GetSchedulesDocument;
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function graphql(source: "\n\t\tquery GetSkills {\n\t\t\tskillList {\n\t\t\t\t...Skill\n\t\t\t}\n\t\t}\n\t"): typeof import('./graphql').GetSkillsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -77,7 +76,23 @@ export function graphql(source: "\n\tmutation DeleteEmployee($id: ID!) {\n\t\tde
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n\tquery GetSchedule($id: Int!) {\n\t\tschedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').GetScheduleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n\tquery GetSchedules {\n\t\tscheduleList {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').GetSchedulesDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation CreateSchedule($schedule: ScheduleCreateDto!) {\n\t\tcreateSchedule(schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').CreateScheduleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation UpdateSchedule($id: Int!, $schedule: ScheduleUpdateDto!) {\n\t\tupdateSchedule(id: $id, schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').UpdateScheduleDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation DeleteSchedule($id: Int!) {\n\t\tdeleteSchedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').DeleteScheduleDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
