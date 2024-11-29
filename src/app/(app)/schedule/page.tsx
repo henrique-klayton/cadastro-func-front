@@ -1,8 +1,7 @@
 import DataTable, { DataTableProps } from "@components/data-table";
-import Schedule from "@fragments/schedule";
+import { ScheduleType } from "@fragments/schedule";
 import { graphql } from "@graphql-types/gql";
-import { ScheduleDto } from "@graphql-types/graphql";
-import getUrqlClient from "@graphql/client";
+import { getSchedules } from "./actions";
 
 export default async function SchedulePage() {
 	const getSchedulesListQuery = graphql(`
@@ -13,12 +12,8 @@ export default async function SchedulePage() {
 		}
 	`);
 
-	const client = getUrqlClient();
-	const { data: queryResult } = await client
-		.query(getSchedulesListQuery.toString(), {})
-		.toPromise();
-	const schedules = queryResult?.scheduleList.map((item) => Schedule(item));
-	const columns: DataTableProps<ScheduleDto>["columns"] = [
+	const schedules = await getSchedules();
+	const columns: DataTableProps<ScheduleType>["columns"] = [
 		{
 			dataIndex: "id",
 			title: "Id",
@@ -41,5 +36,5 @@ export default async function SchedulePage() {
 		},
 	];
 
-	return <DataTable data={schedules ?? []} rowKey="id" columns={columns} />;
+	return <DataTable data={schedules} rowKey="id" columns={columns} />;
 }

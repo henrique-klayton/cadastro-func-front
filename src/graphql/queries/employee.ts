@@ -6,7 +6,7 @@ export const getFullEmployeeQuery = graphql(`
 			...FullEmployee
 		}
 	}
-`).toString();
+`);
 
 export const getEmployeesListQuery = graphql(`
 	query GetEmployees($filterStatus: Boolean) {
@@ -14,7 +14,7 @@ export const getEmployeesListQuery = graphql(`
 			...Employee
 		}
 	}
-`).toString();
+`);
 
 export const createEmployeeMutation = graphql(`
 	mutation CreateEmployee($employee: EmployeeCreateDto!) {
@@ -22,7 +22,7 @@ export const createEmployeeMutation = graphql(`
 			...Employee
 		}
 	}
-`).toString();
+`);
 
 export const updateEmployeeMutation = graphql(`
 	mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {
@@ -30,7 +30,7 @@ export const updateEmployeeMutation = graphql(`
 			...Employee
 		}
 	}
-`).toString();
+`);
 
 export const deleteEmployeeMutation = graphql(`
 	mutation DeleteEmployee($id: ID!) {
@@ -38,4 +38,4 @@ export const deleteEmployeeMutation = graphql(`
 			...Employee
 		}
 	}
-`).toString();
+`);

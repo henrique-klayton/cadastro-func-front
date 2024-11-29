@@ -6,7 +6,8 @@ import {
 	FullEmployeeType,
 } from "@fragments/employee";
 import { EmployeeCreateDto } from "@graphql-types/graphql";
-import getUrqlClient from "@graphql/client";
+import runMutation from "@graphql/run-mutation";
+import runQuery from "@graphql/run-query";
 import {
 	createEmployeeMutation,
 	getEmployeesListQuery,
@@ -16,31 +17,26 @@ import {
 export async function getEmployeeWithRelations(
 	id: string,
 ): Promise<FullEmployeeType> {
-	const { data: queryResult } = await getUrqlClient()
-		.query(getFullEmployeeQuery, { id })
-		.toPromise();
-	if (queryResult?.employeeWithRelations != null) {
+	try {
+		const queryResult = await runQuery(getFullEmployeeQuery, { id });
 		return FullEmployee(queryResult.employeeWithRelations);
+	} catch (error) {
+		throw new Error("Error getting employee with relations", { cause: error });
 	}
-	throw new Error("Error getting employee with relations");
 }
 
 export async function getEmployees(
 	filterStatus = false,
 ): Promise<EmployeeType[]> {
-	const { data: queryResult } = await getUrqlClient()
-		.query(getEmployeesListQuery, { filterStatus })
-		.toPromise();
-	const employees = queryResult?.employeeList.map((item) => Employee(item));
-	return employees ?? [];
+	const queryResult = await runQuery(getEmployeesListQuery, { filterStatus });
+	const employees = queryResult.employeeList.map((item) => Employee(item));
+	return employees;
 }
 
 export async function createEmployee(data: EmployeeCreateDto) {
-	const created = getUrqlClient()
-		.mutation(createEmployeeMutation, {
-			employee: data,
-		})
-		.toPromise();
+	const created = runMutation(createEmployeeMutation, {
+		employee: data,
+	});
 }
 
 export async function updateEmployee() {}

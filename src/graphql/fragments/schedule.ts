@@ -14,7 +14,7 @@ export const ScheduleFragment = graphql(`
 	}
 `);
 
-export default function Schedule(
+export function Schedule(
 	fragment: FragmentType<typeof ScheduleFragment>,
 ): ScheduleType {
 	const schedule = useFragment(ScheduleFragment, fragment);

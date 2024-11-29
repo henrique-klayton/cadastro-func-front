@@ -1,25 +1,10 @@
 import DataTable, { TableColumn } from "@components/data-table";
-import Skill from "@fragments/skill";
-import { graphql } from "@graphql-types/gql";
-import { SkillDto } from "@graphql-types/graphql";
-import getUrqlClient from "@graphql/client";
+import { SkillType } from "@fragments/skill";
+import { getSkills } from "./actions";
 
 export default async function SchedulePage() {
-	const getSkillsListQuery = graphql(`
-		query GetSkills {
-			skillList {
-				...Skill
-			}
-		}
-	`);
-
-	const client = getUrqlClient();
-	const { data: queryResult } = await client
-		.query(getSkillsListQuery.toString(), {})
-		.toPromise();
-	const skills = queryResult?.skillList.map((item) => Skill(item));
-
-	const columns: TableColumn<SkillDto>[] = [
+	const skills = await getSkills();
+	const columns: TableColumn<SkillType>[] = [
 		{
 			dataIndex: "id",
 			title: "Id",
@@ -33,5 +18,5 @@ export default async function SchedulePage() {
 			title: "Status",
 		},
 	];
-	return <DataTable data={skills ?? []} rowKey="id" columns={columns} />;
+	return <DataTable data={skills} rowKey="id" columns={columns} />;
 }
