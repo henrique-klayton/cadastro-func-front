@@ -25,6 +25,7 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@fragments/*": ["./src/graphql/fragments/*"],
+      "@queries/*": [ "./src/graphql/queries/*" ],
       "@graphql-types/*": ["./src/graphql/types/*"],
       "@graphql/*": ["./src/graphql/*"]
     }
