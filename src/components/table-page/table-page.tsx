@@ -12,6 +12,7 @@ import { ActionsEnum } from "../../enums/actions";
 import { FormModalActions, TablePageProps } from "./types";
 
 import "./table-page.css";
+import useModal from "antd/es/modal/useModal";
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
@@ -25,6 +26,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [form] = useForm<C | U>();
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
+	const [confirmModal, modalContext] = useModal();
+	confirmModal.confirm({
+		content: `Tem certeza que deseja remover esse(a) ${registerName}?`,
+	});
 
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
@@ -71,30 +76,35 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		closeFormModal();
 	};
 
+	// const confirmModal = <ConfirmModal />;
+
 	return (
-		<Card title={title}>
-			<Flex className="w-full h-full" vertical>
-				<DataTable<T> {...tableProps} actions={actions} />
-				<FloatButton
-					className="create-button"
-					type="primary"
-					icon={<AiOutlinePlus />}
-					onClick={() => {
-						openFormModal(ActionsEnum.CREATE);
-					}}
-				/>
-				<FormModal<C | U>
-					action={action as FormModalActions}
-					objectName={registerName}
-					form={form}
-					initialData={formData}
-					openState={isFormOpen}
-					onSubmit={formSubmit}
-					onCancel={handleCancel}
-				>
-					{children}
-				</FormModal>
-			</Flex>
-		</Card>
+		<>
+			{confirmModal}
+			<FormModal<C | U>
+				action={action as FormModalActions}
+				objectName={registerName}
+				form={form}
+				initialData={formData}
+				openState={isFormOpen}
+				onSubmit={formSubmit}
+				onCancel={handleCancel}
+			>
+				{children}
+			</FormModal>
+			<Card title={title}>
+				<Flex className="w-full h-full" vertical>
+					<DataTable<T> {...tableProps} actions={actions} />
+					<FloatButton
+						className="create-button"
+						type="primary"
+						icon={<AiOutlinePlus />}
+						onClick={() => {
+							openFormModal(ActionsEnum.CREATE);
+						}}
+					/>
+				</Flex>
+			</Card>
+		</>
 	);
 }
