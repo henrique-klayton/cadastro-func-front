@@ -9,8 +9,17 @@
     - [x] Delete
   - [x] Create form modal to manipulate data for crud
   - [ ] Create forms for each entity
-  - [ ] Initialize form on update
+    - [ ] Schedule
+    - [ ] Skill
+    - [ ] Employee
+  - [x] Initialize form on update
+  - [ ] Format data before sending to backend
+  - [ ] Add delete confirmation modal
   - [ ] Call server actions on form submit
+    - [ ] Add
+    - [ ] Edit
+    - [ ] Delete
+  - [ ] Create
   - [ ] Notifications about operation status (failure, success, etc.)
 - [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
