@@ -6,14 +6,12 @@ import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 import { HaveId } from "../../app/interfaces/have-id";
 
 export interface DataTableActions<T extends HaveId> {
-	create?: (data: T) => Promise<unknown>;
-	update?: (data: T) => Promise<unknown>;
-	delete?: (data: T) => Promise<unknown>;
-	onUpdateClick: (id: T["id"]) => unknown;
-	onDeleteClick: (id: T["id"]) => unknown;
+	onUpdateClick: (id: T["id"]) => void;
+	onDeleteClick: (id: T["id"]) => void;
 }
 
 export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
+
 export interface RequiredColumnProps<T> {
 	title: string;
 	dataIndex: Extract<keyof T, string | number>;
