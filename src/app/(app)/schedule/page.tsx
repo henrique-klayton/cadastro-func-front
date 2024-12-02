@@ -1,10 +1,9 @@
 import { TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import { DataTableProps } from "@components/data-table";
-import TablePageComponent, {
-	FormValueFormatters,
-} from "@components/table-page";
+import { TableProps } from "@components/data-table/types";
+import TablePageComponent from "@components/table-page";
+import { FormValueFormatters } from "@components/table-page/types";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import timeParse from "@utils/time-parse";
@@ -19,7 +18,7 @@ import {
 export default async function SchedulePage() {
 	const schedules = await getSchedules();
 
-	const table: Omit<DataTableProps<ScheduleType>, "actions"> = {
+	const table: TableProps<ScheduleType> = {
 		data: schedules,
 		columns: [
 			{

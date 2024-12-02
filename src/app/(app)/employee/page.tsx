@@ -1,11 +1,11 @@
 "use client";
-import DataTable, { DataTableProps } from "@components/data-table";
+import DataTable from "@components/data-table";
+import { TableProps } from "@components/data-table/types";
 import { EmployeeType } from "@fragments/employee";
 import { FloatButton } from "antd";
 import { useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { getEmployees } from "./actions";
-import "./page.css";
 
 export default function EmployeePage() {
 	const [isFormOpen, setIsFormOpen] = useState(false);
@@ -35,7 +35,7 @@ export default function EmployeePage() {
 		getEmployeesList();
 	}, []);
 
-	const columns: DataTableProps<EmployeeType>["columns"] = [
+	const columns: TableProps<EmployeeType>["columns"] = [
 		{
 			dataIndex: "id",
 			title: "Id",
