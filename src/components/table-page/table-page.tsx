@@ -1,21 +1,16 @@
 "use client";
-import DataTable, {
-	DataTableActions,
-	DataTableProps,
-} from "@components/data-table";
-import FormModal from "@components/form-modal";
 import { Flex, FloatButton } from "antd";
+import { useForm } from "antd/es/form/Form";
 import { ReactNode, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
+
+import DataTable, { DataTableProps } from "@components/data-table";
+import FormModal from "@components/form-modal";
 import { HaveId } from "../../app/interfaces/have-id";
 import { ActionsEnum } from "../../enums/actions";
 import "./table-page.css";
 
-type FormModalActions = ActionsEnum.CREATE & ActionsEnum.UPDATE;
-
-interface Handlers<T extends HaveId, C, U> extends DataTableActions<T> {
-	formSubmit: (data: C | U, id?: T["id"]) => unknown;
-}
+type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
 
 export interface TablePageProps<T extends HaveId, C, U> {
 	children: ReactNode;
@@ -26,9 +21,9 @@ export interface TablePageProps<T extends HaveId, C, U> {
 
 export interface ServerActions<T extends HaveId, C, U> {
 	queryAction: (id: T["id"]) => Promise<T>;
-	createAction: (data: C) => Promise<unknown>;
-	updateAction: (id: T["id"], data: U) => Promise<unknown>;
-	deleteAction: (id: T["id"]) => Promise<unknown>;
+	createAction: (data: C) => Promise<T>;
+	updateAction: (id: T["id"], data: U) => Promise<T>;
+	deleteAction: (id: T["id"]) => Promise<T>;
 }
 
 export default function TablePageComponent<T extends HaveId, C, U>({
@@ -37,22 +32,12 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 	pageName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
 }: TablePageProps<T, C, U>) {
+	const [form] = useForm<C | U>();
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 
-	const handlers: Handlers<T, C, U> = {
-		formSubmit: (data: C | U, id?: T["id"]) => {
-			switch (action as FormModalActions) {
-				case ActionsEnum.CREATE:
-					createAction(data as C);
-					break;
-				case ActionsEnum.UPDATE:
-					updateAction(id as T["id"], data as U);
-					break;
-			}
-			closeFormModal();
-		},
+	tableProps.actions = {
 		onUpdateClick: (id: T["id"]) => {
 			const item = queryAction(id);
 			openFormModal(ActionsEnum.UPDATE, item as C | U);
@@ -62,7 +47,18 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 			openDeleteConfirm();
 		},
 	};
-	tableProps.actions = handlers;
+
+	const formSubmit = (data: C | U, id?: T["id"]) => {
+		switch (action as FormModalActions) {
+			case ActionsEnum.CREATE:
+				createAction(data as C);
+				break;
+			case ActionsEnum.UPDATE:
+				updateAction(id as T["id"], data as U);
+				break;
+		}
+		closeFormModal();
+	};
 
 	const openDeleteConfirm = () => {
 		setAction(ActionsEnum.DELETE);
@@ -76,6 +72,7 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 
 	const closeFormModal = () => {
 		setIsFormOpen(false);
+		form.resetFields();
 	};
 
 	const handleCancel = () => {
@@ -98,7 +95,7 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 				objectName={pageName}
 				initialData={formData}
 				openState={isFormOpen}
-				onSubmit={handlers.formSubmit}
+				onSubmit={formSubmit}
 				onCancel={handleCancel}
 			>
 				{children}
