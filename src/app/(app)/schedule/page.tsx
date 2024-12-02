@@ -2,9 +2,12 @@ import { TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import { DataTableProps } from "@components/data-table";
-import TablePageComponent from "@components/table-page";
+import TablePageComponent, {
+	FormValueFormatters,
+} from "@components/table-page";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import timeParse from "@utils/time-parse";
 import {
 	createSchedule,
 	deleteSchedule,
@@ -26,10 +29,12 @@ export default async function SchedulePage() {
 			{
 				dataIndex: "startTime",
 				title: "Hora Início",
+				formatter: timeParse,
 			},
 			{
 				dataIndex: "endTime",
 				title: "Hora Fim",
+				formatter: timeParse,
 			},
 			{
 				dataIndex: "type",
@@ -50,12 +55,18 @@ export default async function SchedulePage() {
 		deleteAction: deleteSchedule,
 	};
 
+	const formatters: FormValueFormatters<ScheduleUpdateDto> = {
+		startTime: timeParse,
+		endTime: timeParse,
+	};
+
 	return (
 		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
 			table={table}
 			title="Escalas"
 			registerName="Escala"
 			actions={actions}
+			formatters={formatters}
 		>
 			<FormItem label="Horário Início" name="startTime" required>
 				<TimePicker />

@@ -15,6 +15,8 @@ export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
 export interface RequiredColumnProps<T> {
 	title: string;
 	dataIndex: Extract<keyof T, string | number>;
+	// biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
+	formatter?: (value: T[keyof T]) => any;
 }
 
 export interface DataTableProps<T extends HaveId> {
@@ -39,11 +41,18 @@ export default function DataTable<T extends HaveId>({
 	columns: columnsProps,
 	actions,
 }: DataTableProps<T>) {
-	const columns = columnsProps.map((item) => {
-		if (item.dataIndex === "status")
-			item.render = renderStatus as () => React.ReactNode;
-		if (item.align != null) item.align = "center";
-		return <Table.Column {...item} key={item.key ?? item.dataIndex} />;
+	const columns = columnsProps.map((column) => {
+		const property = column.dataIndex;
+		if (property === "status")
+			column.render = renderStatus as () => React.ReactNode;
+		if (column.align != null) column.align = "center";
+		if (column.formatter) {
+			const formatter = column.formatter;
+			column.render = (_: unknown, obj: T) => {
+				return formatter(obj[property]).format("HH:mm");
+			};
+		}
+		return <Table.Column {...column} key={column.key ?? property} />;
 	});
 
 	const renderActions = (_: unknown, { id }: T) => {
