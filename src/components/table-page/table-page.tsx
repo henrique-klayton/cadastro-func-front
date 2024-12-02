@@ -6,7 +6,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 import DataTable, { DataTableProps } from "@components/data-table";
 import FormModal from "@components/form-modal";
-import { HaveId } from "../../app/interfaces/have-id";
+import { HaveId } from "@interfaces/have-id";
 import { ActionsEnum } from "../../enums/actions";
 import "./table-page.css";
 

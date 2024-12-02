@@ -3,7 +3,7 @@ import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { ColumnProps } from "antd/es/table";
 import { ReactNode } from "react";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
-import { HaveId } from "../../app/interfaces/have-id";
+import { HaveId } from "@interfaces/have-id";
 
 export interface DataTableActions<T extends HaveId> {
 	onUpdateClick: (id: T["id"]) => void;
