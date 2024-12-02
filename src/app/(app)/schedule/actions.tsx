@@ -12,7 +12,7 @@ import {
 } from "@queries/schedule";
 
 export async function getSchedule(id: number): Promise<ScheduleType> {
-	const queryResult = await runQuery(getScheduleQuery);
+	const queryResult = await runQuery(getScheduleQuery, { id });
 	return Schedule(queryResult.schedule);
 }
 
