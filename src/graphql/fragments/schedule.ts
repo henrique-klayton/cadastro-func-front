@@ -1,6 +1,6 @@
-import { FragmentType, useFragment } from "@graphql-types/fragment-masking";
-import { graphql } from "@graphql-types/gql";
-import { ScheduleFragment as ScheduleFragmentType } from "@graphql-types/graphql";
+import { FragmentType, useFragment } from "@graphql/types/fragment-masking";
+import { graphql } from "@graphql/types/gql";
+import { ScheduleFragment as ScheduleFragmentType } from "@graphql/types/graphql";
 
 export type ScheduleType = ScheduleFragmentType;
 

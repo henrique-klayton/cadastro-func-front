@@ -1,4 +1,4 @@
-import { TypedDocumentString } from "@graphql-types/graphql";
+import { TypedDocumentString } from "@graphql/types/graphql";
 import getUrqlClient from "./client";
 
 export default async function runMutation<R, V extends object>(

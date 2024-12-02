@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [ "dom", "dom.iterable", "esnext" ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -23,13 +23,12 @@
       }
     ],
     "paths": {
-      "@components/*": ["./src/components/*"],
-      "@fragments/*": ["./src/graphql/fragments/*"],
+      "@components/*": [ "./src/components/*" ],
+      "@fragments/*": [ "./src/graphql/fragments/*" ],
       "@queries/*": [ "./src/graphql/queries/*" ],
-      "@graphql-types/*": ["./src/graphql/types/*"],
-      "@graphql/*": ["./src/graphql/*"]
+      "@graphql/*": [ "./src/graphql/*" ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs"],
-  "exclude": ["node_modules"]
+  "include": [ "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next.config.mjs" ],
+  "exclude": [ "node_modules" ]
 }

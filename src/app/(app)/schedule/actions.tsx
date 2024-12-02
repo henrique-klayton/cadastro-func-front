@@ -1,8 +1,8 @@
 "use server";
 import { Schedule, ScheduleType } from "@fragments/schedule";
-import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql-types/graphql";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
+import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import {
 	createEmployeeMutation,
 	deleteEmployeeMutation,

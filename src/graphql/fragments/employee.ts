@@ -1,9 +1,9 @@
-import { FragmentType, useFragment } from "@graphql-types/fragment-masking";
-import { graphql } from "@graphql-types/gql";
+import { FragmentType, useFragment } from "@graphql/types/fragment-masking";
+import { graphql } from "@graphql/types/gql";
 import {
 	EmployeeFragment as EmployeeFragmentType,
 	FullEmployeeFragment as FullEmployeeFragmentType,
-} from "@graphql-types/graphql";
+} from "@graphql/types/graphql";
 import { ScheduleFragment, ScheduleType } from "./schedule";
 import { SkillFragment, SkillType } from "./skill";
 
