@@ -1,10 +1,11 @@
 import { Form, Modal } from "antd";
 import { ReactNode } from "react";
-import { Actions } from "../../enums/actions";
+import { ActionsEnum } from "../../enums/actions";
 
 export type FormModalProps<C, U> =
 	| CreateModalProps<C, U>
 	| UpdateModalProps<C, U>;
+
 export interface BaseModalProps<C, U> {
 	children: ReactNode;
 	objectName: string;
@@ -12,12 +13,14 @@ export interface BaseModalProps<C, U> {
 	openState: boolean;
 	onCancel: () => void;
 }
+
 export interface CreateModalProps<C, U> extends BaseModalProps<C, U> {
-	action: Actions.CREATE;
+	action: ActionsEnum.CREATE;
 	onSubmit: (data: C) => void;
 }
+
 export interface UpdateModalProps<C, U> extends BaseModalProps<C, U> {
-	action: Actions.UPDATE;
+	action: ActionsEnum.UPDATE;
 	onSubmit: (data: U, id: string | number) => void;
 }
 
@@ -36,10 +39,10 @@ export default function FormModal<C, U>({
 			open={openState}
 			onOk={() => {
 				switch (action) {
-					case Actions.CREATE:
+					case ActionsEnum.CREATE:
 						onSubmit({} as C);
 						break;
-					case Actions.UPDATE:
+					case ActionsEnum.UPDATE:
 						onSubmit({} as U, "data.id");
 						break;
 

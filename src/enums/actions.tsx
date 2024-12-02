@@ -1,4 +1,4 @@
-export enum Actions {
+export enum ActionsEnum {
 	CREATE = "Criar",
 	UPDATE = "Editar",
 	DELETE = "Remover",

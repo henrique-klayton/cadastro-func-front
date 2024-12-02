@@ -1,5 +1,5 @@
 import { DataTableProps } from "@components/data-table";
-import TablePage from "@components/table-page";
+import TablePageComponent from "@components/table-page";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql-types/graphql";
 import {
@@ -48,13 +48,13 @@ export default async function SchedulePage() {
 	};
 
 	return (
-		<TablePage<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
+		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
 			table={table}
 			pageName="Escalas"
 			actions={actions}
 		>
 			<p>Teste</p>
-		</TablePage>
+		</TablePageComponent>
 	);
 	// return <DataTable data={schedules} rowKey="id" columns={columns} />;
 }
