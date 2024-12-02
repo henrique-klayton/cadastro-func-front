@@ -51,24 +51,35 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 					updateAction(id as T["id"], data as U);
 					break;
 			}
+			closeFormModal();
 		},
 		onUpdateClick: (id: T["id"]) => {
 			const item = queryAction(id);
-			setFormData(item as C | U);
-			setAction(ActionsEnum.UPDATE);
+			openFormModal(ActionsEnum.UPDATE, item as C | U);
 		},
 		onDeleteClick: (id: T["id"]) => {
-			deleteAction(id);
+			// deleteAction(id);
+			openDeleteConfirm();
 		},
 	};
 	tableProps.actions = handlers;
 
-	const showFormModal = () => {
+	const openDeleteConfirm = () => {
+		setAction(ActionsEnum.DELETE);
+	};
+
+	const openFormModal = (action: FormModalActions, initialData?: C | U) => {
+		setAction(action);
 		setIsFormOpen(true);
+		setFormData(initialData);
+	};
+
+	const closeFormModal = () => {
+		setIsFormOpen(false);
 	};
 
 	const handleCancel = () => {
-		setIsFormOpen(false);
+		closeFormModal();
 	};
 
 	return (
@@ -79,8 +90,7 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 				type="primary"
 				icon={<AiOutlinePlus />}
 				onClick={() => {
-					setAction(ActionsEnum.CREATE);
-					setIsFormOpen(true);
+					openFormModal(ActionsEnum.CREATE);
 				}}
 			/>
 			<FormModal<C, U>
