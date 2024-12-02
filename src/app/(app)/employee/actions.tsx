@@ -5,9 +5,9 @@ import {
 	FullEmployee,
 	FullEmployeeType,
 } from "@fragments/employee";
-import { EmployeeCreateDto } from "@graphql-types/graphql";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
+import { EmployeeCreateDto } from "@graphql/types/graphql";
 import {
 	createEmployeeMutation,
 	getEmployeesListQuery,

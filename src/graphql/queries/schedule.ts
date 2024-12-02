@@ -1,4 +1,4 @@
-import { graphql } from "@graphql-types/gql";
+import { graphql } from "@graphql/types/gql";
 
 export const getScheduleQuery = graphql(`
 	query GetSchedule($id: Int!) {

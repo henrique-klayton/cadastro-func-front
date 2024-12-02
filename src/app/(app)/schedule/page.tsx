@@ -1,7 +1,7 @@
 import { DataTableProps } from "@components/data-table";
 import TablePageComponent from "@components/table-page";
 import { ScheduleType } from "@fragments/schedule";
-import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql-types/graphql";
+import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import {
 	createSchedule,
 	deleteSchedule,
