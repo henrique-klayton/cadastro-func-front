@@ -14,13 +14,16 @@ import { ActionsEnum } from "../../enums/actions";
 import "./table-page.css";
 
 export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
+// biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
+export type FormValueFormatters<T> = { [P in keyof T]: (value: T[P]) => any };
 
-export interface TablePageProps<T extends HaveId, C, U> {
+export interface TablePageProps<T extends HaveId, C extends U, U> {
 	children: React.ReactNode;
 	table: Omit<DataTableProps<T>, "actions">;
 	actions: ServerActions<T, C, U>;
 	title: string;
 	registerName: string;
+	formatters: FormValueFormatters<U>;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
@@ -30,12 +33,13 @@ export interface ServerActions<T extends HaveId, C, U> {
 	deleteAction: (id: T["id"]) => Promise<T>;
 }
 
-export default function TablePageComponent<T extends HaveId, C, U>({
+export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
 	table: tableProps,
 	title,
 	registerName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
+	formatters,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [isFormOpen, setIsFormOpen] = useState(false);
@@ -45,6 +49,9 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			const item = await queryAction(id);
+			for (const key in formatters) {
+				item[key] = formatters[key](item[key]);
+			}
 			openFormModal(ActionsEnum.UPDATE, item as U);
 		},
 		onDeleteClick: async (id: T["id"]) => {
