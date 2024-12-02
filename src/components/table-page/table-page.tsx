@@ -8,8 +8,10 @@ import { Flex, FloatButton } from "antd";
 import { ReactNode, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { HaveId } from "../../app/interfaces/have-id";
-import { Actions } from "../../enums/actions";
+import { ActionsEnum } from "../../enums/actions";
 import "./table-page.css";
+
+type FormModalActions = ActionsEnum.CREATE & ActionsEnum.UPDATE;
 
 interface Handlers<T extends HaveId, C, U> extends DataTableActions<T> {
 	formSubmit: (data: C | U, id?: T["id"]) => unknown;
@@ -29,23 +31,23 @@ export interface ServerActions<T extends HaveId, C, U> {
 	deleteAction: (id: T["id"]) => Promise<unknown>;
 }
 
-export default function TablePage<T extends HaveId, C, U>({
+export default function TablePageComponent<T extends HaveId, C, U>({
 	children,
 	table: tableProps,
 	pageName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
 }: TablePageProps<T, C, U>) {
-	const [action, setAction] = useState<Actions>(Actions.CREATE);
+	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 
 	const handlers: Handlers<T, C, U> = {
 		formSubmit: (data: C | U, id?: T["id"]) => {
-			switch (action) {
-				case Actions.CREATE:
+			switch (action as FormModalActions) {
+				case ActionsEnum.CREATE:
 					createAction(data as C);
 					break;
-				case Actions.UPDATE:
+				case ActionsEnum.UPDATE:
 					updateAction(id as T["id"], data as U);
 					break;
 			}
@@ -53,7 +55,7 @@ export default function TablePage<T extends HaveId, C, U>({
 		onUpdateClick: (id: T["id"]) => {
 			const item = queryAction(id);
 			setFormData(item as C | U);
-			setAction(Actions.UPDATE);
+			setAction(ActionsEnum.UPDATE);
 		},
 		onDeleteClick: (id: T["id"]) => {
 			deleteAction(id);
@@ -77,12 +79,12 @@ export default function TablePage<T extends HaveId, C, U>({
 				type="primary"
 				icon={<AiOutlinePlus />}
 				onClick={() => {
-					setAction(Actions.CREATE);
+					setAction(ActionsEnum.CREATE);
 					setIsFormOpen(true);
 				}}
 			/>
 			<FormModal<C, U>
-				action={action as Actions.CREATE & Actions.UPDATE}
+				action={action as FormModalActions}
 				objectName={pageName}
 				initialData={formData}
 				openState={isFormOpen}
