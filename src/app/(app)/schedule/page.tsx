@@ -68,10 +68,10 @@ export default async function SchedulePage() {
 			formatters={formatters}
 		>
 			<FormItem label="Horário Início" name="startTime" required>
-				<TimePicker />
+				<TimePicker format="HH:mm" />
 			</FormItem>
 			<FormItem label="Horário Fim" name="endTime" required>
-				<TimePicker />
+				<TimePicker format="HH:mm" />
 			</FormItem>
 		</TablePageComponent>
 	);
