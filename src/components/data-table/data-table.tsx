@@ -1,13 +1,13 @@
 "use client";
 import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { ColumnProps } from "antd/es/table";
-import { ReactNode } from "react";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
+
 import { HaveId } from "@interfaces/have-id";
 
 export interface DataTableActions<T extends HaveId> {
-	onUpdateClick: (id: T["id"]) => void;
-	onDeleteClick: (id: T["id"]) => void;
+	onUpdateClick: (id: T["id"]) => Promise<void>;
+	onDeleteClick: (id: T["id"]) => Promise<void>;
 }
 
 export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
@@ -21,7 +21,7 @@ export interface DataTableProps<T extends HaveId> {
 	data: T[];
 	rowKey: keyof T;
 	columns: Array<TableColumn<T>>;
-	actions?: DataTableActions<T>;
+	actions: DataTableActions<T>;
 }
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
@@ -41,7 +41,7 @@ export default function DataTable<T extends HaveId>({
 }: DataTableProps<T>) {
 	const columns = columnsProps.map((item) => {
 		if (item.dataIndex === "status")
-			item.render = renderStatus as () => ReactNode;
+			item.render = renderStatus as () => React.ReactNode;
 		if (item.align != null) item.align = "center";
 		return <Table.Column {...item} key={item.key ?? item.dataIndex} />;
 	});

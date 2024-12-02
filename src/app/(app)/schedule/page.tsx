@@ -1,3 +1,6 @@
+import { TimePicker } from "antd";
+import FormItem from "antd/es/form/FormItem";
+
 import { DataTableProps } from "@components/data-table";
 import TablePageComponent from "@components/table-page";
 import { ScheduleType } from "@fragments/schedule";
@@ -13,7 +16,7 @@ import {
 export default async function SchedulePage() {
 	const schedules = await getSchedules();
 
-	const table: DataTableProps<ScheduleType> = {
+	const table: Omit<DataTableProps<ScheduleType>, "actions"> = {
 		data: schedules,
 		columns: [
 			{
@@ -50,11 +53,16 @@ export default async function SchedulePage() {
 	return (
 		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
 			table={table}
-			pageName="Escalas"
+			title="Escalas"
+			registerName="Escala"
 			actions={actions}
 		>
-			<p>Teste</p>
+			<FormItem label="Horário Início" name="startTime" required>
+				<TimePicker />
+			</FormItem>
+			<FormItem label="Horário Fim" name="endTime" required>
+				<TimePicker />
+			</FormItem>
 		</TablePageComponent>
 	);
-	// return <DataTable data={schedules} rowKey="id" columns={columns} />;
 }

@@ -1,26 +1,30 @@
 "use client";
-import { Flex, FloatButton } from "antd";
+import { Card, Flex, FloatButton } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { ReactNode, useState } from "react";
+import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
-import DataTable, { DataTableProps } from "@components/data-table";
+import DataTable, {
+	DataTableActions,
+	DataTableProps,
+} from "@components/data-table";
 import FormModal from "@components/form-modal";
 import { HaveId } from "@interfaces/have-id";
 import { ActionsEnum } from "../../enums/actions";
 import "./table-page.css";
 
-type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
+export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
 
 export interface TablePageProps<T extends HaveId, C, U> {
-	children: ReactNode;
-	table: DataTableProps<T>;
+	children: React.ReactNode;
+	table: Omit<DataTableProps<T>, "actions">;
 	actions: ServerActions<T, C, U>;
-	pageName: string;
+	title: string;
+	registerName: string;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
-	queryAction: (id: T["id"]) => Promise<T>;
+	queryAction: (id: T["id"]) => Promise<C | U>;
 	createAction: (data: C) => Promise<T>;
 	updateAction: (id: T["id"], data: U) => Promise<T>;
 	deleteAction: (id: T["id"]) => Promise<T>;
@@ -29,27 +33,28 @@ export interface ServerActions<T extends HaveId, C, U> {
 export default function TablePageComponent<T extends HaveId, C, U>({
 	children,
 	table: tableProps,
-	pageName,
+	title,
+	registerName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
 }: TablePageProps<T, C, U>) {
-	const [form] = useForm<C | U>();
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [isFormOpen, setIsFormOpen] = useState(false);
+	const [form] = useForm<C | U>();
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 
-	tableProps.actions = {
-		onUpdateClick: (id: T["id"]) => {
-			const item = queryAction(id);
-			openFormModal(ActionsEnum.UPDATE, item as C | U);
+	const actions: DataTableActions<T> = {
+		onUpdateClick: async (id: T["id"]) => {
+			const item = await queryAction(id);
+			openFormModal(ActionsEnum.UPDATE, item as U);
 		},
-		onDeleteClick: (id: T["id"]) => {
+		onDeleteClick: async (id: T["id"]) => {
 			// deleteAction(id);
 			openDeleteConfirm();
 		},
 	};
 
 	const formSubmit = (data: C | U, id?: T["id"]) => {
-		switch (action as FormModalActions) {
+		switch (action) {
 			case ActionsEnum.CREATE:
 				createAction(data as C);
 				break;
@@ -64,7 +69,7 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 		setAction(ActionsEnum.DELETE);
 	};
 
-	const openFormModal = (action: FormModalActions, initialData?: C | U) => {
+	const openFormModal = (action: FormModalActions, initialData?: U) => {
 		setAction(action);
 		setIsFormOpen(true);
 		setFormData(initialData);
@@ -80,26 +85,29 @@ export default function TablePageComponent<T extends HaveId, C, U>({
 	};
 
 	return (
-		<Flex className="w-full h-full">
-			<DataTable<T> {...tableProps} />
-			<FloatButton
-				className="create-button"
-				type="primary"
-				icon={<AiOutlinePlus />}
-				onClick={() => {
-					openFormModal(ActionsEnum.CREATE);
-				}}
-			/>
-			<FormModal<C, U>
-				action={action as FormModalActions}
-				objectName={pageName}
-				initialData={formData}
-				openState={isFormOpen}
-				onSubmit={formSubmit}
-				onCancel={handleCancel}
-			>
-				{children}
-			</FormModal>
-		</Flex>
+		<Card title={title}>
+			<Flex className="w-full h-full" vertical>
+				<DataTable<T> {...tableProps} actions={actions} />
+				<FloatButton
+					className="create-button"
+					type="primary"
+					icon={<AiOutlinePlus />}
+					onClick={() => {
+						openFormModal(ActionsEnum.CREATE);
+					}}
+				/>
+				<FormModal<C | U>
+					action={action as FormModalActions}
+					objectName={registerName}
+					form={form}
+					initialData={formData}
+					openState={isFormOpen}
+					onSubmit={formSubmit}
+					onCancel={handleCancel}
+				>
+					{children}
+				</FormModal>
+			</Flex>
+		</Card>
 	);
 }

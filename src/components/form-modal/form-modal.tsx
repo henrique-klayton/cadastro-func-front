@@ -1,38 +1,30 @@
-import { Form, Modal } from "antd";
-import { ReactNode } from "react";
+import { Form, FormInstance, Modal } from "antd";
+
 import { ActionsEnum } from "../../enums/actions";
 
-export type FormModalProps<C, U> =
-	| CreateModalProps<C, U>
-	| UpdateModalProps<C, U>;
-
-export interface BaseModalProps<C, U> {
-	children: ReactNode;
+export interface FormModalProps<F> {
+	action: ActionsEnum.CREATE | ActionsEnum.UPDATE;
+	initialData: Partial<F> | undefined;
+	form: FormInstance<F>;
+	children: React.ReactNode;
 	objectName: string;
-	initialData: C | U | undefined;
 	openState: boolean;
 	onCancel: () => void;
+	onSubmit: (data: F, id?: string | number) => void;
 }
 
-export interface CreateModalProps<C, U> extends BaseModalProps<C, U> {
-	action: ActionsEnum.CREATE;
-	onSubmit: (data: C) => void;
-}
+export interface UpdateModalProps<F> extends FormModalProps<F> {}
 
-export interface UpdateModalProps<C, U> extends BaseModalProps<C, U> {
-	action: ActionsEnum.UPDATE;
-	onSubmit: (data: U, id: string | number) => void;
-}
-
-export default function FormModal<C, U>({
+export default function FormModal<F>({
 	children,
 	action,
 	objectName,
 	initialData,
+	form,
 	openState,
 	onCancel,
 	onSubmit,
-}: FormModalProps<C, U>) {
+}: FormModalProps<F>) {
 	return (
 		<Modal
 			title={`${action} ${objectName}`}
@@ -40,10 +32,10 @@ export default function FormModal<C, U>({
 			onOk={() => {
 				switch (action) {
 					case ActionsEnum.CREATE:
-						onSubmit({} as C);
+						onSubmit(form.getFieldsValue());
 						break;
 					case ActionsEnum.UPDATE:
-						onSubmit({} as U, "data.id");
+						onSubmit(form.getFieldsValue(), "data.id");
 						break;
 
 					default:
@@ -52,7 +44,9 @@ export default function FormModal<C, U>({
 			}}
 			onCancel={onCancel}
 		>
-			<Form>{children}</Form>
+			<Form layout="vertical" form={form} initialValues={initialData}>
+				{children}
+			</Form>
 		</Modal>
 	);
 }

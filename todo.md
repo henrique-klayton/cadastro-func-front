@@ -11,6 +11,7 @@
   - [ ] Create forms for each entity
   - [ ] Initialize form on update
   - [ ] Call server actions on form submit
+  - [ ] Notifications about operation status (failure, success, etc.)
 - [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
 - [ ] Add table pagination
