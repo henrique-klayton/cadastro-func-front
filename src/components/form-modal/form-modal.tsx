@@ -1,19 +1,7 @@
-import { Form, FormInstance, Modal } from "antd";
+import { Form, Modal } from "antd";
 
 import { ActionsEnum } from "../../enums/actions";
-
-export interface FormModalProps<F> {
-	action: ActionsEnum.CREATE | ActionsEnum.UPDATE;
-	initialData: Partial<F> | undefined;
-	form: FormInstance<F>;
-	children: React.ReactNode;
-	objectName: string;
-	openState: boolean;
-	onCancel: () => void;
-	onSubmit: (data: F, id?: string | number) => void;
-}
-
-export interface UpdateModalProps<F> extends FormModalProps<F> {}
+import { FormModalProps } from "./types";
 
 export default function FormModal<F>({
 	children,

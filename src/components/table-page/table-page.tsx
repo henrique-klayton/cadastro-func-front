@@ -4,34 +4,14 @@ import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
-import DataTable, {
-	DataTableActions,
-	DataTableProps,
-} from "@components/data-table";
+import DataTable from "@components/data-table";
+import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { HaveId } from "@interfaces/have-id";
 import { ActionsEnum } from "../../enums/actions";
+import { FormModalActions, TablePageProps } from "./types";
+
 import "./table-page.css";
-
-export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
-// biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
-export type FormValueFormatters<T> = { [P in keyof T]: (value: T[P]) => any };
-
-export interface TablePageProps<T extends HaveId, C extends U, U> {
-	children: React.ReactNode;
-	table: Omit<DataTableProps<T>, "actions">;
-	actions: ServerActions<T, C, U>;
-	title: string;
-	registerName: string;
-	formatters: FormValueFormatters<U>;
-}
-
-export interface ServerActions<T extends HaveId, C, U> {
-	queryAction: (id: T["id"]) => Promise<C | U>;
-	createAction: (data: C) => Promise<T>;
-	updateAction: (id: T["id"], data: U) => Promise<T>;
-	deleteAction: (id: T["id"]) => Promise<T>;
-}
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
