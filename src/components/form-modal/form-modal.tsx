@@ -19,6 +19,7 @@ export default function FormModal<F>({
 			title={`${action} ${objectName}`}
 			open={open}
 			loading={loading}
+			okText="Salvar"
 			onOk={() => {
 				switch (action) {
 					case ActionsEnum.CREATE:
