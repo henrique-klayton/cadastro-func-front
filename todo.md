@@ -23,4 +23,8 @@
   - [ ] Notifications about operation status (failure, success, etc.)
 - [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
+  - [ ] Status filter
+  - [ ] Other filters
 - [ ] Add table pagination
+- [ ] Dynamic white/dark theme
+- [ ] Authentication
