@@ -24,4 +24,5 @@ export interface TableProps<T> {
 
 export interface DataTableProps<T extends HaveId> extends TableProps<T> {
 	actions: DataTableActions<T>;
+	registerName: string;
 }

@@ -19,6 +19,7 @@ export default function DataTable<T extends HaveId>({
 	rowKey,
 	columns: columnsProps,
 	actions,
+	registerName,
 }: DataTableProps<T>) {
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
@@ -38,7 +39,7 @@ export default function DataTable<T extends HaveId>({
 		return (
 			<>
 				<Flex justify="flex-start" align="center" gap="0.5rem">
-					<Tooltip title="Editar">
+					<Tooltip title={`Editar ${registerName}`}>
 						<Button
 							icon={<AiOutlineForm />}
 							color="primary"
@@ -46,7 +47,7 @@ export default function DataTable<T extends HaveId>({
 							onClick={() => actions?.onUpdateClick(id)}
 						/>
 					</Tooltip>
-					<Tooltip title="Remover">
+					<Tooltip title={`Remover ${registerName}`}>
 						<Button
 							danger
 							icon={<AiOutlineDelete />}
