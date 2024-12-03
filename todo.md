@@ -14,11 +14,11 @@
     - [ ] Employee
   - [x] Initialize form on update
   - [ ] Format data before sending to backend
-  - [ ] Add delete confirmation modal
+  - [x] Add delete confirmation modal
   - [ ] Call server actions on form submit
     - [ ] Add
     - [ ] Edit
-    - [ ] Delete
+    - [x] Delete
   - [ ] Create
   - [ ] Notifications about operation status (failure, success, etc.)
 - [ ] Fixed rows height at <= 65px

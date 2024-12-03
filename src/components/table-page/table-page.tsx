@@ -1,5 +1,6 @@
 "use client";
-import { Card, Flex, FloatButton } from "antd";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { App, Card, Flex, FloatButton, ModalFuncProps } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -13,7 +14,6 @@ import { ActionsEnum } from "../../enums/actions";
 import { TablePageProps } from "./types";
 
 import "./table-page.css";
-import useModal from "antd/es/modal/useModal";
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
@@ -25,13 +25,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [isFormOpen, setIsFormOpen] = useState(false);
-	const [form] = useForm<C | U>();
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
-	const [confirmModal, modalContext] = useModal();
-	confirmModal.confirm({
-		content: `Tem certeza que deseja remover esse(a) ${registerName}?`,
-	});
+	const [form] = useForm<C | U>();
 
+	// Delete Confirm Modal
+	const { modal: confirmModal, message } = App.useApp();
+	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${registerName}?`;
+
+	// DataTable Component
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			const item = await queryAction(id);
@@ -41,11 +42,25 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			openFormModal(ActionsEnum.UPDATE, item as U);
 		},
 		onDeleteClick: async (id: T["id"]) => {
-			// deleteAction(id);
-			openDeleteConfirm();
+			const confirmModalProps: ModalFuncProps = {
+				icon: <ExclamationCircleFilled className="text-yellow-400" />,
+				okText: "Remover",
+				okType: "danger",
+				cancelText: "Cancelar",
+				title: confirmQuestion,
+				onOk: () => {
+					return handleDeleteConfirm(2, true).catch(() => {
+						message.error(`Erro ao remover ${registerName}`);
+					});
+				},
+				onCancel: () => {},
+			};
+			const response = await confirmModal.confirm(confirmModalProps);
+			console.log(response);
 		},
 	};
 
+	// Form Modal
 	const formSubmit = (data: C | U, id?: T["id"]) => {
 		switch (action) {
 			case ActionsEnum.CREATE:
@@ -56,10 +71,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				break;
 		}
 		closeFormModal();
-	};
-
-	const openDeleteConfirm = () => {
-		setAction(ActionsEnum.DELETE);
 	};
 
 	const openFormModal = (action: FormModalActions, initialData?: U) => {
@@ -73,15 +84,20 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		form.resetFields();
 	};
 
-	const handleCancel = () => {
+	const handleFormModalCancel = () => {
 		closeFormModal();
 	};
 
-	// const confirmModal = <ConfirmModal />;
+	// Delete Confirm Modal
+	const handleDeleteConfirm = async (id: T["id"], confirm: boolean) => {
+		setAction(ActionsEnum.DELETE);
+		if (confirm) {
+			return deleteAction(id);
+		}
+	};
 
 	return (
 		<>
-			{confirmModal}
 			<FormModal<C | U>
 				action={action as FormModalActions}
 				objectName={registerName}
@@ -89,7 +105,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				initialData={formData}
 				openState={isFormOpen}
 				onSubmit={formSubmit}
-				onCancel={handleCancel}
+				onCancel={handleFormModalCancel}
 			>
 				{children}
 			</FormModal>
