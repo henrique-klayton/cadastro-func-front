@@ -1,14 +1,12 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { App, ConfigProvider } from "antd";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 
-import ptBR from "antd/locale/pt_BR";
-import "dayjs/locale/pt-br";
-
+import AppLayoutClient from "@components/app-layout-client/app-layout-client";
 import "./globals.css";
-import dayjs from "dayjs";
 
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
 
 const geistSans = localFont({
@@ -38,9 +36,7 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<AntdRegistry layer>
-					<ConfigProvider locale={ptBR}>
-						<App className="flex w-full h-full">{children}</App>
-					</ConfigProvider>
+					<AppLayoutClient>{children}</AppLayoutClient>
 				</AntdRegistry>
 			</body>
 		</html>
