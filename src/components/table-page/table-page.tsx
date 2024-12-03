@@ -46,7 +46,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				icon: <ExclamationCircleFilled className="text-yellow-400" />,
 				okText: "Remover",
 				okType: "danger",
-				cancelText: "Cancelar",
 				title: confirmQuestion,
 				onOk: () => {
 					return handleDeleteConfirm(2, true).catch(() => {
@@ -111,10 +110,15 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			</FormModal>
 			<Card title={title}>
 				<Flex className="w-full h-full" vertical>
-					<DataTable<T> {...tableProps} actions={actions} />
+					<DataTable<T>
+						{...tableProps}
+						actions={actions}
+						registerName={registerName}
+					/>
 					<FloatButton
 						className="create-button"
 						type="primary"
+						tooltip={`Criar ${registerName}`}
 						icon={<AiOutlinePlus />}
 						onClick={() => {
 							openFormModal(ActionsEnum.CREATE);
