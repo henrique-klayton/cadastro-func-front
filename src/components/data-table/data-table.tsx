@@ -28,7 +28,7 @@ export default function DataTable<T extends HaveId>({
 		if (column.formatter) {
 			const formatter = column.formatter;
 			column.render = (_: unknown, obj: T) => {
-				return formatter(obj[property]).format("HH:mm");
+				return formatter(obj[property]);
 			};
 		}
 		return <Table.Column {...column} key={column.key ?? property} />;
