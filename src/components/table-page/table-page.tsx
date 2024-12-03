@@ -48,7 +48,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				okType: "danger",
 				title: confirmQuestion,
 				onOk: () => {
-					return handleDeleteConfirm(2, true).catch(() => {
+					return handleDeleteConfirm(id, true).catch(() => {
 						message.error(`Erro ao remover ${registerName}`);
 					});
 				},
