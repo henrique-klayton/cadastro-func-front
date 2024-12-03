@@ -2,6 +2,7 @@ import { TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import { TableProps } from "@components/data-table/types";
+import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TablePageComponent from "@components/table-page";
 import { FormValueFormatters } from "@components/table-page/types";
 import { ScheduleType } from "@fragments/schedule";
@@ -75,6 +76,9 @@ export default async function SchedulePage() {
 			</FormItem>
 			<FormItem label="Horário Fim" name="endTime" required>
 				<TimePicker format="HH:mm" />
+			</FormItem>
+			<FormItem label="Tipo Escala" name="type" required>
+				<ScheduleTypeSelect />
 			</FormItem>
 		</TablePageComponent>
 	);
