@@ -6,7 +6,7 @@ export default async function runMutation<R, V extends object>(
 	variables: V,
 ): Promise<R> {
 	const { data: mutationResult } = await getUrqlClient()
-		.query(mutation.toString(), variables ?? {})
+		.mutation(mutation.toString(), variables ?? {})
 		.toPromise();
 
 	if (mutationResult === undefined) throw new Error("Mutation failed");
