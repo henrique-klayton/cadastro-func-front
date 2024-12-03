@@ -5,10 +5,14 @@ export default async function runQuery<R, V>(
 	query: TypedDocumentString<R, V>,
 	variables?: V,
 ): Promise<R> {
-	const { data: queryResult } = await getUrqlClient()
-		.query(query.toString(), variables ?? {})
-		.toPromise();
+	try {
+		const { data: queryResult } = await getUrqlClient()
+			.query(query.toString(), variables ?? {})
+			.toPromise();
 
-	if (queryResult === undefined) throw new Error("Query failed");
-	return queryResult;
+		if (queryResult == null) throw new Error("Query null/undefined");
+		return queryResult;
+	} catch (err) {
+		throw new Error("Query failed", { cause: err });
+	}
 }

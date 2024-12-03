@@ -5,10 +5,14 @@ export default async function runMutation<R, V extends object>(
 	mutation: TypedDocumentString<R, V>,
 	variables: V,
 ): Promise<R> {
-	const { data: mutationResult } = await getUrqlClient()
-		.mutation(mutation.toString(), variables ?? {})
-		.toPromise();
+	try {
+		const { data: mutationResult } = await getUrqlClient()
+			.mutation(mutation.toString(), variables ?? {})
+			.toPromise();
 
-	if (mutationResult === undefined) throw new Error("Mutation failed");
-	return mutationResult;
+		if (mutationResult == null) throw new Error("Mutation null/undefined");
+		return mutationResult;
+	} catch (err) {
+		throw new Error("Mutation failed", { cause: err });
+	}
 }
