@@ -7,6 +7,7 @@ import { FormValueFormatters } from "@components/table-page/types";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import timeParse from "@utils/time-parse";
+import timeTableFormat from "@utils/time-table-format";
 import {
 	createSchedule,
 	deleteSchedule,
@@ -28,12 +29,12 @@ export default async function SchedulePage() {
 			{
 				dataIndex: "startTime",
 				title: "Hora Início",
-				formatter: timeParse,
+				formatter: timeTableFormat,
 			},
 			{
 				dataIndex: "endTime",
 				title: "Hora Fim",
-				formatter: timeParse,
+				formatter: timeTableFormat,
 			},
 			{
 				dataIndex: "type",
