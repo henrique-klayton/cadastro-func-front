@@ -25,7 +25,6 @@
     "paths": {
       "@components/*": [ "./src/components/*" ],
       "@interfaces/*": [ "./src/interfaces/*" ],
-      "@types/*": [ "./src/types/*" ],
       "@enums/*": [ "./src/enums/*" ],
       "@utils/*": [ "./src/utils/*" ],
       "@fragments/*": [ "./src/graphql/fragments/*" ],

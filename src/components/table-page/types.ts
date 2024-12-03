@@ -1,8 +1,6 @@
 import { TableProps } from "@components/data-table/types";
-import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
 
-export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type FormValueFormatters<T> = { [P in keyof T]: (value: T[P]) => any };
 

@@ -1,8 +1,10 @@
 import { ActionsEnum } from "@enums/actions";
 import { FormInstance } from "antd";
 
+export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
+
 export interface FormModalProps<F> {
-	action: ActionsEnum.CREATE | ActionsEnum.UPDATE;
+	action: FormModalActions;
 	initialData: Partial<F> | undefined;
 	form: FormInstance<F>;
 	children: React.ReactNode;

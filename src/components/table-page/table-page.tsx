@@ -7,9 +7,10 @@ import { AiOutlinePlus } from "react-icons/ai";
 import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
+import { FormModalActions } from "@components/form-modal/types";
 import { HaveId } from "@interfaces/have-id";
 import { ActionsEnum } from "../../enums/actions";
-import { FormModalActions, TablePageProps } from "./types";
+import { TablePageProps } from "./types";
 
 import "./table-page.css";
 import useModal from "antd/es/modal/useModal";
