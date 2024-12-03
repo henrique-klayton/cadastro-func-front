@@ -11,6 +11,8 @@ import {
 	updateEmployeeMutation,
 } from "@queries/schedule";
 
+// FIXME Treat errors in all server actions
+
 export async function getSchedule(id: number): Promise<ScheduleType> {
 	const queryResult = await runQuery(getScheduleQuery, { id });
 	return Schedule(queryResult.schedule);
@@ -45,9 +47,14 @@ export async function updateSchedule(
 }
 
 export async function deleteSchedule(id: number): Promise<ScheduleType> {
-	const deleted = await runMutation(deleteEmployeeMutation, {
+	return runMutation(deleteEmployeeMutation, {
 		id,
-	});
-	const schedule = Schedule(deleted.deleteSchedule);
-	return schedule;
+	})
+		.then((deleted) => {
+			const schedule = Schedule(deleted.deleteSchedule);
+			return schedule;
+		})
+		.catch((err) => {
+			throw err;
+		});
 }
