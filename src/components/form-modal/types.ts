@@ -9,7 +9,8 @@ export interface FormModalProps<F> {
 	form: FormInstance<F>;
 	children: React.ReactNode;
 	objectName: string;
-	openState: boolean;
+	open: boolean;
+	loading: boolean;
 	onCancel: () => void;
 	onSubmit: (data: F, id?: string | number) => void;
 }

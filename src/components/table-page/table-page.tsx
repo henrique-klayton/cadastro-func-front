@@ -24,7 +24,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	formatters,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
-	const [isFormOpen, setIsFormOpen] = useState(false);
+	const [formOpen, setFormOpen] = useState(false);
+	const [formLoading, setFormLoading] = useState(false);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [form] = useForm<C | U>();
 
@@ -35,11 +36,13 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	// DataTable Component
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
-			const item = await queryAction(id);
-			for (const key in formatters) {
-				item[key] = formatters[key](item[key]);
-			}
-			openFormModal(ActionsEnum.UPDATE, item as U);
+			const item = await queryAction(id).then((obj) => {
+				for (const key in formatters) {
+					obj[key] = formatters[key](obj[key]);
+				}
+				return obj;
+			});
+			openFormModal(ActionsEnum.UPDATE, item as Promise<U>);
 		},
 		onDeleteClick: async (id: T["id"]) => {
 			const confirmModalProps: ModalFuncProps = {
@@ -72,14 +75,19 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		closeFormModal();
 	};
 
-	const openFormModal = (action: FormModalActions, initialData?: U) => {
+	const openFormModal = async (
+		action: FormModalActions,
+		initialData?: Promise<U>,
+	) => {
 		setAction(action);
-		setIsFormOpen(true);
-		setFormData(initialData);
+		if (initialData) setFormLoading(true);
+		setFormOpen(true);
+		if (initialData) setFormData(await initialData);
+		setFormLoading(false);
 	};
 
 	const closeFormModal = () => {
-		setIsFormOpen(false);
+		setFormOpen(false);
 		form.resetFields();
 	};
 
@@ -102,7 +110,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				objectName={registerName}
 				form={form}
 				initialData={formData}
-				openState={isFormOpen}
+				loading={formLoading}
+				open={formOpen}
 				onSubmit={formSubmit}
 				onCancel={handleFormModalCancel}
 			>

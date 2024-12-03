@@ -9,14 +9,16 @@ export default function FormModal<F>({
 	objectName,
 	initialData,
 	form,
-	openState,
+	open,
+	loading,
 	onCancel,
 	onSubmit,
 }: FormModalProps<F>) {
 	return (
 		<Modal
 			title={`${action} ${objectName}`}
-			open={openState}
+			open={open}
+			loading={loading}
 			onOk={() => {
 				switch (action) {
 					case ActionsEnum.CREATE:

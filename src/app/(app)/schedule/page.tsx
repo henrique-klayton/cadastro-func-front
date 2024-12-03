@@ -1,4 +1,4 @@
-import { TimePicker } from "antd";
+import { Switch, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import { TableProps } from "@components/data-table/types";
@@ -79,6 +79,9 @@ export default async function SchedulePage() {
 			</FormItem>
 			<FormItem label="Tipo Escala" name="type" required>
 				<ScheduleTypeSelect />
+			</FormItem>
+			<FormItem label="Status" name="status" required>
+				<Switch />
 			</FormItem>
 		</TablePageComponent>
 	);
