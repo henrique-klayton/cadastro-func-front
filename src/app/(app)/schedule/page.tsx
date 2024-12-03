@@ -6,6 +6,7 @@ import TablePageComponent from "@components/table-page";
 import { FormValueFormatters } from "@components/table-page/types";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import scheduleTypeFormat from "@utils/schedule-type-format";
 import timeParse from "@utils/time-parse";
 import timeTableFormat from "@utils/time-table-format";
 import {
@@ -38,7 +39,8 @@ export default async function SchedulePage() {
 			},
 			{
 				dataIndex: "type",
-				title: "Tipo",
+				title: "Tipo Escala",
+				formatter: scheduleTypeFormat,
 			},
 			{
 				dataIndex: "status",
