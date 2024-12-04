@@ -35,6 +35,7 @@ export type EmployeeDto = {
   firstName: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   lastName: Scalars['String']['output'];
+  schedule?: Maybe<ScheduleDto>;
   scheduleId?: Maybe<Scalars['Int']['output']>;
   status: Scalars['Boolean']['output'];
   updatedAt: Scalars['DateTime']['output'];
@@ -354,7 +355,7 @@ export type __EnumValue = {
   deprecationReason?: Maybe<Scalars['String']['output']>;
 };
 
-export type EmployeeFragment = { __typename: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean } & { ' $fragmentName'?: 'EmployeeFragment' };
+export type EmployeeFragment = { __typename: 'EmployeeDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean, schedule?: { __typename: 'ScheduleDto', type: ScheduleType } | null } & { ' $fragmentName'?: 'EmployeeFragment' };
 
 export type FullEmployeeFragment = { __typename: 'EmployeeFullDto', id: string, firstName: string, lastName: string, birthDate: any, status: boolean, schedule: (
     { __typename: 'ScheduleDto' }
@@ -544,6 +545,10 @@ export const EmployeeFragmentDoc = new TypedDocumentString(`
   lastName
   birthDate
   status
+  schedule {
+    __typename
+    type
+  }
 }
     `, {"fragmentName":"Employee"}) as unknown as TypedDocumentString<EmployeeFragment, unknown>;
 export const ScheduleFragmentDoc = new TypedDocumentString(`
@@ -648,6 +653,10 @@ export const GetEmployeesDocument = new TypedDocumentString(`
   lastName
   birthDate
   status
+  schedule {
+    __typename
+    type
+  }
 }`) as unknown as TypedDocumentString<GetEmployeesQuery, GetEmployeesQueryVariables>;
 export const CreateEmployeeDocument = new TypedDocumentString(`
     mutation CreateEmployee($employee: EmployeeCreateDto!) {
@@ -664,6 +673,10 @@ export const CreateEmployeeDocument = new TypedDocumentString(`
   lastName
   birthDate
   status
+  schedule {
+    __typename
+    type
+  }
 }`) as unknown as TypedDocumentString<CreateEmployeeMutation, CreateEmployeeMutationVariables>;
 export const UpdateEmployeeDocument = new TypedDocumentString(`
     mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {
@@ -680,6 +693,10 @@ export const UpdateEmployeeDocument = new TypedDocumentString(`
   lastName
   birthDate
   status
+  schedule {
+    __typename
+    type
+  }
 }`) as unknown as TypedDocumentString<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
 export const DeleteEmployeeDocument = new TypedDocumentString(`
     mutation DeleteEmployee($id: ID!) {
@@ -696,6 +713,10 @@ export const DeleteEmployeeDocument = new TypedDocumentString(`
   lastName
   birthDate
   status
+  schedule {
+    __typename
+    type
+  }
 }`) as unknown as TypedDocumentString<DeleteEmployeeMutation, DeleteEmployeeMutationVariables>;
 export const ScheduleTypeValuesDocument = new TypedDocumentString(`
     query ScheduleTypeValues {

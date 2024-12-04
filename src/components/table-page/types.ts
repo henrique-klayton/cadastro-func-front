@@ -14,7 +14,7 @@ export interface TablePageProps<T extends HaveId, C extends U, U> {
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
-	queryAction: (id: T["id"]) => Promise<C | U>;
+	queryAction: (id: T["id"]) => Promise<U>;
 	createAction: (data: C) => Promise<T>;
 	updateAction: (id: T["id"], data: U) => Promise<T>;
 	deleteAction: (id: T["id"]) => Promise<T>;

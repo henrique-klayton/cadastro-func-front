@@ -15,7 +15,7 @@ import * as types from './graphql';
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 const documents = {
-    "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t}\n": types.EmployeeFragmentDoc,
+    "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t\tschedule {\n\t\t\ttype\n\t\t}\n\t}\n": types.EmployeeFragmentDoc,
     "\n\tfragment FullEmployee on EmployeeFullDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t\tschedule { ...Schedule }\n\t\tskills { ...Skill }\n\t}\n": types.FullEmployeeFragmentDoc,
     "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
     "\n\tfragment Skill on SkillDto {\n\t\tid\n\t\tdescription\n\t\tstatus\n\t}\n": types.SkillFragmentDoc,
@@ -40,7 +40,7 @@ const documents = {
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t}\n"): typeof import('./graphql').EmployeeFragmentDoc;
+export function graphql(source: "\n\tfragment Employee on EmployeeDto {\n\t\tid\n\t\tfirstName\n\t\tlastName\n\t\tbirthDate\n\t\tstatus\n\t\tschedule {\n\t\t\ttype\n\t\t}\n\t}\n"): typeof import('./graphql').EmployeeFragmentDoc;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

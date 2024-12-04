@@ -1,18 +1,19 @@
 "use server";
-import {
-	Employee,
-	EmployeeType,
-	FullEmployee,
-	FullEmployeeType,
-} from "@fragments/employee";
+import { Employee, EmployeeType } from "@fragments/employee";
+import { FullEmployeeType } from "@fragments/full-employee";
+import { FullEmployee } from "@fragments/full-employee";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import { EmployeeCreateDto } from "@graphql/types/graphql";
+import { EmployeeCreateDto, EmployeeUpdateDto } from "@graphql/types/graphql";
 import {
 	createEmployeeMutation,
+	deleteEmployeeMutation,
 	getEmployeesListQuery,
 	getFullEmployeeQuery,
+	updateEmployeeMutation,
 } from "@queries/employee";
+
+// FIXME Treat errors in all server actions
 
 export async function getEmployeeWithRelations(
 	id: string,
@@ -25,6 +26,7 @@ export async function getEmployeeWithRelations(
 	}
 }
 
+// FIXME Catch errors
 export async function getEmployees(
 	filterStatus = false,
 ): Promise<EmployeeType[]> {
@@ -33,12 +35,31 @@ export async function getEmployees(
 	return employees;
 }
 
+// FIXME Catch errors
 export async function createEmployee(data: EmployeeCreateDto) {
-	const created = runMutation(createEmployeeMutation, {
+	const created = await runMutation(createEmployeeMutation, {
 		employee: data,
 	});
+	const employee = Employee(created.createEmployee);
+	return employee;
 }
 
-export async function updateEmployee() {}
+// FIXME Catch errors
+export async function updateEmployee(
+	id: string,
+	data: EmployeeUpdateDto,
+): Promise<EmployeeType> {
+	const updated = await runMutation(updateEmployeeMutation, {
+		id,
+		employee: data,
+	});
+	const employee = Employee(updated.updateEmployee);
+	return employee;
+}
 
-export async function deleteEmployee() {}
+// FIXME Catch errors
+export async function deleteEmployee(id: string): Promise<EmployeeType> {
+	const deleted = await runMutation(deleteEmployeeMutation, { id });
+	const employee = Employee(deleted.deleteEmployee);
+	return employee;
+}

@@ -8,10 +8,10 @@
     - [x] Edit
     - [x] Delete
   - [x] Create form modal to manipulate data for crud
-  - [ ] Create forms for each entity
+  - [x] Create forms for each entity
     - [x] Schedule
     - [x] Skill
-    - [ ] Employee
+    - [x] Employee
   - [x] Initialize form on update
   - [ ] Format data before sending to backend
   - [x] Add delete confirmation modal
