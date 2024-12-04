@@ -1,8 +1,16 @@
 "use server";
-import { Schedule, ScheduleType } from "@fragments/schedule";
+import { FormDataParser } from "@components/table-page/types";
+import {
+	Schedule,
+	ScheduleType as ScheduleFragmentType,
+} from "@fragments/schedule";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import {
+	ScheduleCreateDto,
+	ScheduleType as ScheduleTypeEnum,
+	ScheduleUpdateDto,
+} from "@graphql/types/graphql";
 import {
 	createScheduleMutation,
 	deleteScheduleMutation,
@@ -10,17 +18,34 @@ import {
 	getSchedulesListQuery,
 	updateScheduleMutation,
 } from "@queries/schedule";
+import timeFormat from "@utils/time-format-server";
 
 // FIXME Treat errors in all server actions
+const createParser: FormDataParser<ScheduleCreateDto> = (
+	data: ScheduleCreateDto,
+) => {
+	data.startTime = timeFormat(data.startTime);
+	data.endTime = timeFormat(data.endTime);
+	data.type = `SCHEDULE_${data.type}` as ScheduleTypeEnum;
+	return data;
+};
+const updateParser: FormDataParser<ScheduleUpdateDto> = (
+	data: ScheduleUpdateDto,
+) => {
+	if (data.startTime) data.startTime = timeFormat(data.startTime);
+	if (data.endTime) data.endTime = timeFormat(data.endTime);
+	if (data.type) data.type = `SCHEDULE_${data.type}` as ScheduleTypeEnum;
+	return data;
+};
 
 // FIXME Catch errors
-export async function getSchedule(id: number): Promise<ScheduleType> {
+export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 	const queryResult = await runQuery(getScheduleQuery, { id });
 	return Schedule(queryResult.schedule);
 }
 
 // FIXME Catch errors
-export async function getSchedules(): Promise<ScheduleType[]> {
+export async function getSchedules(): Promise<ScheduleFragmentType[]> {
 	const queryResult = await runQuery(getSchedulesListQuery);
 	const schedules = queryResult.scheduleList.map((item) => Schedule(item));
 	return schedules;
@@ -29,9 +54,9 @@ export async function getSchedules(): Promise<ScheduleType[]> {
 // FIXME Catch errors
 export async function createSchedule(
 	data: ScheduleCreateDto,
-): Promise<ScheduleType> {
+): Promise<ScheduleFragmentType> {
 	const created = await runMutation(createScheduleMutation, {
-		schedule: data,
+		schedule: createParser(data),
 	});
 	const schedule = Schedule(created.createSchedule);
 	return schedule;
@@ -41,16 +66,18 @@ export async function createSchedule(
 export async function updateSchedule(
 	id: number,
 	data: ScheduleUpdateDto,
-): Promise<ScheduleType> {
+): Promise<ScheduleFragmentType> {
 	const updated = await runMutation(updateScheduleMutation, {
 		id,
-		schedule: data,
+		schedule: updateParser(data),
 	});
 	const schedule = Schedule(updated.updateSchedule);
 	return schedule;
 }
 
-export async function deleteSchedule(id: number): Promise<ScheduleType> {
+export async function deleteSchedule(
+	id: number,
+): Promise<ScheduleFragmentType> {
 	return runMutation(deleteScheduleMutation, {
 		id,
 	})
