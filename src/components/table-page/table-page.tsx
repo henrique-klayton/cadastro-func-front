@@ -46,7 +46,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		},
 		onDeleteClick: async (id: T["id"]) => {
 			const confirmModalProps: ModalFuncProps = {
-				icon: <ExclamationCircleFilled className="text-yellow-400" />,
+				icon: <ExclamationCircleFilled />,
 				okText: "Remover",
 				okType: "danger",
 				title: confirmQuestion,
