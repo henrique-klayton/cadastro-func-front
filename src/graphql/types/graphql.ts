@@ -473,6 +473,16 @@ export type DeleteScheduleMutation = { __typename: 'Mutation', deleteSchedule: (
     & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
   ) };
 
+export type GetSkillQueryVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type GetSkillQuery = { __typename: 'Query', skill: (
+    { __typename: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  ) };
+
 export type GetSkillsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -480,6 +490,37 @@ export type GetSkillsQuery = { __typename: 'Query', skillList: Array<(
     { __typename: 'SkillDto' }
     & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
   )> };
+
+export type CreateSkillMutationVariables = Exact<{
+  skill: SkillCreateDto;
+}>;
+
+
+export type CreateSkillMutation = { __typename: 'Mutation', createSkill: (
+    { __typename: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  ) };
+
+export type UpdateSkillMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+  skill: SkillUpdateDto;
+}>;
+
+
+export type UpdateSkillMutation = { __typename: 'Mutation', updateSkill: (
+    { __typename: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  ) };
+
+export type DeleteSkillMutationVariables = Exact<{
+  id: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteSkillMutation = { __typename: 'Mutation', deleteSkill: (
+    { __typename: 'SkillDto' }
+    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+  ) };
 
 export class TypedDocumentString<TResult, TVariables>
   extends String
@@ -748,6 +789,20 @@ export const DeleteScheduleDocument = new TypedDocumentString(`
   type
   status
 }`) as unknown as TypedDocumentString<DeleteScheduleMutation, DeleteScheduleMutationVariables>;
+export const GetSkillDocument = new TypedDocumentString(`
+    query GetSkill($id: Int!) {
+  __typename
+  skill(id: $id) {
+    __typename
+    ...Skill
+  }
+}
+    fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<GetSkillQuery, GetSkillQueryVariables>;
 export const GetSkillsDocument = new TypedDocumentString(`
     query GetSkills {
   __typename
@@ -762,3 +817,45 @@ export const GetSkillsDocument = new TypedDocumentString(`
   description
   status
 }`) as unknown as TypedDocumentString<GetSkillsQuery, GetSkillsQueryVariables>;
+export const CreateSkillDocument = new TypedDocumentString(`
+    mutation CreateSkill($skill: SkillCreateDto!) {
+  __typename
+  createSkill(skill: $skill) {
+    __typename
+    ...Skill
+  }
+}
+    fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<CreateSkillMutation, CreateSkillMutationVariables>;
+export const UpdateSkillDocument = new TypedDocumentString(`
+    mutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {
+  __typename
+  updateSkill(id: $id, skill: $skill) {
+    __typename
+    ...Skill
+  }
+}
+    fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<UpdateSkillMutation, UpdateSkillMutationVariables>;
+export const DeleteSkillDocument = new TypedDocumentString(`
+    mutation DeleteSkill($id: Int!) {
+  __typename
+  deleteSkill(id: $id) {
+    __typename
+    ...Skill
+  }
+}
+    fragment Skill on SkillDto {
+  __typename
+  id
+  description
+  status
+}`) as unknown as TypedDocumentString<DeleteSkillMutation, DeleteSkillMutationVariables>;
