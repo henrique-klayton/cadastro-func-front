@@ -10,13 +10,13 @@
   - [x] Create form modal to manipulate data for crud
   - [ ] Create forms for each entity
     - [x] Schedule
-    - [ ] Skill
+    - [x] Skill
     - [ ] Employee
   - [x] Initialize form on update
   - [ ] Format data before sending to backend
   - [x] Add delete confirmation modal
   - [ ] Call server actions on form submit
-    - [ ] Add
+    - [ ] Create
     - [ ] Edit
     - [x] Delete
   - [ ] Create
@@ -25,6 +25,7 @@
 - [ ] Add table filtering
   - [ ] Status filter
   - [ ] Other filters
+- [ ] Gerar relatórios em CSV
 - [ ] Add table pagination
 - [ ] Dynamic white/dark theme
 - [ ] Authentication

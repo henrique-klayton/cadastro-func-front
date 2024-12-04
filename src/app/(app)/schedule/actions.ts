@@ -13,17 +13,20 @@ import {
 
 // FIXME Treat errors in all server actions
 
+// FIXME Catch errors
 export async function getSchedule(id: number): Promise<ScheduleType> {
 	const queryResult = await runQuery(getScheduleQuery, { id });
 	return Schedule(queryResult.schedule);
 }
 
+// FIXME Catch errors
 export async function getSchedules(): Promise<ScheduleType[]> {
 	const queryResult = await runQuery(getSchedulesListQuery);
 	const schedules = queryResult.scheduleList.map((item) => Schedule(item));
 	return schedules;
 }
 
+// FIXME Catch errors
 export async function createSchedule(
 	data: ScheduleCreateDto,
 ): Promise<ScheduleType> {
@@ -34,6 +37,7 @@ export async function createSchedule(
 	return schedule;
 }
 
+// FIXME Catch errors
 export async function updateSchedule(
 	id: number,
 	data: ScheduleUpdateDto,

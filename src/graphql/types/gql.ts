@@ -30,7 +30,11 @@ const documents = {
     "\n\tmutation CreateSchedule($schedule: ScheduleCreateDto!) {\n\t\tcreateSchedule(schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.CreateScheduleDocument,
     "\n\tmutation UpdateSchedule($id: Int!, $schedule: ScheduleUpdateDto!) {\n\t\tupdateSchedule(id: $id, schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.UpdateScheduleDocument,
     "\n\tmutation DeleteSchedule($id: Int!) {\n\t\tdeleteSchedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.DeleteScheduleDocument,
+    "\n\tquery GetSkill($id: Int!) {\n\t\tskill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.GetSkillDocument,
     "\n\tquery GetSkills {\n\t\tskillList {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.GetSkillsDocument,
+    "\n\tmutation CreateSkill($skill: SkillCreateDto!) {\n\t\tcreateSkill(skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.CreateSkillDocument,
+    "\n\tmutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {\n\t\tupdateSkill(id: $id, skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.UpdateSkillDocument,
+    "\n\tmutation DeleteSkill($id: Int!) {\n\t\tdeleteSkill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.DeleteSkillDocument,
 };
 
 /**
@@ -96,7 +100,23 @@ export function graphql(source: "\n\tmutation DeleteSchedule($id: Int!) {\n\t\td
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function graphql(source: "\n\tquery GetSkill($id: Int!) {\n\t\tskill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').GetSkillDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function graphql(source: "\n\tquery GetSkills {\n\t\tskillList {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').GetSkillsDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation CreateSkill($skill: SkillCreateDto!) {\n\t\tcreateSkill(skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').CreateSkillDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {\n\t\tupdateSkill(id: $id, skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').UpdateSkillDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tmutation DeleteSkill($id: Int!) {\n\t\tdeleteSkill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').DeleteSkillDocument;
 
 
 export function graphql(source: string) {
