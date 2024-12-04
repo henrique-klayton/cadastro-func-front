@@ -36,7 +36,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	// DataTable Component
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
-			const item = await queryAction(id).then((obj) => {
+			const item = queryAction(id).then((obj) => {
 				for (const key in formatters) {
 					obj[key] = formatters[key](obj[key]);
 				}
@@ -75,20 +75,24 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		closeFormModal();
 	};
 
-	const openFormModal = async (
+	const openFormModal = (
 		action: FormModalActions,
 		initialData?: Promise<U>,
 	) => {
 		setAction(action);
-		if (initialData) setFormLoading(true);
+		if (initialData) {
+			setFormLoading(true);
+			initialData.then((data) => {
+				setFormData(data);
+				setFormLoading(false);
+			});
+		}
 		setFormOpen(true);
-		if (initialData) setFormData(await initialData);
-		setFormLoading(false);
 	};
 
 	const closeFormModal = () => {
 		setFormOpen(false);
-		form.resetFields();
+		setFormData(undefined);
 	};
 
 	const handleFormModalCancel = () => {
