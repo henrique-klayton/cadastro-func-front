@@ -9,7 +9,7 @@
     - [x] Delete
   - [x] Create form modal to manipulate data for crud
   - [ ] Create forms for each entity
-    - [ ] Schedule
+    - [x] Schedule
     - [ ] Skill
     - [ ] Employee
   - [x] Initialize form on update
