@@ -51,13 +51,6 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
-	const actions = {
-		queryAction: getSchedule,
-		createAction: createSchedule,
-		updateAction: updateSchedule,
-		deleteAction: deleteSchedule,
-	};
-
 	const formatters: FormValueFormatters<ScheduleUpdateDto> = {
 		startTime: timeParse,
 		endTime: timeParse,
@@ -68,7 +61,12 @@ export default async function SchedulePage() {
 			table={table}
 			title="Escalas"
 			registerName="Escala"
-			actions={actions}
+			actions={{
+				queryAction: getSchedule,
+				createAction: createSchedule,
+				updateAction: updateSchedule,
+				deleteAction: deleteSchedule,
+			}}
 			formatters={formatters}
 		>
 			<FormItem label="Horário Início" name="startTime" required>
