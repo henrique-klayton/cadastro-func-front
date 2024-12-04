@@ -12,8 +12,7 @@ export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
 export interface RequiredColumnProps<T> {
 	title: string;
 	dataIndex: Extract<keyof T, string | number>;
-	// biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
-	formatter?: (value: T[keyof T]) => any;
+	formatter?: (value: T[keyof T]) => React.ReactNode;
 }
 
 export interface TableProps<T> {
