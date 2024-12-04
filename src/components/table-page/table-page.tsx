@@ -22,12 +22,17 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	registerName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
 	formatters,
+	createParser,
+	updateParser,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [form] = useForm<C | U>();
+
+	if (!createParser) createParser = (value) => value;
+	if (!updateParser) updateParser = (value) => value;
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -37,8 +42,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			const item = queryAction(id).then((obj) => {
-				for (const key in formatters) {
-					obj[key] = formatters[key](obj[key]);
+				if (formatters) {
+					for (const key in formatters) {
+						obj[key] = formatters[key](obj[key]);
+					}
 				}
 				return obj;
 			});
@@ -66,10 +73,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const formSubmit = (data: C | U, id?: T["id"]) => {
 		switch (action) {
 			case ActionsEnum.CREATE:
-				createAction(data as C);
+				createAction(createParser(data));
 				break;
 			case ActionsEnum.UPDATE:
-				updateAction(id as T["id"], data as U);
+				updateAction(id as T["id"], updateParser(data));
 				break;
 		}
 		closeFormModal();
