@@ -14,6 +14,7 @@ export default function FormModal<F>({
 	onCancel,
 	onSubmit,
 }: FormModalProps<F>) {
+	form.setFieldsValue(initialData as object);
 	return (
 		<Modal
 			title={`${action} ${objectName}`}
@@ -34,8 +35,9 @@ export default function FormModal<F>({
 				}
 			}}
 			onCancel={onCancel}
+			afterClose={() => form.resetFields()}
 		>
-			<Form layout="vertical" form={form} initialValues={initialData}>
+			<Form layout="vertical" form={form}>
 				{children}
 			</Form>
 		</Modal>
