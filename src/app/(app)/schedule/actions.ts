@@ -4,11 +4,11 @@ import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import {
-	createEmployeeMutation,
-	deleteEmployeeMutation,
+	createScheduleMutation,
+	deleteScheduleMutation,
 	getScheduleQuery,
 	getSchedulesListQuery,
-	updateEmployeeMutation,
+	updateScheduleMutation,
 } from "@queries/schedule";
 
 // FIXME Treat errors in all server actions
@@ -27,7 +27,7 @@ export async function getSchedules(): Promise<ScheduleType[]> {
 export async function createSchedule(
 	data: ScheduleCreateDto,
 ): Promise<ScheduleType> {
-	const created = await runMutation(createEmployeeMutation, {
+	const created = await runMutation(createScheduleMutation, {
 		schedule: data,
 	});
 	const schedule = Schedule(created.createSchedule);
@@ -38,7 +38,7 @@ export async function updateSchedule(
 	id: number,
 	data: ScheduleUpdateDto,
 ): Promise<ScheduleType> {
-	const updated = await runMutation(updateEmployeeMutation, {
+	const updated = await runMutation(updateScheduleMutation, {
 		id,
 		schedule: data,
 	});
@@ -47,7 +47,7 @@ export async function updateSchedule(
 }
 
 export async function deleteSchedule(id: number): Promise<ScheduleType> {
-	return runMutation(deleteEmployeeMutation, {
+	return runMutation(deleteScheduleMutation, {
 		id,
 	})
 		.then((deleted) => {

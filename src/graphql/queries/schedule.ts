@@ -16,7 +16,7 @@ export const getSchedulesListQuery = graphql(`
 	}
 `);
 
-export const createEmployeeMutation = graphql(`
+export const createScheduleMutation = graphql(`
 	mutation CreateSchedule($schedule: ScheduleCreateDto!) {
 		createSchedule(schedule: $schedule) {
 			...Schedule
@@ -24,7 +24,7 @@ export const createEmployeeMutation = graphql(`
 	}
 `);
 
-export const updateEmployeeMutation = graphql(`
+export const updateScheduleMutation = graphql(`
 	mutation UpdateSchedule($id: Int!, $schedule: ScheduleUpdateDto!) {
 		updateSchedule(id: $id, schedule: $schedule) {
 			...Schedule
@@ -32,7 +32,7 @@ export const updateEmployeeMutation = graphql(`
 	}
 `);
 
-export const deleteEmployeeMutation = graphql(`
+export const deleteScheduleMutation = graphql(`
 	mutation DeleteSchedule($id: Int!) {
 		deleteSchedule(id: $id) {
 			...Schedule
