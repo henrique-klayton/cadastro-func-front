@@ -29,3 +29,7 @@
 - [ ] Add table pagination
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
+
+- [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
+Usar códigos de erro?
+Como identificar os erros do prisma?
