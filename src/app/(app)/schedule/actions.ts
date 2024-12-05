@@ -6,11 +6,7 @@ import {
 } from "@fragments/schedule";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import {
-	ScheduleCreateDto,
-	ScheduleType as ScheduleTypeEnum,
-	ScheduleUpdateDto,
-} from "@graphql/types/graphql";
+import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import {
 	createScheduleMutation,
 	deleteScheduleMutation,
@@ -18,23 +14,22 @@ import {
 	getSchedulesListQuery,
 	updateScheduleMutation,
 } from "@queries/schedule";
-import timeFormat from "@utils/time-format-server";
+import timeSerialize from "@utils/time-serialize";
 
 // FIXME Treat errors in all server actions
-const createParser: FormDataParser<ScheduleCreateDto> = (
+const createSerializer: FormDataParser<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
 ) => {
-	data.startTime = timeFormat(data.startTime);
-	data.endTime = timeFormat(data.endTime);
-	data.type = `SCHEDULE_${data.type}` as ScheduleTypeEnum;
+	data.startTime = timeSerialize(data.startTime);
+	data.endTime = timeSerialize(data.endTime);
 	return data;
 };
-const updateParser: FormDataParser<ScheduleUpdateDto> = (
+
+const updateSerializer: FormDataParser<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,
 ) => {
-	if (data.startTime) data.startTime = timeFormat(data.startTime);
-	if (data.endTime) data.endTime = timeFormat(data.endTime);
-	if (data.type) data.type = `SCHEDULE_${data.type}` as ScheduleTypeEnum;
+	if (data.startTime) data.startTime = timeSerialize(data.startTime);
+	if (data.endTime) data.endTime = timeSerialize(data.endTime);
 	return data;
 };
 
@@ -56,7 +51,7 @@ export async function createSchedule(
 	data: ScheduleCreateDto,
 ): Promise<ScheduleFragmentType> {
 	const created = await runMutation(createScheduleMutation, {
-		schedule: createParser(data),
+		schedule: createSerializer(data),
 	});
 	const schedule = Schedule(created.createSchedule);
 	return schedule;
@@ -69,7 +64,7 @@ export async function updateSchedule(
 ): Promise<ScheduleFragmentType> {
 	const updated = await runMutation(updateScheduleMutation, {
 		id,
-		schedule: updateParser(data),
+		schedule: updateSerializer(data),
 	});
 	const schedule = Schedule(updated.updateSchedule);
 	return schedule;

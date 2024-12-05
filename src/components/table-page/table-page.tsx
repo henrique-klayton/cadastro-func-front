@@ -22,8 +22,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	registerName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
 	formatters,
-	createParser,
-	updateParser,
+	createSerializer,
+	updateSerializer,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
@@ -31,14 +31,27 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [form] = useForm<C | U>();
 
-	if (!createParser) createParser = (value) => value;
-	if (!updateParser) updateParser = (value) => value;
+	if (!createSerializer) createSerializer = (value) => value;
+	if (!updateSerializer) updateSerializer = (value) => value;
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${registerName}?`;
 
 	// DataTable Component
+	const [tableData, setTableData] = useState(tableProps.data);
+	tableProps.data = tableData;
+
+	const addItemToTable = (item: T) => {
+		const data = [...tableData, item];
+		setTableData(data);
+	};
+
+	const removeItemFromTable = (id: T["id"]) => {
+		const data = tableData.filter((item) => item.id !== id);
+		setTableData(data);
+	};
+
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			const item = queryAction(id).then((obj) => {
@@ -58,9 +71,11 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				okType: "danger",
 				title: confirmQuestion,
 				onOk: () => {
-					return handleDeleteConfirm(id, true).catch(() => {
-						message.error(`Erro ao remover ${registerName}`);
-					});
+					return handleDeleteConfirm(id, true)
+						.then(() => removeItemFromTable(id))
+						.catch(() => {
+							message.error(`Erro ao remover ${registerName}`);
+						});
 				},
 				onCancel: () => {},
 			};
@@ -73,10 +88,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const formSubmit = (data: C | U, id?: T["id"]) => {
 		switch (action) {
 			case ActionsEnum.CREATE:
-				createAction(createParser(data));
+				createAction(createSerializer(data)).then((item) => {
+					if (item) addItemToTable(item);
+				});
 				break;
 			case ActionsEnum.UPDATE:
-				updateAction(id as T["id"], updateParser(data));
+				updateAction(id as T["id"], updateSerializer(data)).then((item) => {
+					if (item) addItemToTable(item);
+				});
 				break;
 		}
 		closeFormModal();
