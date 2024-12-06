@@ -26,9 +26,9 @@ const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	return data;
 };
 
-const deleteErrorMsg = "Erro ao remover Escala";
-const createErrorMsg = "Erro ao criar Escala";
-const updateErrorMsg = "Erro ao atualizar Escala";
+const deleteErrorMsg = "Erro ao remover Escala!";
+const createErrorMsg = "Erro ao criar Escala!";
+const updateErrorMsg = "Erro ao atualizar Escala!";
 
 const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,

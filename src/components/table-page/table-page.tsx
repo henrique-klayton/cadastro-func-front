@@ -57,14 +57,19 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			setFormId(id);
-			const item = queryAction(id).then((obj) => {
-				if (formatters) {
-					for (const key in formatters) {
-						obj[key] = formatters[key](obj[key]);
+			const item = queryAction(id)
+				.then((obj) => {
+					if (formatters) {
+						for (const key in formatters) {
+							obj[key] = formatters[key](obj[key]);
+						}
 					}
-				}
-				return obj;
-			});
+					return obj;
+				})
+				.catch(() => {
+					closeFormModal();
+					message.error("Erro ao carregar formulário!");
+				});
 			openFormModal(ActionsEnum.UPDATE, item as Promise<U>);
 		},
 		onDeleteClick: async (id: T["id"]) => {
