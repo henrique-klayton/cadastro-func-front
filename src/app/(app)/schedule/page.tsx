@@ -4,7 +4,7 @@ import FormItem from "antd/es/form/FormItem";
 import { TableProps } from "@components/data-table/types";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TablePageComponent from "@components/table-page";
-import { FormValueFormatters } from "@components/table-page/types";
+import { QueryDataParsers } from "@components/table-page/types";
 import { ScheduleType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import scheduleTypeFormat from "@utils/schedule-type-format";
@@ -51,7 +51,7 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
-	const formatters: FormValueFormatters<ScheduleUpdateDto> = {
+	const formatters: QueryDataParsers<ScheduleUpdateDto> = {
 		startTime: timeParse,
 		endTime: timeParse,
 	};
@@ -67,7 +67,7 @@ export default async function SchedulePage() {
 				updateAction: updateSchedule,
 				deleteAction: deleteSchedule,
 			}}
-			formatters={formatters}
+			queryDataParsers={formatters}
 		>
 			<FormItem label="Horário Início" name="startTime" required>
 				<TimePicker format="HH:mm" />

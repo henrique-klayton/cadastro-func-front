@@ -1,11 +1,37 @@
 import { TableProps } from "@components/data-table/types";
+import {
+	FormCreateData,
+	FormData,
+	FormUpdateData,
+} from "@components/form-modal/types";
+import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
 import { Optional } from "@interfaces/optional.type";
+import { FormInstance } from "antd/lib";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
-export type FormValueFormatters<T> = { [P in keyof T]: (value: T[P]) => any };
-// biome-ignore lint/suspicious/noExplicitAny: Impossible to know data type, some props could be formatted to another value
-export type FormDataParser<T> = (data: { [P in keyof T]?: unknown } | any) => T;
+export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
+export type FormDataSerializer<T> = (data: FormData<T>) => T;
+
+export type FormModalProps<C, U> =
+	| FormModalCreateProps<C>
+	| FormModalUpdateProps<U>;
+
+export interface FormModalCreateProps<C> {
+	action: ActionsEnum.CREATE;
+	form: FormInstance<C>;
+	initialData: C | undefined;
+	currentId: undefined;
+	onSubmit: (submit: FormCreateData<C>) => void;
+}
+
+export interface FormModalUpdateProps<U> {
+	action: ActionsEnum.UPDATE;
+	form: FormInstance<U>;
+	initialData: U | undefined;
+	currentId: string | number;
+	onSubmit: (submit: FormUpdateData<U>) => void;
+}
 
 export interface TablePageProps<T extends HaveId, C extends U, U> {
 	children: React.ReactNode;
@@ -13,9 +39,9 @@ export interface TablePageProps<T extends HaveId, C extends U, U> {
 	actions: ServerActions<T, C, U>;
 	title: string;
 	registerName: string;
-	formatters?: FormValueFormatters<U>;
-	createParser?: FormDataParser<C>;
-	updateParser?: FormDataParser<U>;
+	queryDataParsers?: QueryDataParsers<U>;
+	createSerializer?: FormDataSerializer<C>;
+	updateSerializer?: FormDataSerializer<U>;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {

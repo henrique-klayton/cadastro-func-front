@@ -46,7 +46,7 @@ export default async function SchedulePage() {
 				updateAction: updateSkill,
 				deleteAction: deleteSkill,
 			}}
-			formatters={{}}
+			queryDataParsers={{}}
 		>
 			<FormItem label="Descrição" name="description" required>
 				<Input />

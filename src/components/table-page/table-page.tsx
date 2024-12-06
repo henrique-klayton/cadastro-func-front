@@ -2,16 +2,17 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Flex, FloatButton, ModalFuncProps } from "antd";
 import { useForm } from "antd/es/form/Form";
+import { FormInstance } from "antd/lib";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
-import { FormModalActions } from "@components/form-modal/types";
+import { FormModalActions, FormSubmitData } from "@components/form-modal/types";
+import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
-import { ActionsEnum } from "../../enums/actions";
-import { TablePageProps } from "./types";
+import { FormModalProps, TablePageProps } from "./types";
 
 import "./table-page.css";
 
@@ -21,18 +22,19 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	title,
 	registerName,
 	actions: { queryAction, createAction, updateAction, deleteAction },
-	formatters,
+	queryDataParsers: formatters,
 	createSerializer,
 	updateSerializer,
 }: TablePageProps<T, C, U>) {
-	const [action, setAction] = useState<ActionsEnum>(ActionsEnum.CREATE);
+	const [action, setAction] = useState(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
+	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm<C | U>();
 
-	if (!createSerializer) createSerializer = (value) => value;
-	if (!updateSerializer) updateSerializer = (value) => value;
+	if (!createSerializer) createSerializer = (value) => value as C;
+	if (!updateSerializer) updateSerializer = (value) => value as U;
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -54,6 +56,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
+			setFormId(id);
 			const item = queryAction(id).then((obj) => {
 				if (formatters) {
 					for (const key in formatters) {
@@ -84,7 +87,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
-	const formSubmit = (data: C | U, id?: T["id"]) => {
+	const formSubmit = ({ action, data, id }: FormSubmitData<C, U>) => {
 		switch (action) {
 			case ActionsEnum.CREATE:
 				createAction(createSerializer(data)).then((item) => {
@@ -92,7 +95,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				});
 				break;
 			case ActionsEnum.UPDATE:
-				updateAction(id as T["id"], updateSerializer(data)).then((item) => {
+				updateAction(id, updateSerializer(data)).then((item) => {
 					if (item) addItemToTable(item);
 				});
 				break;
@@ -132,16 +135,22 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		}
 	};
 
+	// Form Modal Props
+	const states: FormModalProps<C, U> = {
+		action: action as FormModalActions,
+		form: form as FormInstance,
+		initialData: formData,
+		currentId: formId,
+		onSubmit: formSubmit,
+	} as FormModalProps<C, U>;
+
 	return (
 		<>
-			<FormModal<C | U>
-				action={action as FormModalActions}
+			<FormModal<C, U>
+				{...states}
 				objectName={registerName}
-				form={form}
-				initialData={formData}
 				loading={formLoading}
 				open={formOpen}
-				onSubmit={formSubmit}
 				onCancel={handleFormModalCancel}
 			>
 				{children}

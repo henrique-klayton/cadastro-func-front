@@ -1,5 +1,5 @@
 "use server";
-import { FormDataParser } from "@components/table-page/types";
+import { FormDataSerializer } from "@components/table-page/types";
 import {
 	Schedule,
 	ScheduleType as ScheduleFragmentType,
@@ -18,7 +18,7 @@ import {
 import timeSerialize from "@utils/time-serialize";
 
 // FIXME Treat errors in all server actions
-const createSerializer: FormDataParser<ScheduleCreateDto> = (
+const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
 ) => {
 	data.startTime = timeSerialize(data.startTime);
@@ -30,7 +30,7 @@ const deleteErrorMsg = "Erro ao remover Escala";
 const createErrorMsg = "Erro ao criar Escala";
 const updateErrorMsg = "Erro ao atualizar Escala";
 
-const updateSerializer: FormDataParser<ScheduleUpdateDto> = (
+const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,
 ) => {
 	if (data.startTime) data.startTime = timeSerialize(data.startTime);

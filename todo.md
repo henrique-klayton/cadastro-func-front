@@ -30,6 +30,7 @@
 - [ ] Add table filtering
   - [ ] Status filter
   - [ ] Other filters
+- [ ] Add/remove employee skills
 - [ ] Gerar relatórios em CSV
 - [ ] Add table pagination
 - [ ] Dynamic white/dark theme
