@@ -4,7 +4,6 @@ import {
 	Schedule,
 	ScheduleType as ScheduleFragmentType,
 } from "@fragments/schedule";
-import { GraphQLError } from "@graphql/graphql-error";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
@@ -15,6 +14,7 @@ import {
 	getSchedulesListQuery,
 	updateScheduleMutation,
 } from "@queries/schedule";
+import catchQueryError from "@utils/catch-query-error";
 import timeSerialize from "@utils/time-serialize";
 
 // FIXME Treat errors in all server actions
@@ -26,9 +26,11 @@ const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	return data;
 };
 
-const deleteErrorMsg = "Erro ao remover Escala!";
+const queryErrorMsg = "Erro ao carregar Escala!";
+const queryManyErrorMsg = "Erro ao carregar Escalas!";
 const createErrorMsg = "Erro ao criar Escala!";
 const updateErrorMsg = "Erro ao atualizar Escala!";
+const deleteErrorMsg = "Erro ao remover Escala!";
 
 const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,
@@ -40,26 +42,38 @@ const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 
 // FIXME Catch errors
 export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
-	const queryResult = await runQuery(getScheduleQuery, { id });
-	return Schedule(queryResult.schedule);
+	try {
+		const queryResult = await runQuery(getScheduleQuery, { id });
+		return Schedule(queryResult.schedule);
+	} catch (err) {
+		catchQueryError(err, queryErrorMsg);
+	}
 }
 
 // FIXME Catch errors
 export async function getSchedules(): Promise<ScheduleFragmentType[]> {
-	const queryResult = await runQuery(getSchedulesListQuery);
-	const schedules = queryResult.scheduleList.map((item) => Schedule(item));
-	return schedules;
+	try {
+		const queryResult = await runQuery(getSchedulesListQuery);
+		const schedules = queryResult.scheduleList.map((item) => Schedule(item));
+		return schedules;
+	} catch (err) {
+		catchQueryError(err, queryManyErrorMsg);
+	}
 }
 
 // FIXME Catch errors
 export async function createSchedule(
 	data: ScheduleCreateDto,
 ): Promise<ScheduleFragmentType> {
-	const created = await runMutation(createScheduleMutation, {
-		schedule: createSerializer(data),
-	});
-	const schedule = Schedule(created.createSchedule);
-	return schedule;
+	try {
+		const created = await runMutation(createScheduleMutation, {
+			schedule: createSerializer(data),
+		});
+		const schedule = Schedule(created.createSchedule);
+		return schedule;
+	} catch (err) {
+		catchQueryError(err, createErrorMsg);
+	}
 }
 
 // FIXME Catch errors
@@ -67,30 +81,28 @@ export async function updateSchedule(
 	id: number,
 	data: ScheduleUpdateDto,
 ): Promise<ScheduleFragmentType> {
-	const updated = await runMutation(updateScheduleMutation, {
-		id,
-		schedule: updateSerializer(data),
-	});
-	const schedule = Schedule(updated.updateSchedule);
-	return schedule;
+	try {
+		const updated = await runMutation(updateScheduleMutation, {
+			id,
+			schedule: updateSerializer(data),
+		});
+		const schedule = Schedule(updated.updateSchedule);
+		return schedule;
+	} catch (err) {
+		catchQueryError(err, updateErrorMsg);
+	}
 }
 
 export async function deleteSchedule(
 	id: number,
 ): Promise<ScheduleFragmentType> {
-	return runMutation(deleteScheduleMutation, {
-		id,
-	})
-		.then((deleted) => {
-			const schedule = Schedule(deleted.deleteSchedule);
-			return schedule;
-		})
-		.catch((err) => {
-			if (err instanceof GraphQLError) throw err;
-			if (err instanceof Error) {
-				err.message = deleteErrorMsg;
-				throw err;
-			}
-			throw new Error(deleteErrorMsg);
+	try {
+		const deleted = await runMutation(deleteScheduleMutation, {
+			id,
 		});
+		const schedule = Schedule(deleted.deleteSchedule);
+		return schedule;
+	} catch (err) {
+		catchQueryError(err, deleteErrorMsg);
+	}
 }
