@@ -73,11 +73,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				onOk: () => {
 					return handleDeleteConfirm(id, true)
 						.then(() => removeItemFromTable(id))
-						.catch(() => {
-							message.error(`Erro ao remover ${registerName}`);
+						.catch((err) => {
+							message.error(err.message);
 						});
 				},
-				onCancel: () => {},
 			};
 			const response = await confirmModal.confirm(confirmModalProps);
 			console.log(response);

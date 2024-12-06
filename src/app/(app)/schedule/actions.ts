@@ -4,6 +4,7 @@ import {
 	Schedule,
 	ScheduleType as ScheduleFragmentType,
 } from "@fragments/schedule";
+import { GraphQLError } from "@graphql/graphql-error";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
@@ -24,6 +25,10 @@ const createSerializer: FormDataParser<ScheduleCreateDto> = (
 	data.endTime = timeSerialize(data.endTime);
 	return data;
 };
+
+const deleteErrorMsg = "Erro ao remover Escala";
+const createErrorMsg = "Erro ao criar Escala";
+const updateErrorMsg = "Erro ao atualizar Escala";
 
 const updateSerializer: FormDataParser<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,
@@ -81,6 +86,11 @@ export async function deleteSchedule(
 			return schedule;
 		})
 		.catch((err) => {
-			throw err;
+			if (err instanceof GraphQLError) throw err;
+			if (err instanceof Error) {
+				err.message = deleteErrorMsg;
+				throw err;
+			}
+			throw new Error(deleteErrorMsg);
 		});
 }
