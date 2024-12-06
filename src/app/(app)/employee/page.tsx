@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import { TableProps } from "@components/data-table/types";
+import { DataTableProps } from "@components/data-table/types";
 import TablePageComponent from "@components/table-page";
 import { EmployeeType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
@@ -24,7 +24,7 @@ dayjs.extend(localizedFormat);
 export default async function EmployeePage() {
 	const employees = await getEmployees();
 
-	const table: TableProps<EmployeeType> = {
+	const table: DataTableProps<EmployeeType> = {
 		data: employees,
 		rowKey: "id",
 		columns: [

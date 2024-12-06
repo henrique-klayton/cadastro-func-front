@@ -3,7 +3,7 @@ import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
 import { HaveId } from "@interfaces/have-id";
-import { DataTableProps } from "./types";
+import { DataTablePageProps } from "./types";
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";
@@ -20,7 +20,7 @@ export default function DataTable<T extends HaveId>({
 	columns: columnsProps,
 	actions,
 	registerName,
-}: DataTableProps<T>) {
+}: DataTablePageProps<T>) {
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
 		if (property === "status")

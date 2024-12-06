@@ -1,7 +1,7 @@
 import { Switch, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import { TableProps } from "@components/data-table/types";
+import { DataTableProps } from "@components/data-table/types";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TablePageComponent from "@components/table-page";
 import { QueryDataParsers } from "@components/table-page/types";
@@ -21,7 +21,7 @@ import {
 export default async function SchedulePage() {
 	const schedules = await getSchedules();
 
-	const table: TableProps<ScheduleType> = {
+	const table: DataTableProps<ScheduleType> = {
 		data: schedules,
 		columns: [
 			{

@@ -1,4 +1,4 @@
-import { TableProps } from "@components/data-table/types";
+import { DataTableProps } from "@components/data-table/types";
 import {
 	FormCreateData,
 	FormData,
@@ -35,7 +35,7 @@ export interface FormModalUpdateProps<U> {
 
 export interface TablePageProps<T extends HaveId, C extends U, U> {
 	children: React.ReactNode;
-	table: TableProps<T>;
+	table: DataTableProps<T>;
 	actions: ServerActions<T, C, U>;
 	title: string;
 	registerName: string;

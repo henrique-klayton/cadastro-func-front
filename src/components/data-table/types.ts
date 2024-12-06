@@ -15,13 +15,14 @@ export interface RequiredColumnProps<T> {
 	formatter?: (value: T[keyof T]) => React.ReactNode;
 }
 
-export interface TableProps<T> {
+export interface DataTableProps<T> {
 	data: T[];
 	rowKey: keyof T;
 	columns: Array<TableColumn<T>>;
 }
 
-export interface DataTableProps<T extends HaveId> extends TableProps<T> {
+export interface DataTablePageProps<T extends HaveId>
+	extends DataTableProps<T> {
 	actions: DataTableActions<T>;
 	registerName: string;
 }
