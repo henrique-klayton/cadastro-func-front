@@ -1,7 +1,7 @@
 import { Input, Switch } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import { TableProps } from "@components/data-table/types";
+import { DataTableProps } from "@components/data-table/types";
 import TablePageComponent from "@components/table-page";
 import { SkillType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
@@ -16,7 +16,7 @@ import {
 export default async function SchedulePage() {
 	const skills = await getSkills();
 
-	const table: TableProps<SkillType> = {
+	const table: DataTableProps<SkillType> = {
 		data: skills,
 		rowKey: "id",
 		columns: [
