@@ -51,23 +51,22 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
-	const formatters: QueryDataParsers<ScheduleUpdateDto> = {
-		startTime: timeParse,
-		endTime: timeParse,
-	};
-
 	return (
 		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
 			table={table}
 			title="Escalas"
 			registerName="Escala"
 			actions={{
-				queryAction: getSchedule,
+				tableQueryAction: getSchedules,
+				formQueryAction: getSchedule,
 				createAction: createSchedule,
 				updateAction: updateSchedule,
 				deleteAction: deleteSchedule,
 			}}
-			queryDataParsers={formatters}
+			queryDataParsers={{
+				startTime: timeParse,
+				endTime: timeParse,
+			}}
 		>
 			<FormItem label="Horário Início" name="startTime" required>
 				<TimePicker format="HH:mm" />

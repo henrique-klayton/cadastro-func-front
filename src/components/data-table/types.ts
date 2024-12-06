@@ -25,4 +25,5 @@ export interface DataTablePageProps<T extends HaveId>
 	extends DataTableProps<T> {
 	actions: DataTableActions<T>;
 	registerName: string;
+	loading: boolean;
 }

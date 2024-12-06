@@ -21,8 +21,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	table: tableProps,
 	title,
 	registerName,
-	actions: { queryAction, createAction, updateAction, deleteAction },
-	queryDataParsers: formatters,
+	actions: {
+		tableQueryAction,
+		formQueryAction,
+		createAction,
+		updateAction,
+		deleteAction,
+	},
+	queryDataParsers: parsers,
 	createSerializer,
 	updateSerializer,
 }: TablePageProps<T, C, U>) {
@@ -57,11 +63,11 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			setFormId(id);
-			const item = queryAction(id)
+			const item = formQueryAction(id)
 				.then((obj) => {
-					if (formatters) {
-						for (const key in formatters) {
-							obj[key] = formatters[key](obj[key]);
+					if (parsers) {
+						for (const key in parsers) {
+							obj[key] = parsers[key](obj[key]);
 						}
 					}
 					return obj;
@@ -86,8 +92,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 						});
 				},
 			};
-			const response = await confirmModal.confirm(confirmModalProps);
-			console.log(response);
+			await confirmModal.confirm(confirmModalProps);
 		},
 	};
 
@@ -164,6 +169,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				<Flex className="w-full h-full" vertical>
 					<DataTable<T>
 						{...tableProps}
+						data={tableData}
+						loading={false}
 						actions={actions}
 						registerName={registerName}
 					/>

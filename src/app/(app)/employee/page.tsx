@@ -69,7 +69,8 @@ export default async function EmployeePage() {
 			title="Funcionários"
 			registerName="Funcionário"
 			actions={{
-				queryAction: getEmployeeWithRelations,
+				tableQueryAction: getEmployees,
+				formQueryAction: getEmployeeWithRelations,
 				createAction: createEmployee,
 				updateAction: updateEmployee,
 				deleteAction: deleteEmployee,
