@@ -1,19 +1,21 @@
 import { Form, Modal } from "antd";
 
+import { FormInstance } from "antd/lib";
 import { ActionsEnum } from "../../enums/actions";
 import { FormModalProps } from "./types";
 
-export default function FormModal<F>({
+export default function FormModal<C, U>({
 	children,
 	action,
 	objectName,
 	initialData,
+	currentId,
 	form,
 	open,
 	loading,
 	onCancel,
 	onSubmit,
-}: FormModalProps<F>) {
+}: FormModalProps<C, U>) {
 	form.setFieldsValue(initialData as object);
 	return (
 		<Modal
@@ -24,10 +26,17 @@ export default function FormModal<F>({
 			onOk={() => {
 				switch (action) {
 					case ActionsEnum.CREATE:
-						onSubmit(form.getFieldsValue());
+						onSubmit({
+							action,
+							data: form.getFieldsValue(),
+						});
 						break;
 					case ActionsEnum.UPDATE:
-						onSubmit(form.getFieldsValue(), "data.id");
+						onSubmit({
+							action,
+							data: form.getFieldsValue(),
+							id: currentId,
+						});
 						break;
 
 					default:
@@ -37,7 +46,7 @@ export default function FormModal<F>({
 			onCancel={onCancel}
 			afterClose={() => form.resetFields()}
 		>
-			<Form layout="vertical" form={form}>
+			<Form layout="vertical" form={form as FormInstance}>
 				{children}
 			</Form>
 		</Modal>

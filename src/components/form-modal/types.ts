@@ -3,14 +3,46 @@ import { FormInstance } from "antd";
 
 export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
 
-export interface FormModalProps<F> {
-	action: FormModalActions;
-	initialData: Partial<F> | undefined;
-	form: FormInstance<F>;
+/* biome-ignore lint/suspicious/noExplicitAny:
+Impossible to know data type, some fields could be formatted to another type
+*/
+export type FormData<T> = { [P in keyof T]: any };
+export type FormSubmitData<C, U> = FormCreateData<C> | FormUpdateData<U>;
+export type FormModalProps<C, U> = BaseFormModalProps &
+	(FormModalCreateProps<C> | FormModalUpdateProps<U>);
+
+export interface FormCreateData<C> {
+	action: ActionsEnum.CREATE;
+	data: FormData<C>;
+	id?: undefined;
+}
+
+export interface FormUpdateData<U> {
+	action: ActionsEnum.UPDATE;
+	data: FormData<U>;
+	id: string | number;
+}
+
+export interface BaseFormModalProps {
 	children: React.ReactNode;
 	objectName: string;
 	open: boolean;
 	loading: boolean;
 	onCancel: () => void;
-	onSubmit: (data: F, id?: string | number) => void;
+}
+
+export interface FormModalCreateProps<C> {
+	action: ActionsEnum.CREATE;
+	initialData: Partial<C> | undefined;
+	currentId?: undefined;
+	form: FormInstance<C>;
+	onSubmit: (submit: FormCreateData<C>) => void;
+}
+
+export interface FormModalUpdateProps<U> {
+	action: ActionsEnum.UPDATE;
+	initialData: Partial<U> | undefined;
+	currentId: string | number;
+	form: FormInstance<U>;
+	onSubmit: (submit: FormUpdateData<U>) => void;
 }

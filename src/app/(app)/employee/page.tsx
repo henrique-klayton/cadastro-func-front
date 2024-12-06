@@ -74,7 +74,7 @@ export default async function EmployeePage() {
 				updateAction: updateEmployee,
 				deleteAction: deleteEmployee,
 			}}
-			formatters={{
+			queryDataParsers={{
 				birthDate: dateParse,
 			}}
 		>
