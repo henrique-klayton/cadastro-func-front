@@ -13,14 +13,19 @@
     - [x] Skill
     - [x] Employee
   - [x] Initialize form on update
-  - [ ] Format data before sending to backend
+  - [ ] Format data before sending to API
+    - [x] Schedule
+    - [ ] Skill
+    - [ ] Employee
+  - [x] Update form after create/update/delete actions
   - [x] Add delete confirmation modal
   - [ ] Call server actions on form submit
     - [ ] Create
     - [ ] Edit
     - [x] Delete
-  - [ ] Create
   - [ ] Notifications about operation status (failure, success, etc.)
+    - [x] Failure
+    - [ ] Success
 - [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
   - [ ] Status filter
