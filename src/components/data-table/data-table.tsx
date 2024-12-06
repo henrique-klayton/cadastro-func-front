@@ -20,6 +20,7 @@ export default function DataTable<T extends HaveId>({
 	columns: columnsProps,
 	actions,
 	registerName,
+	loading,
 }: DataTablePageProps<T>) {
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
@@ -65,7 +66,12 @@ export default function DataTable<T extends HaveId>({
 	);
 
 	return (
-		<Table<T> className="flex-auto" dataSource={data} rowKey={rowKey}>
+		<Table<T>
+			className="flex-auto"
+			dataSource={data}
+			rowKey={rowKey}
+			loading={loading}
+		>
 			{columns}
 		</Table>
 	);

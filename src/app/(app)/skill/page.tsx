@@ -41,7 +41,8 @@ export default async function SchedulePage() {
 			title="Habilidades"
 			registerName="Habilidade"
 			actions={{
-				queryAction: getSkill,
+				tableQueryAction: getSkills,
+				formQueryAction: getSkill,
 				createAction: createSkill,
 				updateAction: updateSkill,
 				deleteAction: deleteSkill,
