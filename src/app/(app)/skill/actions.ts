@@ -12,6 +12,7 @@ import {
 } from "@queries/skill";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
+import { revalidatePath } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Habilidade!";
 const queryManyErrorMsg = "Erro ao carregar Habilidades!";
@@ -51,6 +52,7 @@ export async function createSkill(data: SkillCreateDto): Promise<SkillType> {
 	try {
 		const created = await runMutation(createSkillMutation, { skill: data });
 		const skill = Skill(created.createSkill);
+		revalidatePath("/skill");
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -67,6 +69,7 @@ export async function updateSkill(
 			skill: data,
 		});
 		const skill = Skill(updated.updateSkill);
+		revalidatePath("/skill");
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -77,6 +80,7 @@ export async function deleteSkill(id: number): Promise<SkillType> {
 	try {
 		const deleted = await runMutation(deleteSkillMutation, { id });
 		const skill = Skill(deleted.deleteSkill);
+		revalidatePath("/skill");
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);

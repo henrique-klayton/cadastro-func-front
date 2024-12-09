@@ -48,6 +48,25 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${registerName}?`;
 
 	// DataTable Component
+	const [tableLoading, setTableLoading] = useState(false);
+	const [tableData, setTableData] = useState(tableProps.data);
+	tableProps.data = tableData;
+
+	const loadTableData = (page: number, pageSize: number) => {
+		setTableLoading(true);
+		setTableData([]);
+		tableQueryAction(page, pageSize)
+			.then((res) => {
+				setTableData(res.data);
+				setPagination({ ...pagination, current: page, pageSize: pageSize });
+				setTableLoading(false);
+			})
+			.catch(() => {
+				message.error("Erro ao atualizar a tabela!");
+				setTableLoading(false);
+			});
+	};
+
 	const minPageSize = 10;
 	const [pagination, setPagination] = useState<TablePaginationConfig>({
 		current: 1,
@@ -55,25 +74,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		total,
 		pageSizeOptions: [minPageSize, 20, 50, 100].filter((size) => size <= total),
 		showSizeChanger: total > minPageSize,
-		onChange: (page: number, pageSize: number) => {
-			console.log("teste");
-			setTableLoading(true);
-			setTableData([]);
-			tableQueryAction(page, pageSize)
-				.then((res) => {
-					setTableData(res.data);
-					setPagination({ ...pagination, current: page, pageSize: pageSize });
-					setTableLoading(false);
-				})
-				.catch(() => {
-					message.error("Erro ao atualizar a tabela!");
-					setTableLoading(false);
-				});
-		},
+		onChange: loadTableData,
 	});
-	const [tableLoading, setTableLoading] = useState(false);
-	const [tableData, setTableData] = useState(tableProps.data);
-	tableProps.data = tableData;
 
 	const addItemToTable = (item: T) => {
 		const data = [...tableData, item];

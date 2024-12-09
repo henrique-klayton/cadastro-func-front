@@ -18,6 +18,7 @@ import {
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
 import timeSerialize from "@utils/time-serialize";
+import { revalidatePath } from "next/cache";
 
 const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
@@ -76,6 +77,7 @@ export async function createSchedule(
 			schedule: createSerializer(data),
 		});
 		const schedule = Schedule(created.createSchedule);
+		revalidatePath("/schedule");
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -92,6 +94,7 @@ export async function updateSchedule(
 			schedule: updateSerializer(data),
 		});
 		const schedule = Schedule(updated.updateSchedule);
+		revalidatePath("/schedule");
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -106,6 +109,7 @@ export async function deleteSchedule(
 			id,
 		});
 		const schedule = Schedule(deleted.deleteSchedule);
+		revalidatePath("/schedule");
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);
