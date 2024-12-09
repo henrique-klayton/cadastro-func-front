@@ -136,16 +136,26 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		});
 		switch (action) {
 			case ActionsEnum.CREATE:
-				createAction(data).then((item) => {
-					message.success(`${registerName} criado(a) com sucesso!`);
-					if (item) addItemToTable(item);
-				});
+				createAction(data)
+					.then((item) => {
+						message.success(`${registerName} criado(a) com sucesso!`);
+						if (item) addItemToTable(item);
+					})
+					.catch((err) => {
+						closeFormModal();
+						message.error(err);
+					});
 				break;
 			case ActionsEnum.UPDATE:
-				updateAction(id, data).then((item) => {
-					message.success(`${registerName} atualizado(a) com sucesso!`);
-					if (item) updateItemOnTable(item);
-				});
+				updateAction(id, data)
+					.then((item) => {
+						message.success(`${registerName} atualizado(a) com sucesso!`);
+						if (item) updateItemOnTable(item);
+					})
+					.catch((err) => {
+						closeFormModal();
+						message.error(err);
+					});
 				break;
 		}
 		closeFormModal();
