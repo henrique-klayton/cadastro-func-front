@@ -131,6 +131,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	// Form Modal
 	const formSubmit = ({ action, data, id }: FormSubmitData<C, U>) => {
+		form.validateFields().then((res) => {
+			console.log(res);
+		});
 		switch (action) {
 			case ActionsEnum.CREATE:
 				createAction(data).then((item) => {

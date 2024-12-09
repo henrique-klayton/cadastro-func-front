@@ -13,8 +13,10 @@ export default function FormModal<C, U>({
 	form,
 	open,
 	loading,
+	submitDisabled,
 	onCancel,
 	onSubmit,
+	onFieldsChange,
 }: FormModalProps<C, U>) {
 	form.setFieldsValue(initialData as object);
 	return (
@@ -38,15 +40,17 @@ export default function FormModal<C, U>({
 							id: currentId,
 						});
 						break;
-
-					default:
-						break;
 				}
 			}}
 			onCancel={onCancel}
 			afterClose={() => form.resetFields()}
+			okButtonProps={{ disabled: submitDisabled }}
 		>
-			<Form layout="vertical" form={form as FormInstance}>
+			<Form
+				layout="vertical"
+				form={form as FormInstance}
+				onFieldsChange={onFieldsChange}
+			>
 				{children}
 			</Form>
 		</Modal>

@@ -10,6 +10,8 @@ export type FormData<T> = { [P in keyof T]: any };
 export type FormSubmitData<C, U> = FormCreateData<C> | FormUpdateData<U>;
 export type FormModalProps<C, U> = BaseFormModalProps &
 	(FormModalCreateProps<C> | FormModalUpdateProps<U>);
+export type FormOnSubmit<C, U> = ((submit: FormCreateData<C>) => void) &
+	((submit: FormUpdateData<U>) => void);
 
 export interface FormCreateData<C> {
 	action: ActionsEnum.CREATE;
@@ -28,6 +30,8 @@ export interface BaseFormModalProps {
 	objectName: string;
 	open: boolean;
 	loading: boolean;
+	submitDisabled: boolean;
+	onFieldsChange: (changedFields: unknown[], allFields: unknown[]) => void;
 	onCancel: () => void;
 }
 
