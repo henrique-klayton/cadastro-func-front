@@ -16,7 +16,7 @@ import {
 	updateScheduleMutation,
 } from "@queries/schedule";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
-import catchQueryError from "@utils/catch-query-error";
+import catchGraphQLError from "@utils/catch-graphql-error";
 import timeSerialize from "@utils/time-serialize";
 
 // FIXME Treat errors in all server actions
@@ -48,7 +48,7 @@ export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 		const queryResult = await runQuery(getScheduleQuery, { id });
 		return Schedule(queryResult.schedule);
 	} catch (err) {
-		catchQueryError(err, queryErrorMsg);
+		catchGraphQLError(err, queryErrorMsg);
 	}
 }
 
@@ -67,7 +67,7 @@ export async function getSchedules(
 		const schedules = result.data.map((item) => Schedule(item));
 		return { data: schedules, total: result.total };
 	} catch (err) {
-		catchQueryError(err, queryManyErrorMsg);
+		catchGraphQLError(err, queryManyErrorMsg);
 	}
 }
 
@@ -82,7 +82,7 @@ export async function createSchedule(
 		const schedule = Schedule(created.createSchedule);
 		return schedule;
 	} catch (err) {
-		catchQueryError(err, createErrorMsg);
+		catchGraphQLError(err, createErrorMsg);
 	}
 }
 
@@ -99,7 +99,7 @@ export async function updateSchedule(
 		const schedule = Schedule(updated.updateSchedule);
 		return schedule;
 	} catch (err) {
-		catchQueryError(err, updateErrorMsg);
+		catchGraphQLError(err, updateErrorMsg);
 	}
 }
 
@@ -113,6 +113,6 @@ export async function deleteSchedule(
 		const schedule = Schedule(deleted.deleteSchedule);
 		return schedule;
 	} catch (err) {
-		catchQueryError(err, deleteErrorMsg);
+		catchGraphQLError(err, deleteErrorMsg);
 	}
 }

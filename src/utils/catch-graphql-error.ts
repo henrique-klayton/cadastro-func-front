@@ -1,6 +1,6 @@
 import { GraphQLError } from "@graphql/graphql-error";
 
-export default function catchQueryError(
+export default function catchGraphQLError(
 	err: unknown,
 	defaultMsg: string,
 ): never {
