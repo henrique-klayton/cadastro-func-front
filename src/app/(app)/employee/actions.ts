@@ -14,6 +14,7 @@ import {
 } from "@queries/employee";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
+import { revalidatePath } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Funcionário!";
 const queryManyErrorMsg = "Erro ao carregar Funcionários!";
@@ -56,6 +57,7 @@ export async function createEmployee(data: EmployeeCreateDto) {
 			employee: data,
 		});
 		const employee = Employee(created.createEmployee);
+		revalidatePath("/employee");
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -72,6 +74,7 @@ export async function updateEmployee(
 			employee: data,
 		});
 		const employee = Employee(updated.updateEmployee);
+		revalidatePath("/employee");
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -82,6 +85,7 @@ export async function deleteEmployee(id: string): Promise<EmployeeType> {
 	try {
 		const deleted = await runMutation(deleteEmployeeMutation, { id });
 		const employee = Employee(deleted.deleteEmployee);
+		revalidatePath("/employee");
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);
