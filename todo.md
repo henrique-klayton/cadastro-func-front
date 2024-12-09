@@ -23,9 +23,9 @@
     - [ ] Create
     - [ ] Edit
     - [x] Delete
-  - [ ] Notifications about operation status (failure, success, etc.)
+  - [x] Notifications about operation status (failure, success, etc.)
     - [x] Failure
-    - [ ] Success
+    - [x] Success
 - [ ] Fixed rows height at <= 65px
 - [ ] Add table filtering
   - [ ] Status filter

@@ -111,7 +111,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				title: confirmQuestion,
 				onOk: () => {
 					return handleDeleteConfirm(id, true)
-						.then(() => removeItemFromTable(id))
+						.then(() => {
+							message.success(`${registerName} removido(a) com sucesso!`);
+							removeItemFromTable(id);
+						})
 						.catch((err) => {
 							message.error(err.message);
 						});
@@ -126,11 +129,13 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		switch (action) {
 			case ActionsEnum.CREATE:
 				createAction(createSerializer(data)).then((item) => {
+					message.success(`${registerName} criado(a) com sucesso!`);
 					if (item) addItemToTable(item);
 				});
 				break;
 			case ActionsEnum.UPDATE:
 				updateAction(id, updateSerializer(data)).then((item) => {
+					message.success(`${registerName} atualizado(a) com sucesso!`);
 					if (item) addItemToTable(item);
 				});
 				break;
