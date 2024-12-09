@@ -30,6 +30,8 @@
 - [ ] Add table filtering
   - [ ] Status filter
   - [ ] Other filters
+- [ ] Validate form before submit
+- [ ] Disable form modal submit button while form is invalid
 - [ ] Add/remove employee skills
 - [ ] Gerar relatórios em CSV
 - [x] Add table pagination

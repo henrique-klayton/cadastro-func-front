@@ -13,24 +13,26 @@ import { FormInstance } from "antd/lib";
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
 export type FormDataSerializer<T> = (data: FormData<T>) => T;
 
-export type FormModalProps<C, U> =
-	| FormModalCreateProps<C>
-	| FormModalUpdateProps<U>;
+export type FormModalStateProps<C, U> =
+	| FormModalCreateStateProps<C>
+	| FormModalUpdateStateProps<U>;
 
-export interface FormModalCreateProps<C> {
+export interface FormModalCreateStateProps<C> {
 	action: ActionsEnum.CREATE;
 	form: FormInstance<C>;
 	initialData: C | undefined;
 	currentId: undefined;
 	onSubmit: (submit: FormCreateData<C>) => void;
+	// onFieldsChange: (changedFields: unknown[], allFields: unknown[]) => void;
 }
 
-export interface FormModalUpdateProps<U> {
+export interface FormModalUpdateStateProps<U> {
 	action: ActionsEnum.UPDATE;
 	form: FormInstance<U>;
 	initialData: U | undefined;
 	currentId: string | number;
 	onSubmit: (submit: FormUpdateData<U>) => void;
+	// onFieldsChange: (changedFields: unknown[], allFields: unknown[]) => void;
 }
 
 export interface TablePageProps<T extends HaveId, C extends U, U> {
@@ -41,8 +43,6 @@ export interface TablePageProps<T extends HaveId, C extends U, U> {
 	title: string;
 	registerName: string;
 	queryDataParsers?: QueryDataParsers<U>;
-	createSerializer?: FormDataSerializer<C>;
-	updateSerializer?: FormDataSerializer<U>;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
