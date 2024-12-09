@@ -7,6 +7,11 @@ export type EmployeeType = Omit<
 	"createdAt" | "updatedAt"
 >;
 
+export interface PaginatedEmployee {
+	data: EmployeeType[];
+	total: number;
+}
+
 export const EmployeeFragment = graphql(`
 	fragment Employee on EmployeeDto {
 		id

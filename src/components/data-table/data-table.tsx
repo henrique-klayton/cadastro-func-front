@@ -1,4 +1,3 @@
-"use client";
 import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
@@ -19,6 +18,7 @@ export default function DataTable<T extends HaveId>({
 	rowKey,
 	columns: columnsProps,
 	actions,
+	pagination,
 	registerName,
 	loading,
 }: DataTablePageProps<T>) {
@@ -69,6 +69,7 @@ export default function DataTable<T extends HaveId>({
 		<Table<T>
 			className="flex-auto"
 			dataSource={data}
+			pagination={pagination}
 			rowKey={rowKey}
 			loading={loading}
 		>

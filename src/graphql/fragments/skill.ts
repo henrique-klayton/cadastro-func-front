@@ -4,6 +4,11 @@ import { SkillFragment as SkillFragmentType } from "@graphql/types/graphql";
 
 export type SkillType = SkillFragmentType;
 
+export interface PaginatedSkill {
+	data: SkillType[];
+	total: number;
+}
+
 export const SkillFragment = graphql(`
 	fragment Skill on SkillDto {
 		id

@@ -17,7 +17,7 @@ export default async function SchedulePage() {
 	const skills = await getSkills();
 
 	const table: DataTableProps<SkillType> = {
-		data: skills,
+		data: skills.data,
 		rowKey: "id",
 		columns: [
 			{
@@ -38,6 +38,7 @@ export default async function SchedulePage() {
 	return (
 		<TablePageComponent<SkillType, SkillCreateDto, SkillUpdateDto>
 			table={table}
+			totalCount={skills.total}
 			title="Habilidades"
 			registerName="Habilidade"
 			actions={{

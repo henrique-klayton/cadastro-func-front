@@ -1,6 +1,7 @@
 "use server";
 import { FormDataSerializer } from "@components/table-page/types";
 import {
+	PaginatedSchedule,
 	Schedule,
 	ScheduleType as ScheduleFragmentType,
 } from "@fragments/schedule";
@@ -14,6 +15,7 @@ import {
 	getSchedulesListQuery,
 	updateScheduleMutation,
 } from "@queries/schedule";
+import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchQueryError from "@utils/catch-query-error";
 import timeSerialize from "@utils/time-serialize";
 
@@ -51,11 +53,19 @@ export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 }
 
 // FIXME Catch errors
-export async function getSchedules(): Promise<ScheduleFragmentType[]> {
+export async function getSchedules(
+	page?: number,
+	pageSize?: number,
+	filterStatus = false,
+): Promise<PaginatedSchedule> {
 	try {
-		const queryResult = await runQuery(getSchedulesListQuery);
-		const schedules = queryResult.scheduleList.map((item) => Schedule(item));
-		return schedules;
+		const queryResult = await runQuery(getSchedulesListQuery, {
+			filterStatus,
+			...calculateLimitOffset(page, pageSize),
+		});
+		const result = queryResult.scheduleList;
+		const schedules = result.data.map((item) => Schedule(item));
+		return { data: schedules, total: result.total };
 	} catch (err) {
 		catchQueryError(err, queryManyErrorMsg);
 	}

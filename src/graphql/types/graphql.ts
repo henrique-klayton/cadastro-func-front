@@ -149,15 +149,33 @@ export type MutationUpdateSkillStatusArgs = {
   status: Scalars['Boolean']['input'];
 };
 
+export type PaginatedEmployeeDto = {
+  __typename?: 'PaginatedEmployeeDto';
+  data: Array<EmployeeDto>;
+  total: Scalars['Int']['output'];
+};
+
+export type PaginatedScheduleDto = {
+  __typename?: 'PaginatedScheduleDto';
+  data: Array<ScheduleDto>;
+  total: Scalars['Int']['output'];
+};
+
+export type PaginatedSkillDto = {
+  __typename?: 'PaginatedSkillDto';
+  data: Array<SkillDto>;
+  total: Scalars['Int']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   employee: EmployeeDto;
-  employeeList: Array<EmployeeDto>;
+  employeeList: PaginatedEmployeeDto;
   employeeWithRelations: EmployeeFullDto;
   schedule: ScheduleDto;
-  scheduleList: Array<ScheduleDto>;
+  scheduleList: PaginatedScheduleDto;
   skill: SkillDto;
-  skillList: Array<SkillDto>;
+  skillList: PaginatedSkillDto;
 };
 
 
@@ -380,14 +398,16 @@ export type GetFullEmployeeQuery = { __typename: 'Query', employeeWithRelations:
   ) };
 
 export type GetEmployeesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type GetEmployeesQuery = { __typename: 'Query', employeeList: Array<(
-    { __typename: 'EmployeeDto' }
-    & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
-  )> };
+export type GetEmployeesQuery = { __typename: 'Query', employeeList: { __typename: 'PaginatedEmployeeDto', total: number, data: Array<(
+      { __typename: 'EmployeeDto' }
+      & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
+    )> } };
 
 export type CreateEmployeeMutationVariables = Exact<{
   employee: EmployeeCreateDto;
@@ -435,13 +455,17 @@ export type GetScheduleQuery = { __typename: 'Query', schedule: (
     & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
   ) };
 
-export type GetSchedulesQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetSchedulesQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
 
 
-export type GetSchedulesQuery = { __typename: 'Query', scheduleList: Array<(
-    { __typename: 'ScheduleDto' }
-    & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
-  )> };
+export type GetSchedulesQuery = { __typename: 'Query', scheduleList: { __typename: 'PaginatedScheduleDto', total: number, data: Array<(
+      { __typename: 'ScheduleDto' }
+      & { ' $fragmentRefs'?: { 'ScheduleFragment': ScheduleFragment } }
+    )> } };
 
 export type CreateScheduleMutationVariables = Exact<{
   schedule: ScheduleCreateDto;
@@ -484,13 +508,17 @@ export type GetSkillQuery = { __typename: 'Query', skill: (
     & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
   ) };
 
-export type GetSkillsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetSkillsQueryVariables = Exact<{
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+}>;
 
 
-export type GetSkillsQuery = { __typename: 'Query', skillList: Array<(
-    { __typename: 'SkillDto' }
-    & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
-  )> };
+export type GetSkillsQuery = { __typename: 'Query', skillList: { __typename: 'PaginatedSkillDto', total: number, data: Array<(
+      { __typename: 'SkillDto' }
+      & { ' $fragmentRefs'?: { 'SkillFragment': SkillFragment } }
+    )> } };
 
 export type CreateSkillMutationVariables = Exact<{
   skill: SkillCreateDto;
@@ -639,11 +667,15 @@ fragment Skill on SkillDto {
   status
 }`) as unknown as TypedDocumentString<GetFullEmployeeQuery, GetFullEmployeeQueryVariables>;
 export const GetEmployeesDocument = new TypedDocumentString(`
-    query GetEmployees($filterStatus: Boolean) {
+    query GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {
   __typename
-  employeeList(filterStatus: $filterStatus) {
+  employeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
     __typename
-    ...Employee
+    data {
+      __typename
+      ...Employee
+    }
+    total
   }
 }
     fragment Employee on EmployeeDto {
@@ -747,11 +779,15 @@ export const GetScheduleDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<GetScheduleQuery, GetScheduleQueryVariables>;
 export const GetSchedulesDocument = new TypedDocumentString(`
-    query GetSchedules {
+    query GetSchedules($limit: Int, $offset: Int, $filterStatus: Boolean) {
   __typename
-  scheduleList {
+  scheduleList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
     __typename
-    ...Schedule
+    data {
+      __typename
+      ...Schedule
+    }
+    total
   }
 }
     fragment Schedule on ScheduleDto {
@@ -825,11 +861,15 @@ export const GetSkillDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<GetSkillQuery, GetSkillQueryVariables>;
 export const GetSkillsDocument = new TypedDocumentString(`
-    query GetSkills {
+    query GetSkills($limit: Int, $offset: Int, $filterStatus: Boolean) {
   __typename
-  skillList {
+  skillList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
     __typename
-    ...Skill
+    data {
+      __typename
+      ...Skill
+    }
+    total
   }
 }
     fragment Skill on SkillDto {

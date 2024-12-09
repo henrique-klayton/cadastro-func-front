@@ -20,18 +20,18 @@ const documents = {
     "\n\tfragment Schedule on ScheduleDto {\n\t\tid\n\t\tstartTime\n\t\tendTime\n\t\ttype\n\t\tstatus\n\t}\n": types.ScheduleFragmentDoc,
     "\n\tfragment Skill on SkillDto {\n\t\tid\n\t\tdescription\n\t\tstatus\n\t}\n": types.SkillFragmentDoc,
     "\n\tquery GetFullEmployee($id: ID!) {\n\t\temployeeWithRelations(id: $id) {\n\t\t\t...FullEmployee\n\t\t}\n\t}\n": types.GetFullEmployeeDocument,
-    "\n\tquery GetEmployees($filterStatus: Boolean) {\n\t\temployeeList(filterStatus: $filterStatus) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.GetEmployeesDocument,
+    "\n\tquery GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\temployeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Employee}\n\t\t\ttotal\n\t\t}\n\t}\n": types.GetEmployeesDocument,
     "\n\tmutation CreateEmployee($employee: EmployeeCreateDto!) {\n\t\tcreateEmployee(employee: $employee) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.CreateEmployeeDocument,
     "\n\tmutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {\n\t\tupdateEmployee(id: $id, employee: $employee) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.UpdateEmployeeDocument,
     "\n\tmutation DeleteEmployee($id: ID!) {\n\t\tdeleteEmployee(id: $id) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.DeleteEmployeeDocument,
     "\n\tquery ScheduleTypeValues {\n\t\t__type(name: \"ScheduleType\") {\n\t\t\tenumValues {\n\t\t\t\tname\n\t\t\t}\n\t\t}\n\t}\n": types.ScheduleTypeValuesDocument,
     "\n\tquery GetSchedule($id: Int!) {\n\t\tschedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.GetScheduleDocument,
-    "\n\tquery GetSchedules {\n\t\tscheduleList {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.GetSchedulesDocument,
+    "\n\tquery GetSchedules($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\tscheduleList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Schedule}\n\t\t\ttotal\n\t\t}\n\t}\n": types.GetSchedulesDocument,
     "\n\tmutation CreateSchedule($schedule: ScheduleCreateDto!) {\n\t\tcreateSchedule(schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.CreateScheduleDocument,
     "\n\tmutation UpdateSchedule($id: Int!, $schedule: ScheduleUpdateDto!) {\n\t\tupdateSchedule(id: $id, schedule: $schedule) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.UpdateScheduleDocument,
     "\n\tmutation DeleteSchedule($id: Int!) {\n\t\tdeleteSchedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.DeleteScheduleDocument,
     "\n\tquery GetSkill($id: Int!) {\n\t\tskill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.GetSkillDocument,
-    "\n\tquery GetSkills {\n\t\tskillList {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.GetSkillsDocument,
+    "\n\tquery GetSkills($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\tskillList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Skill}\n\t\t\ttotal\n\t\t}\n\t}\n": types.GetSkillsDocument,
     "\n\tmutation CreateSkill($skill: SkillCreateDto!) {\n\t\tcreateSkill(skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.CreateSkillDocument,
     "\n\tmutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {\n\t\tupdateSkill(id: $id, skill: $skill) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.UpdateSkillDocument,
     "\n\tmutation DeleteSkill($id: Int!) {\n\t\tdeleteSkill(id: $id) {\n\t\t\t...Skill\n\t\t}\n\t}\n": types.DeleteSkillDocument,
@@ -60,7 +60,7 @@ export function graphql(source: "\n\tquery GetFullEmployee($id: ID!) {\n\t\templ
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery GetEmployees($filterStatus: Boolean) {\n\t\temployeeList(filterStatus: $filterStatus) {\n\t\t\t...Employee\n\t\t}\n\t}\n"): typeof import('./graphql').GetEmployeesDocument;
+export function graphql(source: "\n\tquery GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\temployeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Employee}\n\t\t\ttotal\n\t\t}\n\t}\n"): typeof import('./graphql').GetEmployeesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -84,7 +84,7 @@ export function graphql(source: "\n\tquery GetSchedule($id: Int!) {\n\t\tschedul
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery GetSchedules {\n\t\tscheduleList {\n\t\t\t...Schedule\n\t\t}\n\t}\n"): typeof import('./graphql').GetSchedulesDocument;
+export function graphql(source: "\n\tquery GetSchedules($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\tscheduleList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Schedule}\n\t\t\ttotal\n\t\t}\n\t}\n"): typeof import('./graphql').GetSchedulesDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -104,7 +104,7 @@ export function graphql(source: "\n\tquery GetSkill($id: Int!) {\n\t\tskill(id: 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n\tquery GetSkills {\n\t\tskillList {\n\t\t\t...Skill\n\t\t}\n\t}\n"): typeof import('./graphql').GetSkillsDocument;
+export function graphql(source: "\n\tquery GetSkills($limit: Int, $offset: Int, $filterStatus: Boolean) {\n\t\tskillList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {\n\t\t\tdata {...Skill}\n\t\t\ttotal\n\t\t}\n\t}\n"): typeof import('./graphql').GetSkillsDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

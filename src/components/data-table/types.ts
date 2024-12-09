@@ -1,4 +1,5 @@
-import { ColumnProps } from "antd/es/table";
+import { TablePaginationConfig } from "antd/lib";
+import { ColumnProps } from "antd/lib/table";
 
 import { HaveId } from "@interfaces/have-id";
 
@@ -24,6 +25,7 @@ export interface DataTableProps<T> {
 export interface DataTablePageProps<T extends HaveId>
 	extends DataTableProps<T> {
 	actions: DataTableActions<T>;
+	pagination: TablePaginationConfig;
 	registerName: string;
 	loading: boolean;
 }

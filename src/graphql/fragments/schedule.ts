@@ -4,6 +4,11 @@ import { ScheduleFragment as ScheduleFragmentType } from "@graphql/types/graphql
 
 export type ScheduleType = ScheduleFragmentType;
 
+export interface PaginatedSchedule {
+	data: ScheduleType[];
+	total: number;
+}
+
 export const ScheduleFragment = graphql(`
 	fragment Schedule on ScheduleDto {
 		id
