@@ -19,9 +19,9 @@
     - [ ] Employee
   - [x] Update form after create/update/delete actions
   - [x] Add delete confirmation modal
-  - [ ] Call server actions on form submit
-    - [ ] Create
-    - [ ] Edit
+  - [x] Call server actions on form submit
+    - [x] Create
+    - [x] Edit
     - [x] Delete
   - [x] Notifications about operation status (failure, success, etc.)
     - [x] Failure
