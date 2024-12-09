@@ -13,8 +13,13 @@ import {
 	updateEmployeeMutation,
 } from "@queries/employee";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
+import catchGraphQLError from "@utils/catch-graphql-error";
 
-// FIXME Treat errors in all server actions
+const queryErrorMsg = "Erro ao carregar Funcionário!";
+const queryManyErrorMsg = "Erro ao carregar Funcionários!";
+const createErrorMsg = "Erro ao criar Funcionário!";
+const updateErrorMsg = "Erro ao atualizar Funcionário!";
+const deleteErrorMsg = "Erro ao remover Funcionário!";
 
 export async function getEmployeeWithRelations(
 	id: string,
@@ -22,51 +27,63 @@ export async function getEmployeeWithRelations(
 	try {
 		const queryResult = await runQuery(getFullEmployeeQuery, { id });
 		return FullEmployee(queryResult.employeeWithRelations);
-	} catch (error) {
-		throw new Error("Error getting employee with relations", { cause: error });
+	} catch (err) {
+		catchGraphQLError(err, queryErrorMsg);
 	}
 }
 
-// FIXME Catch errors
 export async function getEmployees(
 	page?: number,
 	pageSize?: number,
 	filterStatus = false,
 ): Promise<PaginatedEmployee> {
-	const queryResult = await runQuery(getEmployeesListQuery, {
-		filterStatus,
-		...calculateLimitOffset(page, pageSize),
-	});
-	const result = queryResult.employeeList;
-	const employees = result.data.map((item) => Employee(item));
-	return { data: employees, total: result.total };
+	try {
+		const queryResult = await runQuery(getEmployeesListQuery, {
+			filterStatus,
+			...calculateLimitOffset(page, pageSize),
+		});
+		const result = queryResult.employeeList;
+		const employees = result.data.map((item) => Employee(item));
+		return { data: employees, total: result.total };
+	} catch (err) {
+		catchGraphQLError(err, queryManyErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function createEmployee(data: EmployeeCreateDto) {
-	const created = await runMutation(createEmployeeMutation, {
-		employee: data,
-	});
-	const employee = Employee(created.createEmployee);
-	return employee;
+	try {
+		const created = await runMutation(createEmployeeMutation, {
+			employee: data,
+		});
+		const employee = Employee(created.createEmployee);
+		return employee;
+	} catch (err) {
+		catchGraphQLError(err, createErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function updateEmployee(
 	id: string,
 	data: EmployeeUpdateDto,
 ): Promise<EmployeeType> {
-	const updated = await runMutation(updateEmployeeMutation, {
-		id,
-		employee: data,
-	});
-	const employee = Employee(updated.updateEmployee);
-	return employee;
+	try {
+		const updated = await runMutation(updateEmployeeMutation, {
+			id,
+			employee: data,
+		});
+		const employee = Employee(updated.updateEmployee);
+		return employee;
+	} catch (err) {
+		catchGraphQLError(err, updateErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function deleteEmployee(id: string): Promise<EmployeeType> {
-	const deleted = await runMutation(deleteEmployeeMutation, { id });
-	const employee = Employee(deleted.deleteEmployee);
-	return employee;
+	try {
+		const deleted = await runMutation(deleteEmployeeMutation, { id });
+		const employee = Employee(deleted.deleteEmployee);
+		return employee;
+	} catch (err) {
+		catchGraphQLError(err, deleteErrorMsg);
+	}
 }

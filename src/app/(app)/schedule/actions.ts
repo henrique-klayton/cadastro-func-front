@@ -19,7 +19,6 @@ import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
 import timeSerialize from "@utils/time-serialize";
 
-// FIXME Treat errors in all server actions
 const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
 ) => {
@@ -42,7 +41,6 @@ const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 	return data;
 };
 
-// FIXME Catch errors
 export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 	try {
 		const queryResult = await runQuery(getScheduleQuery, { id });
@@ -52,7 +50,6 @@ export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 	}
 }
 
-// FIXME Catch errors
 export async function getSchedules(
 	page?: number,
 	pageSize?: number,
@@ -71,7 +68,6 @@ export async function getSchedules(
 	}
 }
 
-// FIXME Catch errors
 export async function createSchedule(
 	data: ScheduleCreateDto,
 ): Promise<ScheduleFragmentType> {
@@ -86,7 +82,6 @@ export async function createSchedule(
 	}
 }
 
-// FIXME Catch errors
 export async function updateSchedule(
 	id: number,
 	data: ScheduleUpdateDto,

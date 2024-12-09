@@ -11,54 +11,74 @@ import {
 	updateSkillMutation,
 } from "@queries/skill";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
+import catchGraphQLError from "@utils/catch-graphql-error";
 
-// FIXME Treat errors in all server actions
+const queryErrorMsg = "Erro ao carregar Habilidade!";
+const queryManyErrorMsg = "Erro ao carregar Habilidades!";
+const createErrorMsg = "Erro ao criar Habilidade!";
+const updateErrorMsg = "Erro ao atualizar Habilidade!";
+const deleteErrorMsg = "Erro ao remover Habilidade!";
 
-// FIXME Catch errors
 export async function getSkill(id: number): Promise<SkillType> {
-	const queryResult = await runQuery(getSkillQuery, { id });
-	const skill = Skill(queryResult.skill);
-	return skill;
+	try {
+		const queryResult = await runQuery(getSkillQuery, { id });
+		const skill = Skill(queryResult.skill);
+		return skill;
+	} catch (err) {
+		catchGraphQLError(err, queryErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function getSkills(
 	page?: number,
 	pageSize?: number,
 	filterStatus = false,
 ): Promise<PaginatedSkill> {
-	const queryResult = await runQuery(getSkillsListQuery, {
-		filterStatus,
-		...calculateLimitOffset(page, pageSize),
-	});
-	const result = queryResult.skillList;
-	const skills = result.data.map((item) => Skill(item));
-	return { data: skills, total: result.total };
+	try {
+		const queryResult = await runQuery(getSkillsListQuery, {
+			filterStatus,
+			...calculateLimitOffset(page, pageSize),
+		});
+		const result = queryResult.skillList;
+		const skills = result.data.map((item) => Skill(item));
+		return { data: skills, total: result.total };
+	} catch (err) {
+		catchGraphQLError(err, queryManyErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function createSkill(data: SkillCreateDto): Promise<SkillType> {
-	const created = await runMutation(createSkillMutation, { skill: data });
-	const skill = Skill(created.createSkill);
-	return skill;
+	try {
+		const created = await runMutation(createSkillMutation, { skill: data });
+		const skill = Skill(created.createSkill);
+		return skill;
+	} catch (err) {
+		catchGraphQLError(err, createErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function updateSkill(
 	id: number,
 	data: SkillUpdateDto,
 ): Promise<SkillType> {
-	const updated = await runMutation(updateSkillMutation, {
-		id,
-		skill: data,
-	});
-	const skill = Skill(updated.updateSkill);
-	return skill;
+	try {
+		const updated = await runMutation(updateSkillMutation, {
+			id,
+			skill: data,
+		});
+		const skill = Skill(updated.updateSkill);
+		return skill;
+	} catch (err) {
+		catchGraphQLError(err, updateErrorMsg);
+	}
 }
 
-// FIXME Catch errors
 export async function deleteSkill(id: number): Promise<SkillType> {
-	const deleted = await runMutation(deleteSkillMutation, { id });
-	const skill = Skill(deleted.deleteSkill);
-	return skill;
+	try {
+		const deleted = await runMutation(deleteSkillMutation, { id });
+		const skill = Skill(deleted.deleteSkill);
+		return skill;
+	} catch (err) {
+		catchGraphQLError(err, deleteErrorMsg);
+	}
 }
