@@ -80,6 +80,13 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		setTableData(data);
 	};
 
+	const updateItemOnTable = (item: T) => {
+		const data = [...tableData];
+		const updated = data.filter((old) => old.id === item.id)[0];
+		Object.assign(updated, item);
+		setTableData(data);
+	};
+
 	const removeItemFromTable = (id: T["id"]) => {
 		const data = tableData.filter((item) => item.id !== id);
 		setTableData(data);
@@ -136,7 +143,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			case ActionsEnum.UPDATE:
 				updateAction(id, updateSerializer(data)).then((item) => {
 					message.success(`${registerName} atualizado(a) com sucesso!`);
-					if (item) addItemToTable(item);
+					if (item) updateItemOnTable(item);
 				});
 				break;
 		}
