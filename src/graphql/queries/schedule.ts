@@ -9,9 +9,10 @@ export const getScheduleQuery = graphql(`
 `);
 
 export const getSchedulesListQuery = graphql(`
-	query GetSchedules {
-		scheduleList {
-			...Schedule
+	query GetSchedules($limit: Int, $offset: Int, $filterStatus: Boolean) {
+		scheduleList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+			data {...Schedule}
+			total
 		}
 	}
 `);

@@ -1,5 +1,5 @@
 "use server";
-import { Skill, SkillType } from "@fragments/skill";
+import { PaginatedSkill, Skill, SkillType } from "@fragments/skill";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
@@ -10,6 +10,7 @@ import {
 	getSkillsListQuery,
 	updateSkillMutation,
 } from "@queries/skill";
+import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 
 // FIXME Treat errors in all server actions
 
@@ -21,10 +22,18 @@ export async function getSkill(id: number): Promise<SkillType> {
 }
 
 // FIXME Catch errors
-export async function getSkills(): Promise<SkillType[]> {
-	const queryResult = await runQuery(getSkillsListQuery);
-	const skills = queryResult.skillList.map((item) => Skill(item));
-	return skills;
+export async function getSkills(
+	page?: number,
+	pageSize?: number,
+	filterStatus = false,
+): Promise<PaginatedSkill> {
+	const queryResult = await runQuery(getSkillsListQuery, {
+		filterStatus,
+		...calculateLimitOffset(page, pageSize),
+	});
+	const result = queryResult.skillList;
+	const skills = result.data.map((item) => Skill(item));
+	return { data: skills, total: result.total };
 }
 
 // FIXME Catch errors

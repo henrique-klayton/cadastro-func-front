@@ -25,7 +25,7 @@ export default async function EmployeePage() {
 	const employees = await getEmployees();
 
 	const table: DataTableProps<EmployeeType> = {
-		data: employees,
+		data: employees.data,
 		rowKey: "id",
 		columns: [
 			{
@@ -66,6 +66,7 @@ export default async function EmployeePage() {
 			Partial<FullEmployeeType>
 		>
 			table={table}
+			totalCount={employees.total}
 			title="Funcionários"
 			registerName="Funcionário"
 			actions={{

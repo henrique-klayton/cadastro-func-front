@@ -9,9 +9,10 @@ export const getFullEmployeeQuery = graphql(`
 `);
 
 export const getEmployeesListQuery = graphql(`
-	query GetEmployees($filterStatus: Boolean) {
-		employeeList(filterStatus: $filterStatus) {
-			...Employee
+	query GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {
+		employeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+			data {...Employee}
+			total
 		}
 	}
 `);

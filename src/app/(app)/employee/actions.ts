@@ -1,5 +1,5 @@
 "use server";
-import { Employee, EmployeeType } from "@fragments/employee";
+import { Employee, EmployeeType, PaginatedEmployee } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { FullEmployee } from "@fragments/full-employee";
 import runMutation from "@graphql/run-mutation";
@@ -12,6 +12,7 @@ import {
 	getFullEmployeeQuery,
 	updateEmployeeMutation,
 } from "@queries/employee";
+import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 
 // FIXME Treat errors in all server actions
 
@@ -28,11 +29,17 @@ export async function getEmployeeWithRelations(
 
 // FIXME Catch errors
 export async function getEmployees(
+	page?: number,
+	pageSize?: number,
 	filterStatus = false,
-): Promise<EmployeeType[]> {
-	const queryResult = await runQuery(getEmployeesListQuery, { filterStatus });
-	const employees = queryResult.employeeList.map((item) => Employee(item));
-	return employees;
+): Promise<PaginatedEmployee> {
+	const queryResult = await runQuery(getEmployeesListQuery, {
+		filterStatus,
+		...calculateLimitOffset(page, pageSize),
+	});
+	const result = queryResult.employeeList;
+	const employees = result.data.map((item) => Employee(item));
+	return { data: employees, total: result.total };
 }
 
 // FIXME Catch errors

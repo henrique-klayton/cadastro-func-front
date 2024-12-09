@@ -2,7 +2,7 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Flex, FloatButton, ModalFuncProps } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { FormInstance } from "antd/lib";
+import { FormInstance, TablePaginationConfig } from "antd/lib";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
@@ -19,6 +19,7 @@ import "./table-page.css";
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
 	table: tableProps,
+	totalCount: total,
 	title,
 	registerName,
 	actions: {
@@ -47,6 +48,30 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${registerName}?`;
 
 	// DataTable Component
+	const minPageSize = 10;
+	const [pagination, setPagination] = useState<TablePaginationConfig>({
+		current: 1,
+		pageSize: minPageSize,
+		total,
+		pageSizeOptions: [minPageSize, 20, 50, 100].filter((size) => size <= total),
+		showSizeChanger: total > minPageSize,
+		onChange: (page: number, pageSize: number) => {
+			console.log("teste");
+			setTableLoading(true);
+			setTableData([]);
+			tableQueryAction(page, pageSize)
+				.then((res) => {
+					setTableData(res.data);
+					setPagination({ ...pagination, current: page, pageSize: pageSize });
+					setTableLoading(false);
+				})
+				.catch(() => {
+					message.error("Erro ao atualizar a tabela!");
+					setTableLoading(false);
+				});
+		},
+	});
+	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState(tableProps.data);
 	tableProps.data = tableData;
 
@@ -170,8 +195,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					<DataTable<T>
 						{...tableProps}
 						data={tableData}
-						loading={false}
+						loading={tableLoading}
 						actions={actions}
+						pagination={pagination}
 						registerName={registerName}
 					/>
 					<FloatButton

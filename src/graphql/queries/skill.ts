@@ -9,9 +9,10 @@ export const getSkillQuery = graphql(`
 `);
 
 export const getSkillsListQuery = graphql(`
-	query GetSkills {
-		skillList {
-			...Skill
+	query GetSkills($limit: Int, $offset: Int, $filterStatus: Boolean) {
+		skillList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+			data {...Skill}
+			total
 		}
 	}
 `);

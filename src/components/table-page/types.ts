@@ -36,6 +36,7 @@ export interface FormModalUpdateProps<U> {
 export interface TablePageProps<T extends HaveId, C extends U, U> {
 	children: React.ReactNode;
 	table: DataTableProps<T>;
+	totalCount: number;
 	actions: ServerActions<T, C, U>;
 	title: string;
 	registerName: string;
@@ -45,7 +46,10 @@ export interface TablePageProps<T extends HaveId, C extends U, U> {
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
-	tableQueryAction: () => Promise<T[]>;
+	tableQueryAction: (
+		page: number,
+		pageSize: number,
+	) => Promise<{ data: T[]; total: number }>;
 	formQueryAction: (id: T["id"]) => Promise<U>;
 	createAction: (data: C) => Promise<Optional<T>>;
 	updateAction: (id: T["id"], data: U) => Promise<Optional<T>>;
