@@ -12,7 +12,7 @@ import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitData } from "@components/form-modal/types";
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
-import { FormModalProps, TablePageProps } from "./types";
+import { FormModalStateProps, TablePageProps } from "./types";
 
 import "./table-page.css";
 
@@ -30,18 +30,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		deleteAction,
 	},
 	queryDataParsers: parsers,
-	createSerializer,
-	updateSerializer,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
+	const [submitDisabled, setSubmitDisabled] = useState(true);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm<C | U>();
-
-	if (!createSerializer) createSerializer = (value) => value as C;
-	if (!updateSerializer) updateSerializer = (value) => value as U;
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -137,13 +133,13 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const formSubmit = ({ action, data, id }: FormSubmitData<C, U>) => {
 		switch (action) {
 			case ActionsEnum.CREATE:
-				createAction(createSerializer(data)).then((item) => {
+				createAction(data).then((item) => {
 					message.success(`${registerName} criado(a) com sucesso!`);
 					if (item) addItemToTable(item);
 				});
 				break;
 			case ActionsEnum.UPDATE:
-				updateAction(id, updateSerializer(data)).then((item) => {
+				updateAction(id, data).then((item) => {
 					message.success(`${registerName} atualizado(a) com sucesso!`);
 					if (item) updateItemOnTable(item);
 				});
@@ -185,22 +181,27 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal Props
-	const states: FormModalProps<C, U> = {
+	const formModalstates = {
 		action: action as FormModalActions,
 		form: form as FormInstance,
 		initialData: formData,
 		currentId: formId,
 		onSubmit: formSubmit,
-	} as FormModalProps<C, U>;
+	} as FormModalStateProps<C, U>;
 
 	return (
 		<>
 			<FormModal<C, U>
-				{...states}
+				{...formModalstates}
 				objectName={registerName}
 				loading={formLoading}
+				submitDisabled={submitDisabled}
 				open={formOpen}
 				onCancel={handleFormModalCancel}
+				onFieldsChange={(changed, all) => {
+					console.log(changed);
+					console.log(all);
+				}}
 			>
 				{children}
 			</FormModal>
