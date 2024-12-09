@@ -18,16 +18,16 @@ export const getSkillsListQuery = graphql(`
 `);
 
 export const createSkillMutation = graphql(`
-	mutation CreateSkill($skill: SkillCreateDto!) {
-		createSkill(skill: $skill) {
+	mutation CreateSkill($skill: SkillCreateDto!, $employees: [ID!]) {
+		createSkill(skill: $skill, employees: $employees) {
 			...Skill
 		}
 	}
 `);
 
 export const updateSkillMutation = graphql(`
-	mutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {
-		updateSkill(id: $id, skill: $skill) {
+	mutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!, $employees: [ID!]) {
+		updateSkill(id: $id, skill: $skill, employees: $employees) {
 			...Skill
 		}
 	}

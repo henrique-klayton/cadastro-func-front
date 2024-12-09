@@ -48,9 +48,15 @@ export async function getSkills(
 	}
 }
 
-export async function createSkill(data: SkillCreateDto): Promise<SkillType> {
+export async function createSkill(
+	data: SkillCreateDto,
+	employees?: string[],
+): Promise<SkillType> {
 	try {
-		const created = await runMutation(createSkillMutation, { skill: data });
+		const created = await runMutation(createSkillMutation, {
+			skill: data,
+			employees,
+		});
 		const skill = Skill(created.createSkill);
 		revalidatePath("/skill");
 		return skill;
@@ -62,11 +68,13 @@ export async function createSkill(data: SkillCreateDto): Promise<SkillType> {
 export async function updateSkill(
 	id: number,
 	data: SkillUpdateDto,
+	employees?: string[],
 ): Promise<SkillType> {
 	try {
 		const updated = await runMutation(updateSkillMutation, {
 			id,
 			skill: data,
+			employees,
 		});
 		const skill = Skill(updated.updateSkill);
 		revalidatePath("/skill");
