@@ -1,4 +1,5 @@
 "use server";
+import { FormDataSerializer } from "@components/table-page/types";
 import { Employee, EmployeeType, PaginatedEmployee } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { FullEmployee } from "@fragments/full-employee";
@@ -21,6 +22,18 @@ const queryManyErrorMsg = "Erro ao carregar Funcionários!";
 const createErrorMsg = "Erro ao criar Funcionário!";
 const updateErrorMsg = "Erro ao atualizar Funcionário!";
 const deleteErrorMsg = "Erro ao remover Funcionário!";
+
+const createSerializer: FormDataSerializer<EmployeeCreateDto> = (data) => {
+	// console.log(data.birthDate);
+	// data.birthDate = dateSerialize(data.birthDate);
+	// console.log(data.birthDate);
+	return data;
+};
+
+const updateSerializer: FormDataSerializer<EmployeeUpdateDto> = (data) => {
+	// if (data.birthDate) data.birthDate = dateSerialize(data.birthDate);
+	return data;
+};
 
 export async function getEmployeeWithRelations(
 	id: string,
@@ -57,7 +70,7 @@ export async function createEmployee(
 ) {
 	try {
 		const created = await runMutation(createEmployeeMutation, {
-			employee: data,
+			employee: createSerializer(data),
 			skills,
 		});
 		const employee = Employee(created.createEmployee);
@@ -76,7 +89,7 @@ export async function updateEmployee(
 	try {
 		const updated = await runMutation(updateEmployeeMutation, {
 			id,
-			employee: data,
+			employee: updateSerializer(data),
 			skills,
 		});
 		const employee = Employee(updated.updateEmployee);

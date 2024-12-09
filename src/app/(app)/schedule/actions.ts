@@ -20,6 +20,12 @@ import catchGraphQLError from "@utils/catch-graphql-error";
 import timeSerialize from "@utils/time-serialize";
 import { revalidatePath } from "next/cache";
 
+const queryErrorMsg = "Erro ao carregar Escala!";
+const queryManyErrorMsg = "Erro ao carregar Escalas!";
+const createErrorMsg = "Erro ao criar Escala!";
+const updateErrorMsg = "Erro ao atualizar Escala!";
+const deleteErrorMsg = "Erro ao remover Escala!";
+
 const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
 ) => {
@@ -27,12 +33,6 @@ const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data.endTime = timeSerialize(data.endTime);
 	return data;
 };
-
-const queryErrorMsg = "Erro ao carregar Escala!";
-const queryManyErrorMsg = "Erro ao carregar Escalas!";
-const createErrorMsg = "Erro ao criar Escala!";
-const updateErrorMsg = "Erro ao atualizar Escala!";
-const deleteErrorMsg = "Erro ao remover Escala!";
 
 const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
 	data: ScheduleUpdateDto,
