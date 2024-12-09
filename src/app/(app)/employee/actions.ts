@@ -51,10 +51,14 @@ export async function getEmployees(
 	}
 }
 
-export async function createEmployee(data: EmployeeCreateDto) {
+export async function createEmployee(
+	data: EmployeeCreateDto,
+	skills?: number[],
+) {
 	try {
 		const created = await runMutation(createEmployeeMutation, {
 			employee: data,
+			skills,
 		});
 		const employee = Employee(created.createEmployee);
 		revalidatePath("/employee");
@@ -67,11 +71,13 @@ export async function createEmployee(data: EmployeeCreateDto) {
 export async function updateEmployee(
 	id: string,
 	data: EmployeeUpdateDto,
+	skills?: number[],
 ): Promise<EmployeeType> {
 	try {
 		const updated = await runMutation(updateEmployeeMutation, {
 			id,
 			employee: data,
+			skills,
 		});
 		const employee = Employee(updated.updateEmployee);
 		revalidatePath("/employee");

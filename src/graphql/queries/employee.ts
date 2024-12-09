@@ -18,16 +18,16 @@ export const getEmployeesListQuery = graphql(`
 `);
 
 export const createEmployeeMutation = graphql(`
-	mutation CreateEmployee($employee: EmployeeCreateDto!) {
-		createEmployee(employee: $employee) {
+	mutation CreateEmployee($employee: EmployeeCreateDto!, $skills: [Int!]) {
+		createEmployee(employee: $employee, skills: $skills) {
 			...Employee
 		}
 	}
 `);
 
 export const updateEmployeeMutation = graphql(`
-	mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {
-		updateEmployee(id: $id, employee: $employee) {
+	mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!, $skills: [Int!]) {
+		updateEmployee(id: $id, employee: $employee, skills: $skills) {
 			...Employee
 		}
 	}

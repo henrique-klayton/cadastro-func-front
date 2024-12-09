@@ -411,6 +411,7 @@ export type GetEmployeesQuery = { __typename: 'Query', employeeList: { __typenam
 
 export type CreateEmployeeMutationVariables = Exact<{
   employee: EmployeeCreateDto;
+  skills?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
 }>;
 
 
@@ -422,6 +423,7 @@ export type CreateEmployeeMutation = { __typename: 'Mutation', createEmployee: (
 export type UpdateEmployeeMutationVariables = Exact<{
   id: Scalars['ID']['input'];
   employee: EmployeeUpdateDto;
+  skills?: InputMaybe<Array<Scalars['Int']['input']> | Scalars['Int']['input']>;
 }>;
 
 
@@ -522,6 +524,7 @@ export type GetSkillsQuery = { __typename: 'Query', skillList: { __typename: 'Pa
 
 export type CreateSkillMutationVariables = Exact<{
   skill: SkillCreateDto;
+  employees?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
 }>;
 
 
@@ -533,6 +536,7 @@ export type CreateSkillMutation = { __typename: 'Mutation', createSkill: (
 export type UpdateSkillMutationVariables = Exact<{
   id: Scalars['Int']['input'];
   skill: SkillUpdateDto;
+  employees?: InputMaybe<Array<Scalars['ID']['input']> | Scalars['ID']['input']>;
 }>;
 
 
@@ -691,9 +695,9 @@ export const GetEmployeesDocument = new TypedDocumentString(`
   }
 }`) as unknown as TypedDocumentString<GetEmployeesQuery, GetEmployeesQueryVariables>;
 export const CreateEmployeeDocument = new TypedDocumentString(`
-    mutation CreateEmployee($employee: EmployeeCreateDto!) {
+    mutation CreateEmployee($employee: EmployeeCreateDto!, $skills: [Int!]) {
   __typename
-  createEmployee(employee: $employee) {
+  createEmployee(employee: $employee, skills: $skills) {
     __typename
     ...Employee
   }
@@ -711,9 +715,9 @@ export const CreateEmployeeDocument = new TypedDocumentString(`
   }
 }`) as unknown as TypedDocumentString<CreateEmployeeMutation, CreateEmployeeMutationVariables>;
 export const UpdateEmployeeDocument = new TypedDocumentString(`
-    mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!) {
+    mutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!, $skills: [Int!]) {
   __typename
-  updateEmployee(id: $id, employee: $employee) {
+  updateEmployee(id: $id, employee: $employee, skills: $skills) {
     __typename
     ...Employee
   }
@@ -879,9 +883,9 @@ export const GetSkillsDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<GetSkillsQuery, GetSkillsQueryVariables>;
 export const CreateSkillDocument = new TypedDocumentString(`
-    mutation CreateSkill($skill: SkillCreateDto!) {
+    mutation CreateSkill($skill: SkillCreateDto!, $employees: [ID!]) {
   __typename
-  createSkill(skill: $skill) {
+  createSkill(skill: $skill, employees: $employees) {
     __typename
     ...Skill
   }
@@ -893,9 +897,9 @@ export const CreateSkillDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<CreateSkillMutation, CreateSkillMutationVariables>;
 export const UpdateSkillDocument = new TypedDocumentString(`
-    mutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!) {
+    mutation UpdateSkill($id: Int!, $skill: SkillUpdateDto!, $employees: [ID!]) {
   __typename
-  updateSkill(id: $id, skill: $skill) {
+  updateSkill(id: $id, skill: $skill, employees: $employees) {
     __typename
     ...Skill
   }
