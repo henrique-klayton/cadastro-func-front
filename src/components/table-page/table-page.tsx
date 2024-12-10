@@ -124,7 +124,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 							message.success(`${registerName} removido(a) com sucesso!`);
 							removeItemFromTable(id);
 						})
-						.catch((err) => {
+						.catch((err: Error) => {
 							message.error(err.message);
 						});
 				},
@@ -145,9 +145,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 						message.success(`${registerName} criado(a) com sucesso!`);
 						if (item) addItemToTable(item);
 					})
-					.catch((err) => {
+					.catch((err: Error) => {
 						closeFormModal();
-						message.error(err);
+						message.error(err.message);
 					});
 				break;
 			case ActionsEnum.UPDATE:
@@ -156,9 +156,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 						message.success(`${registerName} atualizado(a) com sucesso!`);
 						if (item) updateItemOnTable(item);
 					})
-					.catch((err) => {
+					.catch((err: Error) => {
 						closeFormModal();
-						message.error(err);
+						message.error(err.message);
 					});
 				break;
 		}
