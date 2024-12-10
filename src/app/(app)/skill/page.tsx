@@ -50,7 +50,13 @@ export default async function SchedulePage() {
 			}}
 			queryDataParsers={{}}
 		>
-			<FormItem label="Descrição" name="description" required>
+			<FormItem
+				label="Descrição"
+				name="description"
+				required
+				hasFeedback
+				rules={[{ required: true }]}
+			>
 				<Input />
 			</FormItem>
 			<FormItem label="Status" name="status" required>

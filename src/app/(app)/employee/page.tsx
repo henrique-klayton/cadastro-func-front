@@ -82,17 +82,35 @@ export default async function EmployeePage() {
 		>
 			<Row gutter={16}>
 				<Col span={12}>
-					<FormItem label="Nome" name="firstName" required>
+					<FormItem
+						label="Nome"
+						name="firstName"
+						required
+						hasFeedback
+						rules={[{ required: true }]}
+					>
 						<Input />
 					</FormItem>
 				</Col>
 				<Col span={12}>
-					<FormItem label="Sobrenome" name="lastName" required>
+					<FormItem
+						label="Sobrenome"
+						name="lastName"
+						required
+						hasFeedback
+						rules={[{ required: true }]}
+					>
 						<Input />
 					</FormItem>
 				</Col>
 			</Row>
-			<FormItem label="Data de Nascimento" name="birthDate" required>
+			<FormItem
+				label="Data de Nascimento"
+				name="birthDate"
+				required
+				hasFeedback
+				rules={[{ required: true }]}
+			>
 				<DatePicker format="L" />
 			</FormItem>
 			<FormItem label="Status" name="status" required>
