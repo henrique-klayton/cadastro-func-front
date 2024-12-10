@@ -1,6 +1,10 @@
 "use server";
 import { FormDataSerializer } from "@components/table-page/types";
-import { Employee, EmployeeType, PaginatedEmployee } from "@fragments/employee";
+import {
+	Employee,
+	EmployeeFragmentType,
+	PaginatedEmployee,
+} from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { FullEmployee } from "@fragments/full-employee";
 import runMutation from "@graphql/run-mutation";
@@ -85,7 +89,7 @@ export async function updateEmployee(
 	id: string,
 	data: EmployeeUpdateDto,
 	skills?: number[],
-): Promise<EmployeeType> {
+): Promise<EmployeeFragmentType> {
 	try {
 		const updated = await runMutation(updateEmployeeMutation, {
 			id,
@@ -100,7 +104,9 @@ export async function updateEmployee(
 	}
 }
 
-export async function deleteEmployee(id: string): Promise<EmployeeType> {
+export async function deleteEmployee(
+	id: string,
+): Promise<EmployeeFragmentType> {
 	try {
 		const deleted = await runMutation(deleteEmployeeMutation, { id });
 		const employee = Employee(deleted.deleteEmployee);

@@ -1,12 +1,12 @@
 import { FragmentType, graphql, useFragment } from "@graphql/types";
 import { FullEmployeeFragment as FullEmployeeFragmentType } from "@graphql/types/graphql";
-import { ScheduleFragment, ScheduleType } from "./schedule";
-import { SkillFragment, SkillType } from "./skill";
+import { ScheduleFragment, ScheduleFragmentType } from "./schedule";
+import { SkillFragment, SkillFragmentType } from "./skill";
 
 export interface FullEmployeeType
 	extends Omit<FullEmployeeFragmentType, "schedule" | "skills"> {
-	schedule: ScheduleType;
-	skills: SkillType[];
+	schedule: ScheduleFragmentType;
+	skills: SkillFragmentType[];
 }
 
 export const FullEmployeeFragment = graphql(`

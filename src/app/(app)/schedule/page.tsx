@@ -4,7 +4,7 @@ import FormItem from "antd/es/form/FormItem";
 import { DataTableProps } from "@components/data-table/types";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TablePageComponent from "@components/table-page";
-import { ScheduleType } from "@fragments/schedule";
+import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import scheduleTypeFormat from "@utils/schedule-type-format";
 import timeParse from "@utils/time-parse";
@@ -20,7 +20,7 @@ import {
 export default async function SchedulePage() {
 	const schedules = await getSchedules();
 
-	const table: DataTableProps<ScheduleType> = {
+	const table: DataTableProps<ScheduleFragmentType> = {
 		data: schedules.data,
 		columns: [
 			{
@@ -56,7 +56,11 @@ export default async function SchedulePage() {
 	// }
 
 	return (
-		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
+		<TablePageComponent<
+			ScheduleFragmentType,
+			ScheduleCreateDto,
+			ScheduleUpdateDto
+		>
 			table={table}
 			totalCount={schedules.total}
 			title="Escalas"

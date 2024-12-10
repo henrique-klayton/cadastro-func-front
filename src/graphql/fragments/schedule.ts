@@ -1,11 +1,10 @@
 import { FragmentType, useFragment } from "@graphql/types/fragment-masking";
 import { graphql } from "@graphql/types/gql";
 import { ScheduleFragment as ScheduleFragmentType } from "@graphql/types/graphql";
-
-export type ScheduleType = ScheduleFragmentType;
+export type { ScheduleFragment as ScheduleFragmentType } from "@graphql/types/graphql";
 
 export interface PaginatedSchedule {
-	data: ScheduleType[];
+	data: ScheduleFragmentType[];
 	total: number;
 }
 
@@ -21,7 +20,7 @@ export const ScheduleFragment = graphql(`
 
 export function Schedule(
 	fragment: FragmentType<typeof ScheduleFragment>,
-): ScheduleType {
+): ScheduleFragmentType {
 	const schedule = useFragment(ScheduleFragment, fragment);
 	return schedule;
 }
