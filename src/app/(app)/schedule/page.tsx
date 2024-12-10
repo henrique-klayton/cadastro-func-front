@@ -50,6 +50,11 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
+	// const config: FormItemConfig<ScheduleCreateDto, ScheduleUpdateDto> = {
+	// 	input: <TimePicker format="HH:mm" />,
+	// 	inputProps: {}
+	// }
+
 	return (
 		<TablePageComponent<ScheduleType, ScheduleCreateDto, ScheduleUpdateDto>
 			table={table}
@@ -68,13 +73,31 @@ export default async function SchedulePage() {
 				endTime: timeParse,
 			}}
 		>
-			<FormItem label="Horário Início" name="startTime" required>
+			<FormItem
+				label="Horário Início"
+				name="startTime"
+				required
+				hasFeedback
+				rules={[{ required: true }]}
+			>
 				<TimePicker format="HH:mm" />
 			</FormItem>
-			<FormItem label="Horário Fim" name="endTime" required>
+			<FormItem
+				label="Horário Fim"
+				name="endTime"
+				required
+				hasFeedback
+				rules={[{ required: true }]}
+			>
 				<TimePicker format="HH:mm" />
 			</FormItem>
-			<FormItem label="Tipo Escala" name="type" required>
+			<FormItem
+				label="Tipo Escala"
+				name="type"
+				required
+				hasFeedback
+				rules={[{ required: true }]}
+			>
 				<ScheduleTypeSelect />
 			</FormItem>
 			<FormItem label="Status" name="status" required>

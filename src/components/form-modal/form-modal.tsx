@@ -13,7 +13,6 @@ export default function FormModal<C, U>({
 	form,
 	open,
 	loading,
-	submitDisabled,
 	onCancel,
 	onSubmit,
 	onFieldsChange,
@@ -44,7 +43,6 @@ export default function FormModal<C, U>({
 			}}
 			onCancel={onCancel}
 			afterClose={() => form.resetFields()}
-			okButtonProps={{ disabled: submitDisabled }}
 		>
 			<Form
 				layout="vertical"

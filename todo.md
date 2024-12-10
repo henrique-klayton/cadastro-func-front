@@ -30,7 +30,7 @@
 - [ ] Add table filtering
   - [ ] Status filter
   - [ ] Other filters
-- [ ] Validate form before submit
+- [x] Validate form before submit
 - [ ] Add/remove employee skills
 - [ ] Gerar relatórios em CSV
 - [x] Add table pagination

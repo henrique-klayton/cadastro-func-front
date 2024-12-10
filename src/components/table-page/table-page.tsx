@@ -38,7 +38,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [action, setAction] = useState(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
-	const [submitDisabled, setSubmitDisabled] = useState(true);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
@@ -135,34 +134,33 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	// Form Modal
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
-		form.validateFields().then((res) => {
-			console.log(res);
+		form.validateFields().then(() => {
+			switch (action) {
+				case ActionsEnum.CREATE:
+					createAction(data)
+						.then((item) => {
+							message.success(`${registerName} criado(a) com sucesso!`);
+							if (item) addItemToTable(item);
+						})
+						.catch((err: Error) => {
+							closeFormModal();
+							message.error(err.message);
+						});
+					break;
+				case ActionsEnum.UPDATE:
+					updateAction(id, data)
+						.then((item) => {
+							message.success(`${registerName} atualizado(a) com sucesso!`);
+							if (item) updateItemOnTable(item);
+						})
+						.catch((err: Error) => {
+							closeFormModal();
+							message.error(err.message);
+						});
+					break;
+			}
+			closeFormModal();
 		});
-		switch (action) {
-			case ActionsEnum.CREATE:
-				createAction(data)
-					.then((item) => {
-						message.success(`${registerName} criado(a) com sucesso!`);
-						if (item) addItemToTable(item);
-					})
-					.catch((err: Error) => {
-						closeFormModal();
-						message.error(err.message);
-					});
-				break;
-			case ActionsEnum.UPDATE:
-				updateAction(id, data)
-					.then((item) => {
-						message.success(`${registerName} atualizado(a) com sucesso!`);
-						if (item) updateItemOnTable(item);
-					})
-					.catch((err: Error) => {
-						closeFormModal();
-						message.error(err.message);
-					});
-				break;
-		}
-		closeFormModal();
 	};
 
 	const openFormModal = (
@@ -204,6 +202,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		initialData: formData,
 		currentId: formId,
 		onSubmit: formSubmit,
+		onFieldsChange: undefined,
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
@@ -212,13 +211,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				{...formModalstates}
 				objectName={registerName}
 				loading={formLoading}
-				submitDisabled={submitDisabled}
 				open={formOpen}
 				onCancel={handleFormModalCancel}
-				onFieldsChange={(changed, all) => {
-					console.log(changed);
-					console.log(all);
-				}}
 			>
 				{children}
 			</FormModal>
