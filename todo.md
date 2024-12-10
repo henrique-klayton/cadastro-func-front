@@ -2,7 +2,7 @@
 - [x] Schedules table
 - [x] Employees table
 - [x] Skills table
-- [ ] CRUD Operations
+- [x] CRUD Operations
   - [x] Add table actions
     - [x] Add
     - [x] Edit
@@ -13,10 +13,10 @@
     - [x] Skill
     - [x] Employee
   - [x] Initialize form on update
-  - [ ] Format data before sending to API
+  - [x] Format data before sending to API
     - [x] Schedule
-    - [ ] Skill
-    - [ ] Employee
+    - [x] Skill
+    - [x] Employee
   - [x] Update form after create/update/delete actions
   - [x] Add delete confirmation modal
   - [x] Call server actions on form submit
