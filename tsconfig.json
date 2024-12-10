@@ -24,6 +24,7 @@
     ],
     "paths": {
       "@components/*": [ "./src/components/*" ],
+      "@models/*": [ "./src/models/*" ],
       "@interfaces/*": [ "./src/interfaces/*" ],
       "@enums/*": [ "./src/enums/*" ],
       "@utils/*": [ "./src/utils/*" ],
