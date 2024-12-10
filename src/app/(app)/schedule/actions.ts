@@ -3,7 +3,7 @@ import { FormDataSerializer } from "@components/table-page/types";
 import {
 	PaginatedSchedule,
 	Schedule,
-	ScheduleType as ScheduleFragmentType,
+	ScheduleFragmentType,
 } from "@fragments/schedule";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";

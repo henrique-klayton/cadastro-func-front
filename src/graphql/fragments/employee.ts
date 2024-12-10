@@ -1,14 +1,10 @@
 import { FragmentType, useFragment } from "@graphql/types/fragment-masking";
 import { graphql } from "@graphql/types/gql";
 import { EmployeeFragment as EmployeeFragmentType } from "@graphql/types/graphql";
-
-export type EmployeeType = Omit<
-	EmployeeFragmentType,
-	"createdAt" | "updatedAt"
->;
+export type { EmployeeFragment as EmployeeFragmentType } from "@graphql/types/graphql";
 
 export interface PaginatedEmployee {
-	data: EmployeeType[];
+	data: EmployeeFragmentType[];
 	total: number;
 }
 
@@ -27,7 +23,7 @@ export const EmployeeFragment = graphql(`
 
 export function Employee(
 	fragment: FragmentType<typeof EmployeeFragment>,
-): EmployeeType {
+): EmployeeFragmentType {
 	const employee = useFragment(EmployeeFragment, fragment);
 	return employee;
 }

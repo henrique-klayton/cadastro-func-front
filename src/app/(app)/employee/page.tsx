@@ -5,7 +5,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import { DataTableProps } from "@components/data-table/types";
 import TablePageComponent from "@components/table-page";
-import { EmployeeType } from "@fragments/employee";
+import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import dateParse from "@utils/date-parse";
@@ -24,7 +24,7 @@ dayjs.extend(localizedFormat);
 export default async function EmployeePage() {
 	const employees = await getEmployees();
 
-	const table: DataTableProps<EmployeeType> = {
+	const table: DataTableProps<EmployeeFragmentType> = {
 		data: employees.data,
 		rowKey: "id",
 		columns: [
@@ -61,7 +61,7 @@ export default async function EmployeePage() {
 
 	return (
 		<TablePageComponent<
-			EmployeeType,
+			EmployeeFragmentType,
 			EmployeeCreateDto,
 			Partial<FullEmployeeType>
 		>

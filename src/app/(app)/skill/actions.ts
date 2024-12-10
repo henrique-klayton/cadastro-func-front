@@ -1,6 +1,6 @@
 "use server";
 import { FormDataSerializer } from "@components/table-page/types";
-import { PaginatedSkill, Skill, SkillType } from "@fragments/skill";
+import { PaginatedSkill, Skill, SkillFragmentType } from "@fragments/skill";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
@@ -33,7 +33,7 @@ const updateSerializer: FormDataSerializer<SkillUpdateDto> = (data) => {
 	return data;
 };
 
-export async function getSkill(id: number): Promise<SkillType> {
+export async function getSkill(id: number): Promise<SkillFragmentType> {
 	try {
 		const queryResult = await runQuery(getSkillQuery, { id });
 		const skill = Skill(queryResult.skill);
@@ -64,7 +64,7 @@ export async function getSkills(
 export async function createSkill(
 	data: SkillCreateDto,
 	employees?: string[],
-): Promise<SkillType> {
+): Promise<SkillFragmentType> {
 	try {
 		const created = await runMutation(createSkillMutation, {
 			skill: createSerializer(data),
@@ -82,7 +82,7 @@ export async function updateSkill(
 	id: number,
 	data: SkillUpdateDto,
 	employees?: string[],
-): Promise<SkillType> {
+): Promise<SkillFragmentType> {
 	try {
 		const updated = await runMutation(updateSkillMutation, {
 			id,
@@ -97,7 +97,7 @@ export async function updateSkill(
 	}
 }
 
-export async function deleteSkill(id: number): Promise<SkillType> {
+export async function deleteSkill(id: number): Promise<SkillFragmentType> {
 	try {
 		const deleted = await runMutation(deleteSkillMutation, { id });
 		const skill = Skill(deleted.deleteSkill);

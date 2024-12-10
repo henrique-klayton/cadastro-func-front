@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 
 import { DataTableProps } from "@components/data-table/types";
 import TablePageComponent from "@components/table-page";
-import { SkillType } from "@fragments/skill";
+import { SkillFragmentType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
 import {
 	createSkill,
@@ -16,7 +16,7 @@ import {
 export default async function SchedulePage() {
 	const skills = await getSkills();
 
-	const table: DataTableProps<SkillType> = {
+	const table: DataTableProps<SkillFragmentType> = {
 		data: skills.data,
 		rowKey: "id",
 		columns: [
@@ -36,7 +36,7 @@ export default async function SchedulePage() {
 	};
 
 	return (
-		<TablePageComponent<SkillType, SkillCreateDto, SkillUpdateDto>
+		<TablePageComponent<SkillFragmentType, SkillCreateDto, SkillUpdateDto>
 			table={table}
 			totalCount={skills.total}
 			title="Habilidades"
