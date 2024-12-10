@@ -1,6 +1,8 @@
+import { FormInstance, FormItemProps } from "antd/lib";
+import { FieldData } from "rc-field-form/lib/interface";
+
 import { ActionsEnum } from "@enums/actions";
 import { Merge } from "@interfaces/merge.type";
-import { FormInstance } from "antd";
 
 export type FormModalActions = ActionsEnum.CREATE | ActionsEnum.UPDATE;
 
@@ -10,6 +12,9 @@ Impossible to know data type, some fields could be formatted to another type
 export type FormData<T> = { [P in keyof T]: any };
 export type FormSubmitData<C, U> = FormCreateData<C> | FormUpdateData<U>;
 export type FormSubmitFunc<C, U> = (submit: FormSubmitData<C, U>) => void;
+export type FormField<T> = FieldData<T>;
+export type FormFieldList<T> = FormField<T>[];
+
 export type FormModalProps<C, U> = BaseFormModalProps &
 	(FormModalCreateProps<C> | FormModalUpdateProps<U>);
 export type FormOnSubmit<C, U> = ((submit: FormCreateData<C>) => void) &
@@ -18,7 +23,12 @@ export type FormOnSubmit<C, U> = ((submit: FormCreateData<C>) => void) &
 export type MergedFormModalProps<C, U> = Merge<
 	FormModalCreateProps<C>,
 	FormModalUpdateProps<U>
->;
+> & {
+	onFieldsChange?: (
+		changedFields: FormFieldList<C> | FormFieldList<U>,
+		allFields: FormFieldList<C> | FormFieldList<U>,
+	) => void;
+};
 
 export interface FormCreateData<C> {
 	action: ActionsEnum.CREATE;
@@ -37,8 +47,6 @@ export interface BaseFormModalProps {
 	objectName: string;
 	open: boolean;
 	loading: boolean;
-	submitDisabled: boolean;
-	onFieldsChange: (changedFields: unknown[], allFields: unknown[]) => void;
 	onCancel: () => void;
 }
 
@@ -48,6 +56,10 @@ export interface FormModalCreateProps<C> {
 	currentId?: undefined;
 	form: FormInstance<C>;
 	onSubmit: (submit: FormCreateData<C>) => void;
+	onFieldsChange?: (
+		changedFields: FormFieldList<C>,
+		allFields: FormFieldList<C>,
+	) => void;
 }
 
 export interface FormModalUpdateProps<U> {
@@ -56,4 +68,28 @@ export interface FormModalUpdateProps<U> {
 	currentId: string | number;
 	form: FormInstance<U>;
 	onSubmit: (submit: FormUpdateData<U>) => void;
+	onFieldsChange?: (
+		changedFields: FormFieldList<U>,
+		allFields: FormFieldList<U>,
+	) => void;
+}
+
+type IncludedFormItemProps =
+	| "name"
+	| "label"
+	| "tooltip"
+	| "dependencies"
+	| "required"
+	| "rules"
+	| "hasFeedback"
+	| "validateDebounce"
+	| "validateFirst"
+	| "validateStatus"
+	| "validateTrigger";
+
+export interface FormItemConfig<C, U, P>
+	extends Partial<Pick<FormItemProps, IncludedFormItemProps>> {
+	key: keyof C | U;
+	input: React.ReactElement<P>;
+	inputProps: P;
 }
