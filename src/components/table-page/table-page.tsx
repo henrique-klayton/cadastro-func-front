@@ -9,10 +9,14 @@ import { AiOutlinePlus } from "react-icons/ai";
 import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
-import { FormModalActions, FormSubmitData } from "@components/form-modal/types";
+import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
-import { FormModalStateProps, TablePageProps } from "./types";
+import {
+	FormModalStateProps,
+	TablePageFormModalProps,
+	TablePageProps,
+} from "./types";
 
 import "./table-page.css";
 
@@ -37,7 +41,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [submitDisabled, setSubmitDisabled] = useState(true);
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
-	const [form] = useForm<C | U>();
+	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -130,7 +134,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
-	const formSubmit = ({ action, data, id }: FormSubmitData<C, U>) => {
+	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then((res) => {
 			console.log(res);
 		});
@@ -196,11 +200,11 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	// Form Modal Props
 	const formModalstates = {
 		action: action as FormModalActions,
-		form: form as FormInstance,
+		form: form,
 		initialData: formData,
 		currentId: formId,
 		onSubmit: formSubmit,
-	} as FormModalStateProps<C, U>;
+	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
 		<>
