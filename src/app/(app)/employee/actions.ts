@@ -49,7 +49,7 @@ export async function getEmployeeWithRelations(
 export async function getEmployees(
 	page?: number,
 	pageSize?: number,
-	filterStatus = false,
+	filterStatus?: boolean,
 ): Promise<PaginatedEmployee> {
 	try {
 		const queryResult = await runQuery(getEmployeesListQuery, {

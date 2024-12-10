@@ -46,7 +46,7 @@ export async function getSkill(id: number): Promise<SkillType> {
 export async function getSkills(
 	page?: number,
 	pageSize?: number,
-	filterStatus = false,
+	filterStatus?: boolean,
 ): Promise<PaginatedSkill> {
 	try {
 		const queryResult = await runQuery(getSkillsListQuery, {
