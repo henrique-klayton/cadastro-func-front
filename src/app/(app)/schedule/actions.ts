@@ -54,7 +54,7 @@ export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 export async function getSchedules(
 	page?: number,
 	pageSize?: number,
-	filterStatus = false,
+	filterStatus?: boolean,
 ): Promise<PaginatedSchedule> {
 	try {
 		const queryResult = await runQuery(getSchedulesListQuery, {
