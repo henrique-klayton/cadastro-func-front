@@ -4,13 +4,16 @@ import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import { DataTableProps } from "@components/data-table/types";
+import SkillsSelectTable from "@components/skills-select-table";
 import TablePageComponent from "@components/table-page";
+import { createRelationKeyObject } from "@components/table-page/types";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import dateParse from "@utils/date-parse";
 import dateTableFormat from "@utils/date-table-format";
 import employeeScheduleTableFormat from "@utils/employee-schedule-table-format";
+import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
 	deleteEmployee,
@@ -79,6 +82,9 @@ export default async function EmployeePage() {
 			queryDataParsers={{
 				birthDate: dateParse,
 			}}
+			relationsKeys={[
+				createRelationKeyObject("skills", getSkills, SkillsSelectTable),
+			]}
 		>
 			<Row gutter={16}>
 				<Col span={12}>

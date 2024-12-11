@@ -1,6 +1,15 @@
 "use client";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { App, Card, Flex, FloatButton, ModalFuncProps } from "antd";
+import {
+	App,
+	Card,
+	Col,
+	Flex,
+	FloatButton,
+	Form,
+	ModalFuncProps,
+	Row,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance, TablePaginationConfig } from "antd/lib";
 import { useState } from "react";
@@ -14,6 +23,8 @@ import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
 import {
 	FormModalStateProps,
+	ItemRelationList,
+	RelationTableProps,
 	TablePageFormModalProps,
 	TablePageProps,
 } from "./types";
@@ -34,6 +45,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		deleteAction,
 	},
 	queryDataParsers: parsers,
+	relationsKeys,
 }: TablePageProps<T, C, U>) {
 	const [action, setAction] = useState(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
@@ -41,6 +53,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
+	const [itemRelations, setItemRelations] = useState<ItemRelationList<U>>([]);
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -128,6 +141,109 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
+	if (relationsKeys) {
+		relationsKeys.map(({ key: dataKey, component, queryRelatedAction }) => {
+			const [data, setData] = useState<RelationTableProps<U, keyof U>["data"]>(
+				[] as U[keyof U],
+			);
+			const [selectedDataKeys, setSelectedDataKeys] = useState<
+				RelationTableProps<U, keyof U>["selectedDataKeys"]
+			>([] as U[keyof U]);
+			const [pagination, setPagination] = useState<TablePaginationConfig>({
+				current: 1,
+				pageSize: minPageSize,
+				total,
+				pageSizeOptions: [minPageSize, 20, 50, 100].filter(
+					(size) => size <= total,
+				),
+			});
+			const [loading, setLoading] = useState(false);
+			const element = (
+				// biome-ignore lint/correctness/useJsxKeyInIterable: Key should be on Form.Item
+				<Row>
+					<Col span={24}>
+						<Form.Item name={dataKey as string} key={dataKey as string}>
+							{component({
+								data,
+								dataKey,
+								selectedDataKeys,
+								loading,
+								pagination,
+							})}
+						</Form.Item>
+					</Col>
+				</Row>
+			);
+			return {
+				data,
+				setData,
+				dataKey: dataKey,
+				element: element,
+				selectedDataKeys,
+				setSelectedDataKeys,
+				loading,
+				setLoading,
+				pagination,
+				setPagination,
+				queryRelatedAction,
+			} satisfies RelationTableProps<U, keyof U>;
+		});
+	}
+
+	const loadRelationsListData = async (formData: U | undefined) => {
+		const keys = relationsKeys ?? [];
+		const itemRelations = keys.map(
+			async ({ key: dataKey, queryRelatedAction, component }) => {
+				const { data: tableData, total } = await queryRelatedAction();
+
+				const [data, setData] =
+					useState<RelationTableProps<U, keyof U>["data"]>(tableData);
+				const [selectedDataKeys, setSelectedDataKeys] = useState<
+					RelationTableProps<U, keyof U>["selectedDataKeys"]
+				>(formData ? formData[dataKey] : ([] as U[keyof U]));
+				const [pagination, setPagination] = useState<TablePaginationConfig>({
+					current: 1,
+					pageSize: minPageSize,
+					total,
+					pageSizeOptions: [minPageSize, 20, 50, 100].filter(
+						(size) => size <= total,
+					),
+				});
+				const [loading, setLoading] = useState(false);
+				const element = (
+					// biome-ignore lint/correctness/useJsxKeyInIterable: Key should be on Form.Item
+					<Row>
+						<Col span={24}>
+							<Form.Item name={dataKey as string} key={dataKey as string}>
+								{component({
+									data,
+									dataKey,
+									selectedDataKeys,
+									loading,
+									pagination,
+								})}
+							</Form.Item>
+						</Col>
+					</Row>
+				);
+				return {
+					data,
+					setData,
+					dataKey: dataKey,
+					element: element,
+					selectedDataKeys,
+					setSelectedDataKeys,
+					loading,
+					setLoading,
+					pagination,
+					setPagination,
+					queryRelatedAction,
+				} satisfies RelationTableProps<U, keyof U>;
+			},
+		);
+		setItemRelations(await Promise.all(itemRelations));
+	};
+
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
 			switch (action) {
@@ -167,8 +283,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			setFormLoading(true);
 			initialData
 				.then((data) => {
-					setFormData(data);
-					setFormLoading(false);
+					loadRelationsListData(data)
+						.then(() => {
+							setFormData(data);
+							setFormLoading(false);
+						})
+						.catch((err) => {
+							throw err;
+						});
 				})
 				.catch((err: Error) => {
 					console.error(err);
@@ -217,6 +339,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				onCancel={handleFormModalCancel}
 			>
 				{children}
+				{itemRelations.map((item) => item.element)}
 			</FormModal>
 			<Card title={title}>
 				<Flex className="w-full h-full" vertical>

@@ -1,6 +1,8 @@
-import Skill from "@models/skill";
+import { TablePaginationConfig } from "antd/lib";
 
-export interface SkillsSelectTableProps {
-	skills: Skill[];
-	enabledSkills: Skill["id"][];
+export interface SkillsSelectTableProps<T> {
+	data: T[];
+	pagination: TablePaginationConfig;
+	dataKey: string;
+	selectedDataKeys: string[] | number[];
 }
