@@ -6,10 +6,13 @@ import { GraphQLError } from "./graphql-error";
 export default async function runQuery<R, V>(
 	query: TypedDocumentString<R, V>,
 	variables?: V,
+	nextTag?: string,
 ): Promise<R> {
 	try {
+		const fetchOptions: RequestInit = {};
+		if (nextTag) fetchOptions.next = { tags: [nextTag] };
 		const { data: queryResult, error } = await getUrqlClient()
-			.query(query.toString(), variables ?? {})
+			.query(query.toString(), variables ?? {}, { fetchOptions })
 			.toPromise();
 
 		if (error) throw new Error("Query error", { cause: error });

@@ -13,13 +13,14 @@ import {
 } from "@queries/skill";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Habilidade!";
 const queryManyErrorMsg = "Erro ao carregar Habilidades!";
 const createErrorMsg = "Erro ao criar Habilidade!";
 const updateErrorMsg = "Erro ao atualizar Habilidade!";
 const deleteErrorMsg = "Erro ao remover Habilidade!";
+const queryTag = "skillsList";
 
 const createSerializer: FormDataSerializer<SkillCreateDto> = (data) => {
 	// console.log(data.birthDate);
@@ -49,10 +50,14 @@ export async function getSkills(
 	filterStatus?: boolean,
 ): Promise<PaginatedSkill> {
 	try {
-		const queryResult = await runQuery(getSkillsListQuery, {
-			filterStatus,
-			...calculateLimitOffset(page, pageSize),
-		});
+		const queryResult = await runQuery(
+			getSkillsListQuery,
+			{
+				filterStatus,
+				...calculateLimitOffset(page, pageSize),
+			},
+			queryTag,
+		);
 		const result = queryResult.skillList;
 		const skills = result.data.map((item) => Skill(item));
 		return { data: skills, total: result.total };
@@ -71,7 +76,7 @@ export async function createSkill(
 			employees,
 		});
 		const skill = Skill(created.createSkill);
-		revalidatePath("/skill");
+		revalidateTag(queryTag);
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -90,7 +95,7 @@ export async function updateSkill(
 			employees,
 		});
 		const skill = Skill(updated.updateSkill);
-		revalidatePath("/skill");
+		revalidateTag(queryTag);
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -101,7 +106,7 @@ export async function deleteSkill(id: number): Promise<SkillFragmentType> {
 	try {
 		const deleted = await runMutation(deleteSkillMutation, { id });
 		const skill = Skill(deleted.deleteSkill);
-		revalidatePath("/skill");
+		revalidateTag(queryTag);
 		return skill;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);
