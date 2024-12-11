@@ -40,7 +40,7 @@ export default async function SchedulePage() {
 			table={table}
 			totalCount={skills.total}
 			title="Habilidades"
-			registerName="Habilidade"
+			itemName="Habilidade"
 			actions={{
 				tableQueryAction: getSkills,
 				formQueryAction: getSkill,

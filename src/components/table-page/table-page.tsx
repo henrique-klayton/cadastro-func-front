@@ -25,7 +25,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	table: tableProps,
 	totalCount: total,
 	title,
-	registerName,
+	itemName,
 	actions: {
 		tableQueryAction,
 		formQueryAction,
@@ -44,7 +44,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
-	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${registerName}?`;
+	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 
 	// DataTable Component
 	const [tableLoading, setTableLoading] = useState(false);
@@ -120,7 +120,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				onOk: () => {
 					return handleDeleteConfirm(id, true)
 						.then(() => {
-							message.success(`${registerName} removido(a) com sucesso!`);
+							message.success(`${itemName} removido(a) com sucesso!`);
 							removeItemFromTable(id);
 						})
 						.catch((err: Error) => {
@@ -139,7 +139,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				case ActionsEnum.CREATE:
 					createAction(data)
 						.then((item) => {
-							message.success(`${registerName} criado(a) com sucesso!`);
+							message.success(`${itemName} criado(a) com sucesso!`);
 							if (item) addItemToTable(item);
 						})
 						.catch((err: Error) => {
@@ -150,7 +150,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				case ActionsEnum.UPDATE:
 					updateAction(id, data)
 						.then((item) => {
-							message.success(`${registerName} atualizado(a) com sucesso!`);
+							message.success(`${itemName} atualizado(a) com sucesso!`);
 							if (item) updateItemOnTable(item);
 						})
 						.catch((err: Error) => {
@@ -209,7 +209,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		<>
 			<FormModal<C, U>
 				{...formModalstates}
-				objectName={registerName}
+				objectName={itemName}
 				loading={formLoading}
 				open={formOpen}
 				onCancel={handleFormModalCancel}
@@ -224,12 +224,12 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 						loading={tableLoading}
 						actions={actions}
 						pagination={pagination}
-						registerName={registerName}
+						registerName={itemName}
 					/>
 					<FloatButton
 						className="create-button"
 						type="primary"
-						tooltip={`Criar ${registerName}`}
+						tooltip={`Criar ${itemName}`}
 						icon={<AiOutlinePlus />}
 						onClick={() => {
 							openFormModal(ActionsEnum.CREATE);

@@ -68,7 +68,7 @@ export default async function EmployeePage() {
 			table={table}
 			totalCount={employees.total}
 			title="Funcionários"
-			registerName="Funcionário"
+			itemName="Funcionário"
 			actions={{
 				tableQueryAction: getEmployees,
 				formQueryAction: getEmployeeWithRelations,
