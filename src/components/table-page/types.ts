@@ -12,19 +12,29 @@ import { Optional } from "@interfaces/optional.type";
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
 export type FormDataSerializer<T> = (data: FormData<T>) => T;
 
-export type TablePageFormModalProps<C, U> =
-	| FormModalCreateProps<C>
-	| FormModalUpdateProps<U>;
+export type TablePageFormModalProps<CreateItem, UpdateItem> =
+	| FormModalCreateProps<CreateItem>
+	| FormModalUpdateProps<UpdateItem>;
 
-export type FormModalStateProps<C, U> = MergedFormModalProps<C, U>;
-
-export interface TablePageProps<T extends HaveId, C extends U, U> {
+export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
+	CreateItem,
+	UpdateItem
+>;
+export type ItemRelationList<RelatedItem> = Array<
+	RelationTableProps<RelatedItem, keyof RelatedItem>
+>;
+export interface TablePageProps<
+	TableItem extends HaveId,
+	CreateItem extends UpdateItem,
+	UpdateItem,
+> {
 	children: React.ReactNode;
-	table: DataTableProps<T>;
+	table: DataTableProps<TableItem>;
 	totalCount: number;
-	actions: ServerActions<T, C, U>;
+	actions: ServerActions<TableItem, CreateItem, UpdateItem>;
 	title: string;
 	itemName: string;
+	queryDataParsers?: QueryDataParsers<UpdateItem>;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
