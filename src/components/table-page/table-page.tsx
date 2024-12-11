@@ -96,19 +96,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const actions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			setFormId(id);
-			const item = formQueryAction(id)
-				.then((obj) => {
-					if (parsers) {
-						for (const key in parsers) {
-							obj[key] = parsers[key](obj[key]);
-						}
+			const item = formQueryAction(id).then((obj) => {
+				if (parsers) {
+					for (const key in parsers) {
+						obj[key] = parsers[key](obj[key]);
 					}
-					return obj;
-				})
-				.catch(() => {
-					closeFormModal();
-					message.error("Erro ao carregar formulário!");
-				});
+				}
+				return obj;
+			});
 			openFormModal(ActionsEnum.UPDATE, item as Promise<U>);
 		},
 		onDeleteClick: async (id: T["id"]) => {
@@ -170,10 +165,17 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		setAction(action);
 		if (initialData) {
 			setFormLoading(true);
-			initialData.then((data) => {
-				setFormData(data);
-				setFormLoading(false);
-			});
+			initialData
+				.then((data) => {
+					setFormData(data);
+					setFormLoading(false);
+				})
+				.catch((err: Error) => {
+					console.error(err);
+					console.error(err.message);
+					message.error("Erro ao carregar formulário!");
+					closeFormModal();
+				});
 		}
 		setFormOpen(true);
 	};
