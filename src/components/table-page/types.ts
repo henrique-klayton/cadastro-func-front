@@ -24,8 +24,7 @@ export interface TablePageProps<T extends HaveId, C extends U, U> {
 	totalCount: number;
 	actions: ServerActions<T, C, U>;
 	title: string;
-	registerName: string;
-	queryDataParsers?: QueryDataParsers<U>;
+	itemName: string;
 }
 
 export interface ServerActions<T extends HaveId, C, U> {
