@@ -18,13 +18,14 @@ import {
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
 import timeSerialize from "@utils/time-serialize";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Escala!";
 const queryManyErrorMsg = "Erro ao carregar Escalas!";
 const createErrorMsg = "Erro ao criar Escala!";
 const updateErrorMsg = "Erro ao atualizar Escala!";
 const deleteErrorMsg = "Erro ao remover Escala!";
+const queryTag = "schedulesList";
 
 const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
 	data: ScheduleCreateDto,
@@ -57,10 +58,14 @@ export async function getSchedules(
 	filterStatus?: boolean,
 ): Promise<PaginatedSchedule> {
 	try {
-		const queryResult = await runQuery(getSchedulesListQuery, {
-			filterStatus,
-			...calculateLimitOffset(page, pageSize),
-		});
+		const queryResult = await runQuery(
+			getSchedulesListQuery,
+			{
+				filterStatus,
+				...calculateLimitOffset(page, pageSize),
+			},
+			queryTag,
+		);
 		const result = queryResult.scheduleList;
 		const schedules = result.data.map((item) => Schedule(item));
 		return { data: schedules, total: result.total };
@@ -77,7 +82,7 @@ export async function createSchedule(
 			schedule: createSerializer(data),
 		});
 		const schedule = Schedule(created.createSchedule);
-		revalidatePath("/schedule");
+		revalidateTag(queryTag);
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -94,7 +99,7 @@ export async function updateSchedule(
 			schedule: updateSerializer(data),
 		});
 		const schedule = Schedule(updated.updateSchedule);
-		revalidatePath("/schedule");
+		revalidateTag(queryTag);
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -109,7 +114,7 @@ export async function deleteSchedule(
 			id,
 		});
 		const schedule = Schedule(deleted.deleteSchedule);
-		revalidatePath("/schedule");
+		revalidateTag(queryTag);
 		return schedule;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);

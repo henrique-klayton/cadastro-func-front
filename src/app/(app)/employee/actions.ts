@@ -19,13 +19,14 @@ import {
 } from "@queries/employee";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Funcionário!";
 const queryManyErrorMsg = "Erro ao carregar Funcionários!";
 const createErrorMsg = "Erro ao criar Funcionário!";
 const updateErrorMsg = "Erro ao atualizar Funcionário!";
 const deleteErrorMsg = "Erro ao remover Funcionário!";
+const queryTag = "employeesList";
 
 const createSerializer: FormDataSerializer<EmployeeCreateDto> = (data) => {
 	// console.log(data.birthDate);
@@ -56,10 +57,14 @@ export async function getEmployees(
 	filterStatus?: boolean,
 ): Promise<PaginatedEmployee> {
 	try {
-		const queryResult = await runQuery(getEmployeesListQuery, {
-			filterStatus,
-			...calculateLimitOffset(page, pageSize),
-		});
+		const queryResult = await runQuery(
+			getEmployeesListQuery,
+			{
+				filterStatus,
+				...calculateLimitOffset(page, pageSize),
+			},
+			queryTag,
+		);
 		const result = queryResult.employeeList;
 		const employees = result.data.map((item) => Employee(item));
 		return { data: employees, total: result.total };
@@ -78,7 +83,7 @@ export async function createEmployee(
 			skills,
 		});
 		const employee = Employee(created.createEmployee);
-		revalidatePath("/employee");
+		revalidateTag(queryTag);
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
@@ -97,7 +102,7 @@ export async function updateEmployee(
 			skills,
 		});
 		const employee = Employee(updated.updateEmployee);
-		revalidatePath("/employee");
+		revalidateTag(queryTag);
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, updateErrorMsg);
@@ -110,7 +115,7 @@ export async function deleteEmployee(
 	try {
 		const deleted = await runMutation(deleteEmployeeMutation, { id });
 		const employee = Employee(deleted.deleteEmployee);
-		revalidatePath("/employee");
+		revalidateTag(queryTag);
 		return employee;
 	} catch (err) {
 		catchGraphQLError(err, deleteErrorMsg);
