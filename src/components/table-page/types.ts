@@ -1,5 +1,3 @@
-import { TablePaginationConfig } from "antd/lib";
-
 import { DataTableProps } from "@components/data-table/types";
 import {
 	FormData,
@@ -9,7 +7,7 @@ import {
 } from "@components/form-modal/types";
 import { HaveId } from "@interfaces/have-id";
 import { Optional } from "@interfaces/optional.type";
-import { StateSetter } from "@interfaces/state-setter.type";
+import TablePaginationConfig from "./interfaces/table-pagination-config";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };

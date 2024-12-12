@@ -11,7 +11,7 @@ import {
 	Row,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { FormInstance, TablePaginationConfig } from "antd/lib";
+import { FormInstance } from "antd/lib";
 import { useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
@@ -21,6 +21,8 @@ import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
+import TablePaginationConfig from "./interfaces/table-pagination-config";
+import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
 	ItemRelationList,
@@ -70,7 +72,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		tableQueryAction(page, pageSize)
 			.then((res) => {
 				setTableData(res.data);
-				setPagination({ ...pagination, current: page, pageSize: pageSize });
+				setPagination(
+					makePaginationConfig({ ...pagination, page: page, pageSize }),
+				);
 				setTableLoading(false);
 			})
 			.catch(() => {
@@ -79,15 +83,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			});
 	};
 
-	const minPageSize = 10;
-	const [pagination, setPagination] = useState<TablePaginationConfig>({
-		current: 1,
-		pageSize: minPageSize,
-		total,
-		pageSizeOptions: [minPageSize, 20, 50, 100].filter((size) => size <= total),
-		showSizeChanger: total > minPageSize,
-		onChange: loadTableData,
-	});
+	const [pagination, setPagination] = useState<TablePaginationConfig>(
+		makePaginationConfig({ total, onChange: loadTableData }),
+	);
 
 	const addItemToTable = (item: T) => {
 		const data = [...tableData, item];
@@ -149,14 +147,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 			const [selectedDataKeys, setSelectedDataKeys] = useState<
 				RelationTableProps<U, keyof U>["selectedDataKeys"]
 			>([] as U[keyof U]);
-			const [pagination, setPagination] = useState<TablePaginationConfig>({
-				current: 1,
-				pageSize: minPageSize,
-				total,
-				pageSizeOptions: [minPageSize, 20, 50, 100].filter(
-					(size) => size <= total,
-				),
-			});
+			const [pagination, setPagination] = useState<TablePaginationConfig>(
+				makePaginationConfig({}),
+			);
 			const [loading, setLoading] = useState(false);
 			const element = (
 				// biome-ignore lint/correctness/useJsxKeyInIterable: Key should be on Form.Item
@@ -201,14 +194,9 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				const [selectedDataKeys, setSelectedDataKeys] = useState<
 					RelationTableProps<U, keyof U>["selectedDataKeys"]
 				>(formData ? formData[dataKey] : ([] as U[keyof U]));
-				const [pagination, setPagination] = useState<TablePaginationConfig>({
-					current: 1,
-					pageSize: minPageSize,
-					total,
-					pageSizeOptions: [minPageSize, 20, 50, 100].filter(
-						(size) => size <= total,
-					),
-				});
+				const [pagination, setPagination] = useState<TablePaginationConfig>(
+					makePaginationConfig({}),
+				);
 				const [loading, setLoading] = useState(false);
 				const element = (
 					// biome-ignore lint/correctness/useJsxKeyInIterable: Key should be on Form.Item
