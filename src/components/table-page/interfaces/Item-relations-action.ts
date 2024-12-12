@@ -1,5 +1,6 @@
 "use client";
 
+import { IdArray } from "@interfaces/id-array.type";
 import { Dispatch } from "react";
 import { RelationKeyObject, RelationTableProps } from "../types";
 import TablePaginationConfig from "./table-pagination-config";
@@ -37,7 +38,7 @@ export interface SetPaginationAction<Item> extends BaseAction<Item> {
 
 export interface InitialLoadAction<Item> extends BaseAction<Item> {
 	type: "initialLoad";
-	selectedDataKeys: string[] | number[];
+	selectedDataKeys: IdArray;
 }
 
 export interface PageLoadAction<Item> extends BaseAction<Item> {

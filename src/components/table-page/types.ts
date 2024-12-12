@@ -6,6 +6,7 @@ import {
 	MergedFormModalProps,
 } from "@components/form-modal/types";
 import { HaveId } from "@interfaces/have-id";
+import { IdArray } from "@interfaces/id-array.type";
 import { Optional } from "@interfaces/optional.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 
@@ -72,7 +73,7 @@ export interface RelationKeyObject<Item, Key extends keyof Item = keyof Item> {
 export interface RelationTableProps<Item, Key extends keyof Item> {
 	data: Item[Key];
 	dataKey: Key;
-	selectedDataKeys: string[] | number[];
+	selectedDataKeys: IdArray;
 	loading: boolean;
 	pagination: TablePaginationConfig;
 	element: React.ReactElement;
