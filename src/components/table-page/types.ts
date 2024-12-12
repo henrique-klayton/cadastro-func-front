@@ -21,9 +21,9 @@ export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
 	CreateItem,
 	UpdateItem
 >;
-export type ItemRelationList<Item> = Array<
-	RelationTableProps<Item, keyof Item>
->;
+export type ItemRelationObject<Item> = {
+	[Property in keyof Item]: RelationTableProps<Item, Property>;
+};
 export interface TablePageProps<
 	TableItem extends HaveId,
 	CreateItem extends UpdateItem,
@@ -68,16 +68,13 @@ export interface RelationKeyObject<Item, Key extends keyof Item = keyof Item> {
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }
 
+// export interface RelationTableProps<Item, Key extends keyof Item = keyof Item> {
 export interface RelationTableProps<Item, Key extends keyof Item> {
-	data: Item[keyof Item];
-	setData: StateSetter<Item[keyof Item]>;
+	data: Item[Key];
 	dataKey: Key;
-	selectedDataKeys: Item[Key];
-	setSelectedDataKeys: StateSetter<Item[Key]>;
+	selectedDataKeys: string[] | number[];
 	loading: boolean;
-	setLoading: StateSetter<boolean>;
 	pagination: TablePaginationConfig;
-	setPagination: StateSetter<TablePaginationConfig>;
 	element: React.ReactElement;
 	queryRelatedAction: PaginationQueryType<Item[Key]>;
 }
