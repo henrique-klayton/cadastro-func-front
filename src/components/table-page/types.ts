@@ -23,8 +23,8 @@ export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
 	CreateItem,
 	UpdateItem
 >;
-export type ItemRelationList<RelatedItem> = Array<
-	RelationTableProps<RelatedItem, keyof RelatedItem>
+export type ItemRelationList<Item> = Array<
+	RelationTableProps<Item, keyof Item>
 >;
 export interface TablePageProps<
 	TableItem extends HaveId,
