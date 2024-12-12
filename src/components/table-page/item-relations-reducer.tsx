@@ -2,6 +2,7 @@
 import { Col, Row } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
+import { IdArray } from "@interfaces/id-array.type";
 import {
 	InitAction,
 	ItemRelationsAction,
@@ -75,7 +76,7 @@ function handleInit<T>(action: InitAction<T>) {
 			const relation: Relation<T> = {
 				data: [] as RelatedItem<T>,
 				dataKey: dataKey,
-				selectedDataKeys: [],
+				selectedDataKeys: [] as IdArray,
 				loading: true,
 				element: <></>,
 				pagination: makePaginationConfig({ onChange: loadTableData }),
@@ -108,7 +109,7 @@ function handleInit<T>(action: InitAction<T>) {
 
 function handleInitialLoad<T>(
 	relation: Relation<T>,
-	selectedDataKeys: string[] | number[],
+	selectedDataKeys: IdArray,
 ) {
 	relation.selectedDataKeys = selectedDataKeys;
 	relation.loading = false;
