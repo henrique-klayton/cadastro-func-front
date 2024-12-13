@@ -51,6 +51,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 	const [relationsLoaded, setRelationsLoaded] = useState(false);
+	const [relationsTables, setRelationsTables] = useState<React.ReactNode>("");
 	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
 		{} as ItemRelationObject<U>,
@@ -215,6 +216,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		closeFormModal();
 	};
 	// Form Modal Relation Tables
+	const getRelationsTables = () => {
+		return relationsKeys?.map(({ key }) => itemRelations[key].element);
+	};
+
 	const loadRelationsListData = async (formData: U) => {
 		const keys = [] as Array<keyof U>;
 		for (const key in itemRelations) {
@@ -275,7 +280,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 				onCancel={handleFormModalCancel}
 			>
 				{children}
-				{/* {itemRelations.map((item) => item.element)} */}
+				{relationsTables}
 			</FormModal>
 			<Card title={title}>
 				<Flex className="w-full h-full" vertical>
