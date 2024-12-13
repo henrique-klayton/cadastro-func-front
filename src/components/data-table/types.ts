@@ -2,6 +2,7 @@ import { TablePaginationConfig } from "antd/lib";
 import { ColumnProps } from "antd/lib/table";
 
 import { HaveId } from "@interfaces/have-id";
+import StringKeyof from "@interfaces/string-keyof.type";
 
 export interface DataTableActions<T extends HaveId> {
 	onUpdateClick: (id: T["id"]) => Promise<void>;
@@ -9,16 +10,17 @@ export interface DataTableActions<T extends HaveId> {
 }
 
 export type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
+export type TableColumnList<T> = Array<TableColumn<T>>;
 
 export interface RequiredColumnProps<T> {
 	title: string;
-	dataIndex: Extract<keyof T, string | number>;
-	formatter?: (value: T[keyof T]) => React.ReactNode;
+	dataIndex: StringKeyof<T>;
+	formatter?: (value: T[StringKeyof<T>]) => React.ReactNode;
 }
 
 export interface DataTableProps<T> {
 	data: T[];
-	rowKey: keyof T;
+	rowKey: StringKeyof<T>;
 	columns: Array<TableColumn<T>>;
 }
 

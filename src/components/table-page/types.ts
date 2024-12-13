@@ -8,6 +8,7 @@ import {
 import { HaveId } from "@interfaces/have-id";
 import { IdArray } from "@interfaces/id-array.type";
 import { Optional } from "@interfaces/optional.type";
+import StringKeyof from "@interfaces/string-keyof.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
@@ -23,7 +24,7 @@ export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
 	UpdateItem
 >;
 export type ItemRelationObject<Item> = {
-	[Property in keyof Item]: RelationTableProps<Item, Property>;
+	[Property in keyof Item]: RelationTableProps<Item, Extract<Property, string>>;
 };
 export interface TablePageProps<
 	TableItem extends HaveId,
@@ -37,7 +38,7 @@ export interface TablePageProps<
 	title: string;
 	itemName: string;
 	queryDataParsers?: QueryDataParsers<UpdateItem>;
-	relationsKeys?: Array<RelationKeyObject<UpdateItem, keyof UpdateItem>>;
+	relationsKeys?: Array<RelationKeyObject<UpdateItem, StringKeyof<UpdateItem>>>;
 }
 
 type PaginationQueryType<T> = (
@@ -54,7 +55,7 @@ export interface ServerActions<T extends HaveId, C, U> {
 }
 
 export type RelationTableComponentProps<RelatedItem> = Omit<
-	RelationTableProps<RelatedItem, keyof RelatedItem>,
+	RelationTableProps<RelatedItem, StringKeyof<RelatedItem>>,
 	| "element"
 	| "queryRelatedAction"
 	| "setData"
@@ -63,14 +64,16 @@ export type RelationTableComponentProps<RelatedItem> = Omit<
 	| "setPagination"
 >;
 
-export interface RelationKeyObject<Item, Key extends keyof Item = keyof Item> {
+export interface RelationKeyObject<
+	Item,
+	Key extends StringKeyof<Item> = StringKeyof<Item>,
+> {
 	key: Key;
 	queryRelatedAction: PaginationQueryType<Item[Key]>;
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }
 
-// export interface RelationTableProps<Item, Key extends keyof Item = keyof Item> {
-export interface RelationTableProps<Item, Key extends keyof Item> {
+export interface RelationTableProps<Item, Key extends StringKeyof<Item>> {
 	data: Item[Key];
 	dataKey: Key;
 	selectedDataKeys: IdArray;
@@ -80,7 +83,7 @@ export interface RelationTableProps<Item, Key extends keyof Item> {
 	queryRelatedAction: PaginationQueryType<Item[Key]>;
 }
 
-export function createRelationKeyObject<T, K extends keyof T>(
+export function createRelationKeyObject<T, K extends StringKeyof<T>>(
 	key: K,
 	queryRelatedAction: PaginationQueryType<T[K]>,
 	component: React.FunctionComponent<RelationTableComponentProps<T>>,

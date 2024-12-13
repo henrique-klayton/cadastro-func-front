@@ -3,6 +3,7 @@ import { Col, Row } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import { IdArray } from "@interfaces/id-array.type";
+import StringKeyof from "@interfaces/string-keyof.type";
 import {
 	ActionType,
 	InitAction,
@@ -13,8 +14,8 @@ import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
 import { ItemRelationObject, RelationTableProps } from "./types";
 
-type RelatedItem<T> = T[keyof T];
-type Relation<Item> = RelationTableProps<Item, keyof Item>;
+type RelatedItem<T> = T[StringKeyof<T>];
+type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
 type State<Item> = ItemRelationObject<Item>;
 type Action<Item> = ItemRelationsAction<Item>;
 
@@ -62,7 +63,7 @@ function setPagination<T>(
 function handleInit<T>(action: InitAction<T>) {
 	const initializedState = action.relationsKeys.reduce(
 		(state, { key: dataKey, component, queryRelatedAction }) => {
-			console.log(`Generating props for ${String(dataKey)} table`);
+			console.log(`Generating props for ${dataKey} table`);
 			const loadTableData = (page: number, pageSize: number) => {
 				queryRelatedAction(page, pageSize).then(({ data, total }) => {
 					action.dispatcher({
@@ -76,7 +77,7 @@ function handleInit<T>(action: InitAction<T>) {
 
 			const relation: Relation<T> = {
 				data: [] as RelatedItem<T>,
-				dataKey: dataKey,
+				dataKey,
 				selectedDataKeys: [] as IdArray,
 				loading: true,
 				element: <></>,
@@ -86,7 +87,7 @@ function handleInit<T>(action: InitAction<T>) {
 			relation.element = (
 				<Row>
 					<Col span={24}>
-						<FormItem name={dataKey as string} key={dataKey as string}>
+						<FormItem name={dataKey as string} key={dataKey}>
 							{component({
 								data: relation.data,
 								dataKey: relation.dataKey,
@@ -132,8 +133,7 @@ function handlePageLoad<T>(relation: Relation<T>) {
 }
 
 function handleReset<T>(state: State<T>) {
-	for (const dataKey in state) {
-		const key = dataKey as keyof T;
+	for (const key in state) {
 		state[key].data = [] as RelatedItem<T>;
 		state[key].selectedDataKeys = [];
 	}

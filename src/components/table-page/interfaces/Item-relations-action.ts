@@ -1,11 +1,12 @@
 "use client";
 
 import { IdArray } from "@interfaces/id-array.type";
+import StringKeyof from "@interfaces/string-keyof.type";
 import { Dispatch } from "react";
 import { RelationKeyObject, RelationTableProps } from "../types";
 import TablePaginationConfig from "./table-pagination-config";
 
-type Relation<Item> = RelationTableProps<Item, keyof Item>;
+type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
 
 export type ItemRelationsAction<Item> =
 	| InitAction<Item>
@@ -15,11 +16,6 @@ export type ItemRelationsAction<Item> =
 	| PageLoadAction<Item>
 	| ResetAction<Item>;
 
-export interface BaseAction<Item> {
-	type: ActionType;
-	dataKey: keyof Item;
-}
-
 export enum ActionType {
 	INIT = 0,
 	SET_LOADING = 1,
@@ -27,6 +23,11 @@ export enum ActionType {
 	INITIAL_LOAD = 3,
 	PAGINATION_LOAD = 4,
 	RESET = 5,
+}
+
+export interface BaseAction<Item> {
+	type: ActionType;
+	dataKey: StringKeyof<Item>;
 }
 
 export interface InitAction<Item> {
