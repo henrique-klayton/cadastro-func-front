@@ -138,39 +138,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
-	const loadRelationsListData = async (formData: U) => {
-		const keys = [] as Array<keyof U>;
-		for (const key in itemRelations) {
-			keys.push(key);
-		}
-		const selectedDataKeys = keys.reduce(
-			(selected, key) => {
-				const data = formData[key];
-				if (Array.isArray(data)) {
-					selected[key] = data.map((item) => item.id);
-				}
-				return selected;
-			},
-			{} as InitialLoadAction<U>["selectedDataKeys"],
-		);
-		relationsDispatch({
-			type: ActionType.INITIAL_LOAD,
-			selectedDataKeys,
-		});
-		// ["itemRelations"].map(async (relation) => {
-		// 	const data = "formData[relation.dataKey]";
-		// 	// if (Array.isArray(data)) {
-		// 	// 	relation.setData(data);
-		// 	// 	relation.setPagination(
-		// 	// 		makePaginationConfig({ ...relation.pagination, total: data.length }),
-		// 	// 	);
-		// 	// 	return;
-		// 	// }
-		// 	// throw new Error(
-		// 	// 	`Relation data ${String(relation.dataKey)} is not an array`,
-		// 	// );
-		// });
-	};
 
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
@@ -247,6 +214,40 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const handleFormModalCancel = () => {
 		closeFormModal();
 	};
+	// Form Modal Relation Tables
+	const loadRelationsListData = async (formData: U) => {
+		const keys = [] as Array<keyof U>;
+		for (const key in itemRelations) {
+			keys.push(key);
+		}
+		const selectedDataKeys = keys.reduce(
+			(selected, key) => {
+				const data = formData[key];
+				if (Array.isArray(data)) {
+					selected[key] = data.map((item) => item.id);
+				}
+				return selected;
+			},
+			{} as InitialLoadAction<U>["selectedDataKeys"],
+		);
+		relationsDispatch({
+			type: ActionType.INITIAL_LOAD,
+			selectedDataKeys,
+		});
+		// ["itemRelations"].map(async (relation) => {
+		// 	const data = "formData[relation.dataKey]";
+		// 	// if (Array.isArray(data)) {
+		// 	// 	relation.setData(data);
+		// 	// 	relation.setPagination(
+		// 	// 		makePaginationConfig({ ...relation.pagination, total: data.length }),
+		// 	// 	);
+		// 	// 	return;
+		// 	// }
+		// 	// throw new Error(
+		// 	// 	`Relation data ${String(relation.dataKey)} is not an array`,
+		// 	// );
+		// });
+	};
 
 	// Delete Confirm Modal
 	const handleDeleteConfirm = async (id: T["id"], confirm: boolean) => {
@@ -255,7 +256,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal Props
-	const formModalstates = {
+	const formModalStates = {
 		action: action as FormModalActions,
 		form: form,
 		initialData: formData,
@@ -267,7 +268,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	return (
 		<>
 			<FormModal<C, U>
-				{...formModalstates}
+				{...formModalStates}
 				objectName={itemName}
 				loading={formLoading}
 				open={formOpen}
