@@ -4,9 +4,10 @@ import FormItem from "antd/es/form/FormItem";
 
 import { IdArray } from "@interfaces/id-array.type";
 import {
+	ActionType,
 	InitAction,
+	InitialLoadAction,
 	ItemRelationsAction,
-	UpdateAction,
 } from "./interfaces/Item-relations-action";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
@@ -24,22 +25,22 @@ export default function itemRelationsReducer<T>(
 	action: Action<T>,
 ) {
 	switch (action.type) {
-		case "initRelation":
+		case ActionType.INIT:
 			return handleInit(action);
-		case "setLoading":
+		case ActionType.SET_LOADING:
 			setLoading(state[action.dataKey], action.loading);
 			break;
-		case "setPagination":
+		case ActionType.SET_PAGINATION:
 			setPagination(state[action.dataKey], action.pagination);
 			break;
-		case "initialLoad":
-			handleInitialLoad(state[action.dataKey], action.selectedDataKeys);
+		case ActionType.INITIAL_LOAD:
+			handleInitialLoad(state, action.selectedDataKeys);
 			break;
-		case "pageLoad":
+		case ActionType.PAGINATION_LOAD:
 			handlePageLoad(state[action.dataKey]);
 			break;
-		case "updateTable":
-			handleUpdate(state[action.dataKey], action);
+		case ActionType.RESET:
+			handleReset(state);
 			break;
 		default:
 			return action satisfies never;
@@ -65,7 +66,7 @@ function handleInit<T>(action: InitAction<T>) {
 			const loadTableData = (page: number, pageSize: number) => {
 				queryRelatedAction(page, pageSize).then(({ data, total }) => {
 					action.dispatcher({
-						type: "pageLoad",
+						type: ActionType.PAGINATION_LOAD,
 						dataKey,
 						data,
 						total,
@@ -108,11 +109,13 @@ function handleInit<T>(action: InitAction<T>) {
 }
 
 function handleInitialLoad<T>(
-	relation: Relation<T>,
-	selectedDataKeys: IdArray,
+	state: State<T>,
+	selectedDataKeys: InitialLoadAction<T>["selectedDataKeys"],
 ) {
-	relation.selectedDataKeys = selectedDataKeys;
-	relation.loading = false;
+	for (const key in selectedDataKeys) {
+		state[key].selectedDataKeys = selectedDataKeys[key];
+		state[key].loading = false;
+	}
 }
 
 function handlePageLoad<T>(relation: Relation<T>) {
@@ -128,6 +131,10 @@ function handlePageLoad<T>(relation: Relation<T>) {
 		});
 }
 
-function handleUpdate<T>(relation: Relation<T>, action: UpdateAction<T>) {
-	// state[action.dataKey] = action.relation;
+function handleReset<T>(state: State<T>) {
+	for (const dataKey in state) {
+		const key = dataKey as keyof T;
+		state[key].data = [] as RelatedItem<T>;
+		state[key].selectedDataKeys = [];
+	}
 }

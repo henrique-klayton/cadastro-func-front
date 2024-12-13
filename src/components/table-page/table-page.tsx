@@ -23,6 +23,10 @@ import {
 } from "./types";
 
 import "./table-page.css";
+import {
+	ActionType,
+	InitialLoadAction,
+} from "./interfaces/Item-relations-action";
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
@@ -47,7 +51,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 	const [relationsLoaded, setRelationsLoaded] = useState(false);
-	const [itemRelations, dispatchRelations] = useReducer(
+	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
 		{} as ItemRelationObject<U>,
 	);
@@ -134,87 +138,38 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
-	if (relationsKeys) {
-		// dispatchRelations({
-		// 	type: "initRelation",
-		// 	relationsKeys,
-		// });
-		// 	setItemRelations(
-		// 		relationsKeys.map(({ key: dataKey, component, queryRelatedAction }) => {
-		// 			console.log(`Generating props for ${dataKey} table`);
-		// 			const loadRelationData = (page: number, pageSize: number) => {
-		// 				setLoading(true);
-		// 				setData([] as RelationTableProps<U, keyof U>["data"]);
-		// 				queryRelatedAction(page, pageSize)
-		// 					.then((res) => {
-		// 						setData(res.data);
-		// 						setPagination(
-		// 							makePaginationConfig({ ...pagination, page, pageSize }),
-		// 						);
-		// 						setLoading(false);
-		// 					})
-		// 					.catch(() => {
-		// 						message.error("Erro ao atualizar a tabela!");
-		// 						setLoading(false);
-		// 					});
-		// 			};
-		// 			const [data, setData] = useState(
-		// 				[] as RelationTableProps<U, keyof U>["data"],
-		// 			);
-		// 			const [selectedDataKeys, setSelectedDataKeys] = useState(
-		// 				[] as RelationTableProps<U, keyof U>["selectedDataKeys"],
-		// 			);
-		// 			const [pagination, setPagination] = useState<TablePaginationConfig>(
-		// 				makePaginationConfig({ onChange: loadRelationData }),
-		// 			);
-		// 			const [loading, setLoading] = useState(false);
-		// 			const element = (
-		// 				// biome-ignore lint/correctness/useJsxKeyInIterable: Key should be on Form.Item
-		// 				<Row>
-		// 					<Col span={24}>
-		// 						<Form.Item name={dataKey as string} key={dataKey as string}>
-		// 							{component({
-		// 								data,
-		// 								dataKey,
-		// 								selectedDataKeys,
-		// 								loading,
-		// 								pagination,
-		// 							})}
-		// 						</Form.Item>
-		// 					</Col>
-		// 				</Row>
-		// 			);
-		// 			return {
-		// 				data,
-		// 				setData,
-		// 				dataKey: dataKey,
-		// 				element: element,
-		// 				selectedDataKeys,
-		// 				setSelectedDataKeys,
-		// 				loading,
-		// 				setLoading,
-		// 				pagination,
-		// 				setPagination,
-		// 				queryRelatedAction,
-		// 			} satisfies RelationTableProps<U, keyof U>;
-		// 		}),
-		// 	);
-	}
-
 	const loadRelationsListData = async (formData: U) => {
-		["itemRelations"].map(async (relation) => {
-			const data = "formData[relation.dataKey]";
-			// if (Array.isArray(data)) {
-			// 	relation.setData(data);
-			// 	relation.setPagination(
-			// 		makePaginationConfig({ ...relation.pagination, total: data.length }),
-			// 	);
-			// 	return;
-			// }
-			// throw new Error(
-			// 	`Relation data ${String(relation.dataKey)} is not an array`,
-			// );
+		const keys = [] as Array<keyof U>;
+		for (const key in itemRelations) {
+			keys.push(key);
+		}
+		const selectedDataKeys = keys.reduce(
+			(selected, key) => {
+				const data = formData[key];
+				if (Array.isArray(data)) {
+					selected[key] = data.map((item) => item.id);
+				}
+				return selected;
+			},
+			{} as InitialLoadAction<U>["selectedDataKeys"],
+		);
+		relationsDispatch({
+			type: ActionType.INITIAL_LOAD,
+			selectedDataKeys,
 		});
+		// ["itemRelations"].map(async (relation) => {
+		// 	const data = "formData[relation.dataKey]";
+		// 	// if (Array.isArray(data)) {
+		// 	// 	relation.setData(data);
+		// 	// 	relation.setPagination(
+		// 	// 		makePaginationConfig({ ...relation.pagination, total: data.length }),
+		// 	// 	);
+		// 	// 	return;
+		// 	// }
+		// 	// throw new Error(
+		// 	// 	`Relation data ${String(relation.dataKey)} is not an array`,
+		// 	// );
+		// });
 	};
 
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
@@ -252,10 +207,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		initialData?: Promise<U>,
 	) => {
 		if (!relationsLoaded && relationsKeys) {
-			dispatchRelations({
-				type: "initRelation",
+			relationsDispatch({
+				type: ActionType.INIT,
 				relationsKeys,
-				dispatcher: dispatchRelations,
+				dispatcher: relationsDispatch,
 			});
 			setRelationsLoaded(true);
 		}
