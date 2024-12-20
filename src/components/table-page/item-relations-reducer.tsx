@@ -2,6 +2,7 @@
 // import { Col, Row } from "antd";
 // import FormItem from "antd/es/form/FormItem";
 
+import Flatten from "@interfaces/flatten.type";
 import { IdArray } from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import {
@@ -18,7 +19,7 @@ import {
 	RelationTableProps,
 } from "./types";
 
-type RelatedItem<T> = T[StringKeyof<T>];
+type RelatedItem<T> = Array<Flatten<T[StringKeyof<T>]>>;
 type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
 type State<Item> = ItemRelationObject<Item>;
 type Action<Item> = ItemRelationsAction<Item>;

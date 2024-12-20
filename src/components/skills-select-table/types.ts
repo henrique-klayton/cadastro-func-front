@@ -1,8 +1,5 @@
-import { TablePaginationConfig } from "antd/lib";
+import StringKeyof from "@interfaces/string-keyof.type";
 
 export interface SkillsSelectTableProps<T> {
-	data: T[];
-	pagination: TablePaginationConfig;
-	dataKey: string;
-	selectedDataKeys: string[] | number[];
+	dataKey: StringKeyof<T>;
 }

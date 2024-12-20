@@ -5,6 +5,7 @@ import {
 	FormModalUpdateProps,
 	MergedFormModalProps,
 } from "@components/form-modal/types";
+import Flatten from "@interfaces/flatten.type";
 import { HaveId } from "@interfaces/have-id";
 import { IdArray } from "@interfaces/id-array.type";
 import { Optional } from "@interfaces/optional.type";
@@ -14,6 +15,9 @@ import TablePaginationConfig from "./interfaces/table-pagination-config";
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
 export type FormDataSerializer<T> = (data: FormData<T>) => T;
+export type RelationData<T, K extends StringKeyof<T> = StringKeyof<T>> = Array<
+	Flatten<T[K]>
+>;
 
 export type TablePageFormModalProps<CreateItem, UpdateItem> =
 	| FormModalCreateProps<CreateItem>
@@ -23,8 +27,11 @@ export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
 	CreateItem,
 	UpdateItem
 >;
-export type ItemRelationObject<Item> = {
-	[Property in keyof Item]: RelationTableProps<Item, Extract<Property, string>>;
+export type ItemRelationObject<
+	Item,
+	Key extends StringKeyof<Item> = StringKeyof<Item>,
+> = {
+	[Property in keyof Item]: RelationTableProps<Item, Key>;
 };
 export interface TablePageProps<
 	TableItem extends HaveId,
@@ -44,7 +51,7 @@ export interface TablePageProps<
 type PaginationQueryType<T> = (
 	page?: number,
 	pageSize?: number,
-) => Promise<{ data: T; total: number }>;
+) => Promise<{ data: Flatten<T>[]; total: number }>;
 
 export interface ServerActions<T extends HaveId, C, U> {
 	tableQueryAction: PaginationQueryType<T[]>;
@@ -54,15 +61,9 @@ export interface ServerActions<T extends HaveId, C, U> {
 	deleteAction: (id: T["id"]) => Promise<Optional<T>>;
 }
 
-export type RelationTableComponentProps<RelatedItem> = Omit<
-	RelationTableProps<RelatedItem, StringKeyof<RelatedItem>>,
-	| "element"
-	| "queryRelatedAction"
-	| "setData"
-	| "setSelectedDataKeys"
-	| "setLoading"
-	| "setPagination"
->;
+export type RelationTableComponentProps<Item> = {
+	dataKey: StringKeyof<Item>;
+};
 
 export interface RelationKeyObject<
 	Item,
@@ -74,7 +75,7 @@ export interface RelationKeyObject<
 }
 
 export interface RelationTableProps<Item, Key extends StringKeyof<Item>> {
-	data: Item[Key];
+	data: RelationData<Item, Key>;
 	dataKey: Key;
 	selectedDataKeys: IdArray;
 	loading: boolean;
