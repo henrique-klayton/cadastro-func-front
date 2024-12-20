@@ -10,6 +10,7 @@ import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
+import { createRelationsTable } from "@components/skills-select-table";
 import {
 	createRelationsContext,
 	createRelationsDispatchContext,
@@ -52,7 +53,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 	const [relationsLoaded, setRelationsLoaded] = useState(false);
-	const [relationsTables, setRelationsTables] = useState<React.ReactNode>("");
+	const [relationsTables, setRelationsTables] =
+		useState<React.ReactNode>(undefined);
 	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
 		relationsKeys ?? [],
@@ -222,6 +224,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const loadRelationsListData = async (formData: U) => {
 		for (const key in itemRelations) {
 			const relation = itemRelations[key];
+			const table = createRelationsTable(key);
 		}
 		// const keys = [] as Array<keyof U>;
 		// for (const key in itemRelations) {
@@ -275,37 +278,37 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	return (
 		<RelationsContext.Provider value={itemRelations}>
 			<RelationsDispatchContext.Provider value={relationsDispatch}>
-			<FormModal<C, U>
-				{...formModalStates}
-				objectName={itemName}
-				loading={formLoading}
-				open={formOpen}
-				onCancel={handleFormModalCancel}
-			>
-				{children}
-				{relationsTables}
-			</FormModal>
-			<Card title={title}>
-				<Flex className="w-full h-full" vertical>
-					<DataTable<T>
-						{...tableProps}
-						data={tableData}
-						loading={tableLoading}
-						actions={actions}
-						pagination={pagination}
-						registerName={itemName}
-					/>
-					<FloatButton
-						className="create-button"
-						type="primary"
-						tooltip={`Criar ${itemName}`}
-						icon={<AiOutlinePlus />}
-						onClick={() => {
-							openFormModal(ActionsEnum.CREATE);
-						}}
-					/>
-				</Flex>
-			</Card>
+				<FormModal<C, U>
+					{...formModalStates}
+					objectName={itemName}
+					loading={formLoading}
+					open={formOpen}
+					onCancel={handleFormModalCancel}
+				>
+					{children}
+					{relationsTables}
+				</FormModal>
+				<Card title={title}>
+					<Flex className="w-full h-full" vertical>
+						<DataTable<T>
+							{...tableProps}
+							data={tableData}
+							loading={tableLoading}
+							actions={actions}
+							pagination={pagination}
+							registerName={itemName}
+						/>
+						<FloatButton
+							className="create-button"
+							type="primary"
+							tooltip={`Criar ${itemName}`}
+							icon={<AiOutlinePlus />}
+							onClick={() => {
+								openFormModal(ActionsEnum.CREATE);
+							}}
+						/>
+					</Flex>
+				</Card>
 			</RelationsDispatchContext.Provider>
 		</RelationsContext.Provider>
 	);
