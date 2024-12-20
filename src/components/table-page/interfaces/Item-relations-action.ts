@@ -57,6 +57,7 @@ export interface RenderAction<Item> extends BaseAction<Item> {
 	data: Relation<Item>["data"];
 	total: number;
 	selectedDataKeys: IdArray;
+	element: React.ReactNode;
 	dispatcher: Dispatch<ItemRelationsAction<Item>>;
 }
 

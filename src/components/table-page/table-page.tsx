@@ -1,6 +1,15 @@
 "use client";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { App, Card, Flex, FloatButton, ModalFuncProps } from "antd";
+import {
+	App,
+	Card,
+	Col,
+	Flex,
+	FloatButton,
+	Form,
+	ModalFuncProps,
+	Row,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
 import { useReducer, useState } from "react";
@@ -10,7 +19,10 @@ import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
-import { createRelationsTable } from "@components/skills-select-table";
+import {
+	DynamicTable,
+	createRelationsTable,
+} from "@components/skills-select-table";
 import {
 	createRelationsContext,
 	createRelationsDispatchContext,
@@ -29,6 +41,8 @@ import {
 } from "./types";
 
 import "./table-page.css";
+import { IdArray } from "@interfaces/id-array.type";
+import { ActionType } from "./interfaces/Item-relations-action";
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
@@ -52,12 +66,10 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
-	const [relationsLoaded, setRelationsLoaded] = useState(false);
-	const [relationsTables, setRelationsTables] =
-		useState<React.ReactNode>(undefined);
 	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
 		relationsKeys ?? [],
+		// TODO Update object to save other state together with table data
 		reducerInitializer<U>,
 	);
 	const RelationsContext = createRelationsContext<U>();
@@ -179,14 +191,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		action: FormModalActions,
 		initialData?: Promise<U>,
 	) => {
-		// if (!relationsLoaded && relationsKeys) {
-		// 	relationsDispatch({
-		// 		type: ActionType.RENDER_TABLE,
-		// 		dispatcher: relationsDispatch,
-		// 	});
-		// 	setRelationsLoaded(true);
-		// }
-
 		setAction(action);
 		if (initialData) {
 			setFormLoading(true);
@@ -222,9 +226,35 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	// Form Modal Relation Tables
 	const loadRelationsListData = async (formData: U) => {
+		console.log("loadRelationsListData");
 		for (const key in itemRelations) {
+			console.log("loadRelationsListData key:", key);
 			const relation = itemRelations[key];
+			const { data, total } = await relation.queryRelatedAction();
 			const table = createRelationsTable(key);
+			const element = (
+				<Row key={relation.dataKey}>
+					<Col span={24}>
+						<Form.Item name={relation.dataKey as string} key={relation.dataKey}>
+							{table}
+							<DynamicTable dataKey={relation.dataKey} />
+						</Form.Item>
+					</Col>
+				</Row>
+			);
+			const relatedData: IdArray = [];
+			if (Array.isArray(formData[key])) {
+				relatedData.concat(formData[key].map((item) => item.id));
+			}
+			relationsDispatch({
+				type: ActionType.RENDER_TABLE,
+				dataKey: key,
+				data,
+				total,
+				selectedDataKeys: relatedData,
+				element,
+				dispatcher: relationsDispatch,
+			});
 		}
 		// const keys = [] as Array<keyof U>;
 		// for (const key in itemRelations) {
@@ -286,7 +316,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					onCancel={handleFormModalCancel}
 				>
 					{children}
-					{relationsTables}
+					{relationsKeys?.map(({ key }) => itemRelations[key].element)}
 				</FormModal>
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>

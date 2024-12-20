@@ -14,12 +14,13 @@ export const DynamicTable = dynamic(
 		ssr: false,
 		loading: () => <Table loading={true} />,
 	},
-) as React.ComponentType<SkillsSelectTableProps<unknown>>;
+	// biome-ignore lint/suspicious/noExplicitAny: Unable to use generic types in const declaration
+) as React.ComponentType<SkillsSelectTableProps<any>>;
 
 export const createRelationsTable = <T,>(
 	dataKey: StringKeyof<T>,
 ): React.ReactElement<SkillsSelectTableProps<T>> => {
-	return <DynamicTable dataKey={dataKey as StringKeyof<unknown>} />;
+	return <DynamicTable dataKey={dataKey} />;
 };
 
 export default function SkillsSelectTable<T>({
