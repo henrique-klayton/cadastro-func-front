@@ -1,18 +1,22 @@
 "use client";
-import { Col, Row } from "antd";
-import FormItem from "antd/es/form/FormItem";
+// import { Col, Row } from "antd";
+// import FormItem from "antd/es/form/FormItem";
 
 import { IdArray } from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import {
 	ActionType,
-	InitAction,
-	InitialLoadAction,
 	ItemRelationsAction,
+	PageLoadAction,
+	RenderAction,
 } from "./interfaces/Item-relations-action";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
-import { ItemRelationObject, RelationTableProps } from "./types";
+import {
+	ItemRelationObject,
+	RelationKeyObject,
+	RelationTableProps,
+} from "./types";
 
 type RelatedItem<T> = T[StringKeyof<T>];
 type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
@@ -26,21 +30,21 @@ export default function itemRelationsReducer<T>(
 	action: Action<T>,
 ) {
 	switch (action.type) {
-		case ActionType.INIT:
-			return handleInit(action);
+		// case ActionType.INIT_ALL:
+		// 	break;
 		case ActionType.SET_LOADING:
 			setLoading(state[action.dataKey], action.loading);
 			break;
 		case ActionType.SET_PAGINATION:
 			setPagination(state[action.dataKey], action.pagination);
 			break;
-		case ActionType.INITIAL_LOAD:
-			handleInitialLoad(state, action.selectedDataKeys);
+		case ActionType.RENDER_TABLE:
+			handleRender(state[action.dataKey], action);
 			break;
 		case ActionType.PAGINATION_LOAD:
-			handlePageLoad(state[action.dataKey]);
+			handlePageLoad(state[action.dataKey], action);
 			break;
-		case ActionType.RESET:
+		case ActionType.RESET_ALL:
 			handleReset(state);
 			break;
 		default:
@@ -60,20 +64,12 @@ function setPagination<T>(
 	relation.pagination = pagination;
 }
 
-function handleInit<T>(action: InitAction<T>) {
-	const initializedState = action.relationsKeys.reduce(
-		(state, { key: dataKey, component, queryRelatedAction }) => {
+export function reducerInitializer<T>(
+	relationsKeys: Array<RelationKeyObject<T>>,
+): ItemRelationObject<T> {
+	const initializedState = relationsKeys.reduce(
+		(state, { key: dataKey, queryRelatedAction }) => {
 			console.log(`Generating props for ${dataKey} table`);
-			const loadTableData = (page: number, pageSize: number) => {
-				queryRelatedAction(page, pageSize).then(({ data, total }) => {
-					action.dispatcher({
-						type: ActionType.PAGINATION_LOAD,
-						dataKey,
-						data,
-						total,
-					});
-				});
-			};
 
 			const relation: Relation<T> = {
 				data: [] as RelatedItem<T>,
@@ -81,24 +77,24 @@ function handleInit<T>(action: InitAction<T>) {
 				selectedDataKeys: [] as IdArray,
 				loading: true,
 				element: <></>,
-				pagination: makePaginationConfig({ onChange: loadTableData }),
+				pagination: makePaginationConfig({}),
 				queryRelatedAction,
 			};
-			relation.element = (
-				<Row>
-					<Col span={24}>
-						<FormItem name={dataKey as string} key={dataKey}>
-							{component({
-								data: relation.data,
-								dataKey: relation.dataKey,
-								selectedDataKeys: relation.selectedDataKeys,
-								loading: relation.loading,
-								pagination: relation.pagination,
-							})}
-						</FormItem>
-					</Col>
-				</Row>
-			);
+			// relation.element = (
+			// 	<Row>
+			// 		<Col span={24}>
+			// 			<FormItem name={dataKey as string} key={dataKey}>
+			// 				{component({
+			// 					data: relation.data,
+			// 					dataKey: relation.dataKey,
+			// 					selectedDataKeys: relation.selectedDataKeys,
+			// 					loading: relation.loading,
+			// 					pagination: relation.pagination,
+			// 				})}
+			// 			</FormItem>
+			// 		</Col>
+			// 	</Row>
+			// );
 			state[dataKey] = relation;
 			return state;
 		},
@@ -109,32 +105,40 @@ function handleInit<T>(action: InitAction<T>) {
 	return initializedState;
 }
 
-function handleInitialLoad<T>(
-	state: State<T>,
-	selectedDataKeys: InitialLoadAction<T>["selectedDataKeys"],
-) {
-	for (const key in selectedDataKeys) {
-		state[key].selectedDataKeys = selectedDataKeys[key];
-		state[key].loading = false;
-	}
+function handleRender<T>(relation: Relation<T>, action: RenderAction<T>) {
+	relation.data = action.data;
+	relation.selectedDataKeys = action.selectedDataKeys;
+	relation.loading = false;
+	relation.pagination = makePaginationConfig({
+		...relation.pagination,
+		total: action.total,
+		onChange: (page: number, pageSize: number) => {
+			relation.queryRelatedAction(page, pageSize).then(({ data, total }) => {
+				action.dispatcher({
+					type: ActionType.PAGINATION_LOAD,
+					dataKey: relation.dataKey,
+					data,
+					total,
+				});
+			});
+		},
+	});
 }
 
-function handlePageLoad<T>(relation: Relation<T>) {
-	const pagination = relation.pagination;
-	relation
-		.queryRelatedAction(pagination.page, pagination.pageSize)
-		.then(({ data, total }) => {
-			relation.data = data;
-			relation.pagination = makePaginationConfig({
-				...relation.pagination,
-				total,
-			});
-		});
+function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
+	relation.data = action.data;
+	relation.pagination = makePaginationConfig({
+		...relation.pagination,
+		total: action.total,
+	});
+	relation.loading = false;
 }
 
 function handleReset<T>(state: State<T>) {
 	for (const key in state) {
 		state[key].data = [] as RelatedItem<T>;
 		state[key].selectedDataKeys = [];
+		state[key].pagination = makePaginationConfig({});
+		state[key].loading = true;
 	}
 }
