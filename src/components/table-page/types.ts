@@ -80,7 +80,7 @@ export interface RelationTableProps<Item, Key extends StringKeyof<Item>> {
 	selectedDataKeys: IdArray;
 	loading: boolean;
 	pagination: TablePaginationConfig;
-	element: React.ReactElement;
+	element: React.ReactNode;
 	queryRelatedAction: PaginationQueryType<Item[Key]>;
 }
 
