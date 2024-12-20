@@ -17,20 +17,17 @@ import {
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
-import itemRelationsReducer from "./item-relations-reducer";
+import itemRelationsReducer, {
+	reducerInitializer,
+} from "./item-relations-reducer";
 import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
-	ItemRelationObject,
 	TablePageFormModalProps,
 	TablePageProps,
 } from "./types";
 
 import "./table-page.css";
-import {
-	ActionType,
-	InitialLoadAction,
-} from "./interfaces/Item-relations-action";
 
 export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	children,
@@ -58,7 +55,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [relationsTables, setRelationsTables] = useState<React.ReactNode>("");
 	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
-		{} as ItemRelationObject<U>,
+		relationsKeys ?? [],
+		reducerInitializer<U>,
 	);
 	const RelationsContext = createRelationsContext<U>();
 	const RelationsDispatchContext = createRelationsDispatchContext<U>();
@@ -145,7 +143,6 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal
-
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
 			switch (action) {
@@ -180,14 +177,13 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		action: FormModalActions,
 		initialData?: Promise<U>,
 	) => {
-		if (!relationsLoaded && relationsKeys) {
-			relationsDispatch({
-				type: ActionType.INIT,
-				relationsKeys,
-				dispatcher: relationsDispatch,
-			});
-			setRelationsLoaded(true);
-		}
+		// if (!relationsLoaded && relationsKeys) {
+		// 	relationsDispatch({
+		// 		type: ActionType.RENDER_TABLE,
+		// 		dispatcher: relationsDispatch,
+		// 	});
+		// 	setRelationsLoaded(true);
+		// }
 
 		setAction(action);
 		if (initialData) {
@@ -221,30 +217,30 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const handleFormModalCancel = () => {
 		closeFormModal();
 	};
-	// Form Modal Relation Tables
-	const getRelationsTables = () => {
-		return relationsKeys?.map(({ key }) => itemRelations[key].element);
-	};
 
+	// Form Modal Relation Tables
 	const loadRelationsListData = async (formData: U) => {
-		const keys = [] as Array<keyof U>;
 		for (const key in itemRelations) {
-			keys.push(key);
+			const relation = itemRelations[key];
 		}
-		const selectedDataKeys = keys.reduce(
-			(selected, key) => {
-				const data = formData[key];
-				if (Array.isArray(data)) {
-					selected[key] = data.map((item) => item.id);
-				}
-				return selected;
-			},
-			{} as InitialLoadAction<U>["selectedDataKeys"],
-		);
-		relationsDispatch({
-			type: ActionType.INITIAL_LOAD,
-			selectedDataKeys,
-		});
+		// const keys = [] as Array<keyof U>;
+		// for (const key in itemRelations) {
+		// 	keys.push(key);
+		// }
+		// const selectedDataKeys = keys.reduce(
+		// 	(selected, key) => {
+		// 		const data = formData[key];
+		// 		if (Array.isArray(data)) {
+		// 			selected[key] = data.map((item) => item.id);
+		// 		}
+		// 		return selected;
+		// 	},
+		// 	{} as InitialLoadAction<U>["selectedDataKeys"],
+		// );
+		// relationsDispatch({
+		// 	type: ActionType.INITIAL_LOAD,
+		// 	selectedDataKeys,
+		// });
 		// ["itemRelations"].map(async (relation) => {
 		// 	const data = "formData[relation.dataKey]";
 		// 	// if (Array.isArray(data)) {
