@@ -10,6 +10,10 @@ import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
+import {
+	createRelationsContext,
+	createRelationsDispatchContext,
+} from "@components/skills-select-table/relations-context";
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
@@ -56,6 +60,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		itemRelationsReducer<U>,
 		{} as ItemRelationObject<U>,
 	);
+	const RelationsContext = createRelationsContext<U>();
+	const RelationsDispatchContext = createRelationsDispatchContext<U>();
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -271,7 +277,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
-		<>
+		<RelationsContext.Provider value={itemRelations}>
+			<RelationsDispatchContext.Provider value={relationsDispatch}>
 			<FormModal<C, U>
 				{...formModalStates}
 				objectName={itemName}
@@ -303,6 +310,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					/>
 				</Flex>
 			</Card>
-		</>
+			</RelationsDispatchContext.Provider>
+		</RelationsContext.Provider>
 	);
 }
