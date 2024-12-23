@@ -7,6 +7,7 @@ import { IdArray } from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import {
 	ActionType,
+	InitialLoadAction,
 	ItemRelationsAction,
 	PageLoadAction,
 	RenderAction,
@@ -38,11 +39,17 @@ export default function itemRelationsReducer<T>(
 		case ActionType.RENDER_TABLE:
 			handleRender(state[action.dataKey], action);
 			break;
+		case ActionType.INITIAL_LOAD:
+			handleInitialLoad(state[action.dataKey], action);
+			break;
 		case ActionType.PAGINATION_LOAD:
 			handlePageLoad(state[action.dataKey], action);
 			break;
 		case ActionType.RESET_ALL:
 			handleReset(state);
+			break;
+		case ActionType.SET_LOADED_ALL:
+			setLoadedAllTables(state);
 			break;
 		default:
 			return action satisfies never;
@@ -87,8 +94,16 @@ export function reducerInitializer<T>(
 }
 
 function handleRender<T>(relation: Relation<T>, action: RenderAction<T>) {
-	console.log(`Loading and rendering ${action.dataKey} table`);
+	console.log(`Save rendered ${action.dataKey} table`);
 	relation.element = action.element;
+	relation.loading = true;
+}
+
+function handleInitialLoad<T>(
+	relation: Relation<T>,
+	action: InitialLoadAction<T>,
+) {
+	console.log(`Initial data load for ${action.dataKey} table`);
 	relation.data = action.data;
 	relation.selectedDataKeys = action.selectedDataKeys;
 	relation.loading = false;
@@ -115,7 +130,6 @@ function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
 		...relation.pagination,
 		total: action.total,
 	});
-	relation.loading = false;
 }
 
 function handleReset<T>(state: State<T>) {
@@ -125,5 +139,12 @@ function handleReset<T>(state: State<T>) {
 		state[key].selectedDataKeys = [];
 		state[key].pagination = makePaginationConfig({});
 		state[key].loading = true;
+	}
+}
+
+function setLoadedAllTables<T>(state: State<T>) {
+	for (const key in state) {
+		console.log(`Show ${key} table`);
+		state[key].loading = false;
 	}
 }

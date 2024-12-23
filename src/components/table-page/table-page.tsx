@@ -19,10 +19,7 @@ import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
-import {
-	DynamicTable,
-	createRelationsTable,
-} from "@components/skills-select-table";
+import SkillsSelectTable from "@components/skills-select-table";
 import {
 	createRelationsContext,
 	createRelationsDispatchContext,
@@ -66,6 +63,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	const [formData, setFormData] = useState<C | U | undefined>(undefined);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
+	const [relationTables, setRelationTables] = useState<React.ReactNode[]>([]);
+	const [relationTablesLoaded, setRelationTablesLoaded] = useState(false);
 	const [itemRelations, relationsDispatch] = useReducer(
 		itemRelationsReducer<U>,
 		relationsKeys ?? [],
@@ -192,6 +191,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 		initialData?: Promise<U>,
 	) => {
 		setAction(action);
+		if (!relationTablesLoaded) renderTables();
 		if (initialData) {
 			setFormLoading(true);
 			initialData
@@ -212,12 +212,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					closeFormModal();
 				});
 		}
+		relationsDispatch({ type: ActionType.SET_LOADED_ALL });
 		setFormOpen(true);
 	};
 
 	const closeFormModal = () => {
 		setFormOpen(false);
 		setFormData(undefined);
+		relationsDispatch({ type: ActionType.RESET_ALL });
 	};
 
 	const handleFormModalCancel = () => {
@@ -225,68 +227,50 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	};
 
 	// Form Modal Relation Tables
-	const loadRelationsListData = async (formData: U) => {
-		console.log("loadRelationsListData");
+	const renderTables = () => {
+		const elements: React.ReactNode[] = [];
 		for (const key in itemRelations) {
-			console.log("loadRelationsListData key:", key);
+			console.log(`Render ${key} relation table`);
 			const relation = itemRelations[key];
-			const { data, total } = await relation.queryRelatedAction();
-			const table = createRelationsTable(key);
 			const element = (
 				<Row key={relation.dataKey}>
 					<Col span={24}>
 						<Form.Item name={relation.dataKey as string} key={relation.dataKey}>
-							{table}
-							<DynamicTable dataKey={relation.dataKey} />
+							<SkillsSelectTable dataKey={relation.dataKey} />
 						</Form.Item>
 					</Col>
 				</Row>
 			);
+			elements.push(element);
+			relationsDispatch({
+				type: ActionType.RENDER_TABLE,
+				dataKey: key,
+				element,
+			});
+		}
+		setRelationTables(elements);
+		setRelationTablesLoaded(true);
+	};
+
+	const loadRelationsListData = async (formData: U) => {
+		console.log("Preparing to load relation tables");
+		for (const key in itemRelations) {
+			console.log(`Getting data to load ${key} table`);
+			const relation = itemRelations[key];
+			const { data, total } = await relation.queryRelatedAction();
 			const relatedData: IdArray = [];
 			if (Array.isArray(formData[key])) {
 				relatedData.concat(formData[key].map((item) => item.id));
 			}
 			relationsDispatch({
-				type: ActionType.RENDER_TABLE,
+				type: ActionType.INITIAL_LOAD,
 				dataKey: key,
 				data,
 				total,
 				selectedDataKeys: relatedData,
-				element,
 				dispatcher: relationsDispatch,
 			});
 		}
-		// const keys = [] as Array<keyof U>;
-		// for (const key in itemRelations) {
-		// 	keys.push(key);
-		// }
-		// const selectedDataKeys = keys.reduce(
-		// 	(selected, key) => {
-		// 		const data = formData[key];
-		// 		if (Array.isArray(data)) {
-		// 			selected[key] = data.map((item) => item.id);
-		// 		}
-		// 		return selected;
-		// 	},
-		// 	{} as InitialLoadAction<U>["selectedDataKeys"],
-		// );
-		// relationsDispatch({
-		// 	type: ActionType.INITIAL_LOAD,
-		// 	selectedDataKeys,
-		// });
-		// ["itemRelations"].map(async (relation) => {
-		// 	const data = "formData[relation.dataKey]";
-		// 	// if (Array.isArray(data)) {
-		// 	// 	relation.setData(data);
-		// 	// 	relation.setPagination(
-		// 	// 		makePaginationConfig({ ...relation.pagination, total: data.length }),
-		// 	// 	);
-		// 	// 	return;
-		// 	// }
-		// 	// throw new Error(
-		// 	// 	`Relation data ${String(relation.dataKey)} is not an array`,
-		// 	// );
-		// });
 	};
 
 	// Delete Confirm Modal
@@ -316,7 +300,7 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					onCancel={handleFormModalCancel}
 				>
 					{children}
-					{relationsKeys?.map(({ key }) => itemRelations[key].element)}
+					{relationTables}
 				</FormModal>
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>

@@ -9,33 +9,28 @@ import TablePaginationConfig from "./table-pagination-config";
 type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
 
 export type ItemRelationsAction<Item> =
-	// | InitAction<Item>
 	| SetLoadingAction<Item>
 	| SetPaginationAction<Item>
-	// | InitialLoadAction<Item>
+	| InitialLoadAction<Item>
 	| PageLoadAction<Item>
 	| RenderAction<Item>
-	| ResetAction<Item>;
+	| ResetAllAction
+	| SetLoadedAllAction;
 
 export enum ActionType {
-	// INIT_ALL = 0,
+	RENDER_TABLE = 0,
 	SET_LOADING = 1,
 	SET_PAGINATION = 2,
-	PAGINATION_LOAD = 3,
-	RENDER_TABLE = 4,
+	INITIAL_LOAD = 3,
+	PAGINATION_LOAD = 4,
 	RESET_ALL = 5,
+	SET_LOADED_ALL = 6,
 }
 
 export interface BaseAction<Item> {
 	type: ActionType;
 	dataKey: StringKeyof<Item>;
 }
-
-// export interface InitAction<Item> {
-// 	type: ActionType.INIT_ALL;
-// 	relationsKeys: Array<RelationKeyObject<Item>>;
-// 	dispatcher: Dispatch<ItemRelationsAction<Item>>;
-// }
 
 export interface SetLoadingAction<Item> extends BaseAction<Item> {
 	type: ActionType.SET_LOADING;
@@ -47,18 +42,17 @@ export interface SetPaginationAction<Item> extends BaseAction<Item> {
 	pagination: TablePaginationConfig;
 }
 
-// export interface InitialLoadAction<Item> {
-// 	type: ActionType.LOAD_ALL;
-// 	selectedDataKeys: { [P in keyof Item]: IdArray };
-// }
-
-export interface RenderAction<Item> extends BaseAction<Item> {
-	type: ActionType.RENDER_TABLE;
+export interface InitialLoadAction<Item> extends BaseAction<Item> {
+	type: ActionType.INITIAL_LOAD;
 	data: Relation<Item>["data"];
 	total: number;
 	selectedDataKeys: IdArray;
-	element: React.ReactNode;
 	dispatcher: Dispatch<ItemRelationsAction<Item>>;
+}
+
+export interface RenderAction<Item> extends BaseAction<Item> {
+	type: ActionType.RENDER_TABLE;
+	element: React.ReactNode;
 }
 
 export interface PageLoadAction<Item> extends BaseAction<Item> {
@@ -67,6 +61,10 @@ export interface PageLoadAction<Item> extends BaseAction<Item> {
 	total: number;
 }
 
-export interface ResetAction<Item> extends BaseAction<Item> {
+export interface ResetAllAction {
 	type: ActionType.RESET_ALL;
+}
+
+export interface SetLoadedAllAction {
+	type: ActionType.SET_LOADED_ALL;
 }

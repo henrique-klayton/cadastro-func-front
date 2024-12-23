@@ -26,14 +26,15 @@
   - [x] Notifications about operation status (failure, success, etc.)
     - [x] Failure
     - [x] Success
-- [ ] Fixed rows height at <= 65px
+- [x] Validate form before submit
+- [ ] Add/remove employee skills
+  - [x] Create tables to update entity relations
+- [x] Add table pagination
 - [ ] Add table filtering
   - [ ] Status filter
   - [ ] Other filters
-- [x] Validate form before submit
-- [ ] Add/remove employee skills
+- [ ] Fixed rows height at <= 65px
 - [ ] Gerar relatórios em CSV
-- [x] Add table pagination
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
 
