@@ -105,13 +105,21 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	);
 
 	const addItemToTable = (item: T) => {
+		if (item.status) {
 		const data = [...tableData, item];
 		setTableData(data);
+		}
 	};
 
 	const updateItemOnTable = (item: T) => {
+		const itemIndex = tableData.findIndex((old) => old.id === item.id);
+		if (!item.status) {
+			setTableData(tableData.toSpliced(itemIndex, 1));
+			return;
+		}
+
 		const data = [...tableData];
-		const updated = data.filter((old) => old.id === item.id)[0];
+		const updated = data[itemIndex];
 		Object.assign(updated, item);
 		setTableData(data);
 	};
