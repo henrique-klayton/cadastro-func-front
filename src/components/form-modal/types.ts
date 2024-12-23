@@ -52,7 +52,7 @@ export interface BaseFormModalProps {
 
 export interface FormModalCreateProps<C> {
 	action: ActionsEnum.CREATE;
-	initialData: Partial<C> | undefined;
+	initialData: Partial<C>;
 	currentId?: undefined;
 	form: FormInstance<C>;
 	onSubmit: (submit: FormCreateData<C>) => void;
@@ -64,7 +64,7 @@ export interface FormModalCreateProps<C> {
 
 export interface FormModalUpdateProps<U> {
 	action: ActionsEnum.UPDATE;
-	initialData: Partial<U> | undefined;
+	initialData: Partial<U>;
 	currentId: string | number;
 	form: FormInstance<U>;
 	onSubmit: (submit: FormUpdateData<U>) => void;
