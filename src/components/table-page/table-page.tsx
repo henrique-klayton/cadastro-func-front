@@ -26,6 +26,10 @@ import {
 } from "@components/skills-select-table/relations-context";
 import { ActionsEnum } from "@enums/actions";
 import { HaveId } from "@interfaces/have-id";
+import { HaveStatus } from "@interfaces/have-status";
+import { IdArray } from "@interfaces/id-array.type";
+import { PartialNullable } from "@interfaces/partial-nullable.type";
+import { ActionType } from "./interfaces/Item-relations-action";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 import itemRelationsReducer, {
 	reducerInitializer,
@@ -38,10 +42,12 @@ import {
 } from "./types";
 
 import "./table-page.css";
-import { IdArray } from "@interfaces/id-array.type";
-import { ActionType } from "./interfaces/Item-relations-action";
 
-export default function TablePageComponent<T extends HaveId, C extends U, U>({
+export default function TablePageComponent<
+	T extends HaveId & HaveStatus,
+	C extends U,
+	U extends PartialNullable<HaveId & HaveStatus>,
+>({
 	children,
 	table: tableProps,
 	totalCount: total,
@@ -57,10 +63,11 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 	queryDataParsers: parsers,
 	relationsKeys,
 }: TablePageProps<T, C, U>) {
+	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(ActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
-	const [formData, setFormData] = useState<C | U | undefined>(undefined);
+	const [formData, setFormData] = useState<Partial<C> | Partial<U>>(formReset);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 	const [relationTables, setRelationTables] = useState<React.ReactNode[]>([]);
@@ -106,8 +113,8 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 
 	const addItemToTable = (item: T) => {
 		if (item.status) {
-		const data = [...tableData, item];
-		setTableData(data);
+			const data = [...tableData, item];
+			setTableData(data);
 		}
 	};
 
@@ -219,14 +226,14 @@ export default function TablePageComponent<T extends HaveId, C extends U, U>({
 					message.error("Erro ao carregar formulário!");
 					closeFormModal();
 				});
-		}
+		} else setFormData(formReset);
 		relationsDispatch({ type: ActionType.SET_LOADED_ALL });
 		setFormOpen(true);
 	};
 
 	const closeFormModal = () => {
 		setFormOpen(false);
-		setFormData(undefined);
+		setFormData(formReset);
 		relationsDispatch({ type: ActionType.RESET_ALL });
 	};
 
