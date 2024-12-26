@@ -11,6 +11,7 @@ import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
+import { sKillTableColumns } from "@models/skill";
 import dateParse from "@utils/date-parse";
 import { getSkills } from "../skill/actions";
 import {
@@ -53,7 +54,12 @@ export default async function EmployeePage() {
 				birthDate: dateParse,
 			}}
 			relationsKeys={[
-				createRelationKeyObject("skills", getSkills, SkillsSelectTable),
+				createRelationKeyObject(
+					"skills",
+					sKillTableColumns,
+					getSkills,
+					SkillsSelectTable,
+				),
 			]}
 		>
 			<Row gutter={16}>

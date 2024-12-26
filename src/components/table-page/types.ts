@@ -1,4 +1,4 @@
-import { DataTableProps } from "@components/data-table/types";
+import { DataTableProps, TableColumn } from "@components/data-table/types";
 import {
 	FormData,
 	FormModalCreateProps,
@@ -83,6 +83,7 @@ export interface RelationKeyObject<
 	RelationData = Array<RelationType>,
 > {
 	key: Key;
+	columns: Array<TableColumn<RelationType>>;
 	queryRelatedAction: PaginationQueryType<RelationType>;
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }
@@ -97,6 +98,7 @@ export interface RelationTableProps<
 	dataKey: Key;
 	selectedDataKeys: IdArray;
 	loading: boolean;
+	columns: Array<TableColumn<RelationType>>;
 	pagination: TablePaginationConfig;
 	element: React.ReactNode;
 	queryRelatedAction: PaginationQueryType<RelationType>;
@@ -109,8 +111,9 @@ export function createRelationKeyObject<
 	RelationData = Array<RelationType>,
 >(
 	key: Key,
+	columns: Array<TableColumn<RelationType>>,
 	queryRelatedAction: PaginationQueryType<RelationType>,
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>,
 ): RelationKeyObject<Item, Key, RelationType, RelationData> {
-	return { key, queryRelatedAction, component };
+	return { key, columns, queryRelatedAction, component };
 }

@@ -17,7 +17,7 @@ export default function SkillsSelectTable<T>({
 	return (
 		<Table<Flatten<RelationData<T>>>
 			rowKey="id"
-			// columns={}
+			columns={relation.columns}
 			dataSource={relation.data}
 			pagination={relation.pagination}
 			loading={relation.loading}

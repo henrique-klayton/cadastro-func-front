@@ -74,7 +74,7 @@ export function reducerInitializer<T>(
 	relationsKeys: Array<RelationKeyObject<T>>,
 ): ItemRelationObject<T> {
 	const initializedState = relationsKeys.reduce(
-		(state, { key: dataKey, queryRelatedAction }) => {
+		(state, { key: dataKey, columns, queryRelatedAction }) => {
 			console.log(`Generating props for ${dataKey} table`);
 			const relation: Relation<T> = {
 				data: [] as RelatedItem<T>,
@@ -82,6 +82,7 @@ export function reducerInitializer<T>(
 				selectedDataKeys: [] as IdArray,
 				loading: true,
 				element: undefined,
+				columns,
 				pagination: makePaginationConfig({}),
 				queryRelatedAction,
 			};
