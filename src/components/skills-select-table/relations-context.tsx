@@ -12,9 +12,7 @@ export interface RelationsTablesProviderProps<T> {
 	relationsKeys?: Array<RelationKeyObject<T>>;
 }
 
-export const RelationsContext = createContext(
-	{} as ItemRelationObject<unknown>,
-);
+export const RelationsContext = createContext({} as ItemRelationObject<object>);
 export const RelationsDispatchContext = createContext(
 	null as unknown as React.Dispatch<ItemRelationsAction<unknown>>,
 );
@@ -22,7 +20,7 @@ export const RelationsDispatchContext = createContext(
 export const createRelationsContext = <T,>() =>
 	RelationsContext as React.Context<ItemRelationObject<T>>;
 export const createRelationsDispatchContext = <T,>() =>
-	RelationsDispatchContext as unknown as React.Context<
+	RelationsDispatchContext as React.Context<
 		React.Dispatch<ItemRelationsAction<T>>
 	>;
 

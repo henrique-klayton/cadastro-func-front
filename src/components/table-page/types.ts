@@ -48,19 +48,28 @@ export interface TablePageProps<
 	relationsKeys?: Array<RelationKeyObject<UpdateItem, StringKeyof<UpdateItem>>>;
 }
 
-type PaginationQueryType<T> = (
+// TODO Move to another file
+type PaginationQueryType<RelationType> = (
 	page?: number,
 	pageSize?: number,
-) => Promise<{ data: Flatten<T>[]; total: number }>;
+) => Promise<{ data: RelationType[]; total: number }>;
 
-export interface ServerActions<T extends HaveId, C, U> {
-	tableQueryAction: PaginationQueryType<T[]>;
-	formQueryAction: (id: T["id"]) => Promise<U>;
-	createAction: (data: C) => Promise<Optional<T>>;
-	updateAction: (id: T["id"], data: U) => Promise<Optional<T>>;
-	deleteAction: (id: T["id"]) => Promise<Optional<T>>;
+export interface ServerActions<
+	TableItem extends HaveId,
+	CreateItem,
+	UpdateItem,
+> {
+	tableQueryAction: PaginationQueryType<TableItem>;
+	formQueryAction: (id: TableItem["id"]) => Promise<UpdateItem>;
+	createAction: (data: CreateItem) => Promise<Optional<TableItem>>;
+	updateAction: (
+		id: TableItem["id"],
+		data: UpdateItem,
+	) => Promise<Optional<TableItem>>;
+	deleteAction: (id: TableItem["id"]) => Promise<Optional<TableItem>>;
 }
 
+// TODO Move RelationTable types to somewhere else
 export type RelationTableComponentProps<Item> = {
 	dataKey: StringKeyof<Item>;
 };
@@ -68,26 +77,38 @@ export type RelationTableComponentProps<Item> = {
 export interface RelationKeyObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
+	RelationType = Flatten<Item[Key]>,
+	RelationData = Array<RelationType>,
 > {
 	key: Key;
-	queryRelatedAction: PaginationQueryType<Item[Key]>;
+	queryRelatedAction: PaginationQueryType<RelationType>;
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }
 
-export interface RelationTableProps<Item, Key extends StringKeyof<Item>> {
-	data: RelationData<Item, Key>;
+export interface RelationTableProps<
+	Item,
+	Key extends StringKeyof<Item> = StringKeyof<Item>,
+	RelationType = Flatten<Item[Key]>,
+	RelationData = Array<RelationType>,
+> {
+	data: RelationData;
 	dataKey: Key;
 	selectedDataKeys: IdArray;
 	loading: boolean;
 	pagination: TablePaginationConfig;
 	element: React.ReactNode;
-	queryRelatedAction: PaginationQueryType<Item[Key]>;
+	queryRelatedAction: PaginationQueryType<RelationType>;
 }
 
-export function createRelationKeyObject<T, K extends StringKeyof<T>>(
-	key: K,
-	queryRelatedAction: PaginationQueryType<T[K]>,
-	component: React.FunctionComponent<RelationTableComponentProps<T>>,
-): RelationKeyObject<T, K> {
+export function createRelationKeyObject<
+	Item,
+	Key extends StringKeyof<Item> = StringKeyof<Item>,
+	RelationType = Flatten<Required<Item>[Key]>,
+	RelationData = Array<RelationType>,
+>(
+	key: Key,
+	queryRelatedAction: PaginationQueryType<RelationType>,
+	component: React.FunctionComponent<RelationTableComponentProps<Item>>,
+): RelationKeyObject<Item, Key, RelationType, RelationData> {
 	return { key, queryRelatedAction, component };
 }
