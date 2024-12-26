@@ -220,9 +220,11 @@ export default function TablePageComponent<
 						throw err;
 					});
 			})
-			.catch((err: Error) => {
-				console.error(err);
-				console.error(err.message);
+			.catch((err: unknown) => {
+				const error =
+					err instanceof Error ? err : new Error(String(err), { cause: err });
+				console.error(error);
+				console.error(error.message);
 				message.error("Erro ao carregar formulário!");
 				closeFormModal();
 			});
