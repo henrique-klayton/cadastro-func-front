@@ -203,30 +203,29 @@ export default function TablePageComponent<
 
 	const openFormModal = (
 		action: FormModalActions,
-		initialData?: Promise<U>,
+		initialData: Promise<U | undefined> = Promise.resolve(undefined),
 	) => {
 		setAction(action);
 		if (!relationTablesLoaded) renderTables();
-		if (initialData) {
-			setFormLoading(true);
-			initialData
-				.then((data) => {
-					loadRelationsListData(data)
-						.then(() => {
-							setFormData(data);
-							setFormLoading(false);
-						})
-						.catch((err) => {
-							throw err;
-						});
-				})
-				.catch((err: Error) => {
-					console.error(err);
-					console.error(err.message);
-					message.error("Erro ao carregar formulário!");
-					closeFormModal();
-				});
-		} else setFormData(formReset);
+		setFormLoading(true);
+		initialData
+			.then((data) => {
+				loadRelationsListData(data)
+					.then(() => {
+						if (data) setFormData(data);
+						else setFormData(formReset);
+						setFormLoading(false);
+					})
+					.catch((err) => {
+						throw err;
+					});
+			})
+			.catch((err: Error) => {
+				console.error(err);
+				console.error(err.message);
+				message.error("Erro ao carregar formulário!");
+				closeFormModal();
+			});
 		relationsDispatch({ type: ActionType.SET_LOADED_ALL });
 		setFormOpen(true);
 	};
@@ -267,14 +266,14 @@ export default function TablePageComponent<
 		setRelationTablesLoaded(true);
 	};
 
-	const loadRelationsListData = async (formData: U) => {
+	const loadRelationsListData = async (formData?: U) => {
 		console.log("Preparing to load relation tables");
 		for (const key in itemRelations) {
 			console.log(`Getting data to load ${key} table`);
 			const relation = itemRelations[key];
 			const { data, total } = await relation.queryRelatedAction();
 			const relatedData: IdArray = [];
-			if (Array.isArray(formData[key])) {
+			if (formData && Array.isArray(formData[key])) {
 				relatedData.concat(formData[key].map((item) => item.id));
 			}
 			relationsDispatch({
