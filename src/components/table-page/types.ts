@@ -7,8 +7,10 @@ import {
 } from "@components/form-modal/types";
 import Flatten from "@interfaces/flatten.type";
 import { HaveId } from "@interfaces/have-id";
+import { HaveStatus } from "@interfaces/have-status";
 import { IdArray } from "@interfaces/id-array.type";
 import { Optional } from "@interfaces/optional.type";
+import { PartialNullable } from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 
@@ -34,9 +36,9 @@ export type ItemRelationObject<
 	[Property in keyof Item]: RelationTableProps<Item, Key>;
 };
 export interface TablePageProps<
-	TableItem extends HaveId,
+	TableItem extends HaveId & HaveStatus,
 	CreateItem extends UpdateItem,
-	UpdateItem,
+	UpdateItem extends PartialNullable<HaveId & HaveStatus>,
 > {
 	children: React.ReactNode;
 	table: DataTableProps<TableItem>;
