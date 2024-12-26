@@ -228,7 +228,6 @@ export default function TablePageComponent<
 				message.error("Erro ao carregar formulário!");
 				closeFormModal();
 			});
-		relationsDispatch({ type: ActionType.SET_LOADED_ALL });
 		setFormOpen(true);
 	};
 

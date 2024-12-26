@@ -48,9 +48,6 @@ export default function itemRelationsReducer<T>(
 		case ActionType.RESET_ALL:
 			handleReset(state);
 			break;
-		case ActionType.SET_LOADED_ALL:
-			setLoadedAllTables(state);
-			break;
 		default:
 			return action satisfies never;
 	}
@@ -140,12 +137,5 @@ function handleReset<T>(state: State<T>) {
 		state[key].selectedDataKeys = [];
 		state[key].pagination = makePaginationConfig({});
 		state[key].loading = true;
-	}
-}
-
-function setLoadedAllTables<T>(state: State<T>) {
-	for (const key in state) {
-		console.log(`Show ${key} table`);
-		state[key].loading = false;
 	}
 }

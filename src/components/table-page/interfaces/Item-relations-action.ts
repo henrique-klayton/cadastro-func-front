@@ -14,8 +14,7 @@ export type ItemRelationsAction<Item> =
 	| InitialLoadAction<Item>
 	| PageLoadAction<Item>
 	| RenderAction<Item>
-	| ResetAllAction
-	| SetLoadedAllAction;
+	| ResetAllAction;
 
 export enum ActionType {
 	RENDER_TABLE = 0,
@@ -24,7 +23,6 @@ export enum ActionType {
 	INITIAL_LOAD = 3,
 	PAGINATION_LOAD = 4,
 	RESET_ALL = 5,
-	SET_LOADED_ALL = 6,
 }
 
 export interface BaseAction<Item> {
@@ -63,8 +61,4 @@ export interface PageLoadAction<Item> extends BaseAction<Item> {
 
 export interface ResetAllAction {
 	type: ActionType.RESET_ALL;
-}
-
-export interface SetLoadedAllAction {
-	type: ActionType.SET_LOADED_ALL;
 }
