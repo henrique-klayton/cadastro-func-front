@@ -15,14 +15,14 @@ import {
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
 import {
-	ItemRelationObject,
-	RelationKeyObject,
+	RelationDataObject,
 	RelationTableProps,
+	RelationTablePropsObject,
 } from "./types";
 
 type RelatedItem<T> = Array<Flatten<T[StringKeyof<T>]>>;
 type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
-type State<Item> = ItemRelationObject<Item>;
+type State<Item> = RelationTablePropsObject<Item>;
 type Action<Item> = ItemRelationsAction<Item>;
 
 export default function itemRelationsReducer<T>(
@@ -68,9 +68,9 @@ function setPagination<T>(
 }
 
 export function reducerInitializer<T>(
-	relationsKeys: Array<RelationKeyObject<T>>,
-): ItemRelationObject<T> {
-	const initializedState = relationsKeys.reduce(
+	relationsData: Array<RelationDataObject<T>>,
+): RelationTablePropsObject<T> {
+	const initializedState = relationsData.reduce(
 		(state, { key: dataKey, columns, queryRelatedAction }) => {
 			console.log(`Generating props for ${dataKey} table`);
 			const relation: Relation<T> = {
@@ -109,6 +109,11 @@ function handleInitialLoad<T>(
 		...relation.pagination,
 		total: action.total,
 		onChange: (page: number, pageSize: number) => {
+			action.dispatcher({
+				type: ActionType.SET_LOADING,
+				dataKey: relation.dataKey,
+				loading: true,
+			});
 			relation.queryRelatedAction(page, pageSize).then(({ data, total }) => {
 				action.dispatcher({
 					type: ActionType.PAGINATION_LOAD,
@@ -124,6 +129,7 @@ function handleInitialLoad<T>(
 function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
 	console.log(`Loading new page for ${action.dataKey} table`);
 	relation.data = action.data;
+	relation.loading = false;
 	relation.pagination = makePaginationConfig({
 		...relation.pagination,
 		total: action.total,

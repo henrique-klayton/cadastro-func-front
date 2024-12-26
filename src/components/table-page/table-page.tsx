@@ -31,9 +31,7 @@ import { IdArray } from "@interfaces/id-array.type";
 import { PartialNullable } from "@interfaces/partial-nullable.type";
 import { ActionType } from "./interfaces/Item-relations-action";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
-import itemRelationsReducer, {
-	reducerInitializer,
-} from "./item-relations-reducer";
+import relationsReducer, { reducerInitializer } from "./item-relations-reducer";
 import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
@@ -61,7 +59,7 @@ export default function TablePageComponent<
 		deleteAction,
 	},
 	queryDataParsers: parsers,
-	relationsKeys,
+	relationsData,
 }: TablePageProps<T, C, U>) {
 	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(ActionsEnum.CREATE);
@@ -70,22 +68,23 @@ export default function TablePageComponent<
 	const [formData, setFormData] = useState<Partial<C> | Partial<U>>(formReset);
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
+
+	// Relation Tables States & Reducer
 	const [relationTables, setRelationTables] = useState<React.ReactNode[]>([]);
 	const [relationTablesLoaded, setRelationTablesLoaded] = useState(false);
-	const [itemRelations, relationsDispatch] = useReducer(
-		itemRelationsReducer<U>,
-		relationsKeys ?? [],
-		// TODO Update object to save other state together with table data
+	const [relationTablesProps, relationsDispatch] = useReducer(
+		relationsReducer<U>,
+		relationsData ?? [],
 		reducerInitializer<U>,
 	);
-	const RelationsContext = createRelationsContext<U>();
-	const RelationsDispatchContext = createRelationsDispatchContext<U>();
+	const RelationTablesContext = createRelationsContext<U>();
+	const RelationTablesDispatchContext = createRelationsDispatchContext<U>();
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 
-	// DataTable Component
+	// DataTable Component States & Functions
 	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState(tableProps.data);
 	tableProps.data = tableData;
@@ -170,7 +169,7 @@ export default function TablePageComponent<
 		},
 	};
 
-	// Form Modal
+	// Form Modal Functions
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
 			switch (action) {
@@ -241,12 +240,12 @@ export default function TablePageComponent<
 		closeFormModal();
 	};
 
-	// Form Modal Relation Tables
+	// Relation Tables Functions
 	const renderTables = () => {
 		const elements: React.ReactNode[] = [];
-		for (const key in itemRelations) {
+		for (const key in relationTablesProps) {
 			console.log(`Render ${key} relation table`);
-			const relation = itemRelations[key];
+			const relation = relationTablesProps[key];
 			const element = (
 				<Row key={relation.dataKey}>
 					<Col span={24}>
@@ -269,9 +268,9 @@ export default function TablePageComponent<
 
 	const loadRelationsListData = async (formData?: U) => {
 		console.log("Preparing to load relation tables");
-		for (const key in itemRelations) {
+		for (const key in relationTablesProps) {
 			console.log(`Getting data to load ${key} table`);
-			const relation = itemRelations[key];
+			const relation = relationTablesProps[key];
 			const { data, total } = await relation.queryRelatedAction();
 			const relatedData: IdArray = [];
 			if (formData && Array.isArray(formData[key])) {
@@ -288,7 +287,7 @@ export default function TablePageComponent<
 		}
 	};
 
-	// Delete Confirm Modal
+	// Delete Confirm Modal Functions
 	const handleDeleteConfirm = async (id: T["id"], confirm: boolean) => {
 		setAction(ActionsEnum.DELETE);
 		if (confirm) return deleteAction(id);
@@ -305,8 +304,8 @@ export default function TablePageComponent<
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
-		<RelationsContext.Provider value={itemRelations}>
-			<RelationsDispatchContext.Provider value={relationsDispatch}>
+		<RelationTablesContext.Provider value={relationTablesProps}>
+			<RelationTablesDispatchContext.Provider value={relationsDispatch}>
 				<FormModal<C, U>
 					{...formModalStates}
 					objectName={itemName}
@@ -338,7 +337,7 @@ export default function TablePageComponent<
 						/>
 					</Flex>
 				</Card>
-			</RelationsDispatchContext.Provider>
-		</RelationsContext.Provider>
+			</RelationTablesDispatchContext.Provider>
+		</RelationTablesContext.Provider>
 	);
 }

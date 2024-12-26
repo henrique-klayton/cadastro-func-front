@@ -29,7 +29,7 @@ export type FormModalStateProps<CreateItem, UpdateItem> = MergedFormModalProps<
 	CreateItem,
 	UpdateItem
 >;
-export type ItemRelationObject<
+export type RelationTablePropsObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
 > = {
@@ -47,7 +47,9 @@ export interface TablePageProps<
 	title: string;
 	itemName: string;
 	queryDataParsers?: QueryDataParsers<UpdateItem>;
-	relationsKeys?: Array<RelationKeyObject<UpdateItem, StringKeyof<UpdateItem>>>;
+	relationsData?: Array<
+		RelationDataObject<UpdateItem, StringKeyof<UpdateItem>>
+	>;
 }
 
 // TODO Move to another file
@@ -76,7 +78,7 @@ export type RelationTableComponentProps<Item> = {
 	dataKey: StringKeyof<Item>;
 };
 
-export interface RelationKeyObject<
+export interface RelationDataObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
 	RelationType = Flatten<Item[Key]>,
@@ -104,7 +106,7 @@ export interface RelationTableProps<
 	queryRelatedAction: PaginationQueryType<RelationType>;
 }
 
-export function createRelationKeyObject<
+export function createRelationDataObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
 	RelationType = Flatten<Required<Item>[Key]>,
@@ -114,6 +116,6 @@ export function createRelationKeyObject<
 	columns: Array<TableColumn<RelationType>>,
 	queryRelatedAction: PaginationQueryType<RelationType>,
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>,
-): RelationKeyObject<Item, Key, RelationType, RelationData> {
+): RelationDataObject<Item, Key, RelationType, RelationData> {
 	return { key, columns, queryRelatedAction, component };
 }

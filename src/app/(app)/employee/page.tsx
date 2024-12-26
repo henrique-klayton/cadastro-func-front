@@ -6,7 +6,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import { DataTableProps } from "@components/data-table/types";
 import SkillsSelectTable from "@components/skills-select-table";
 import TablePageComponent from "@components/table-page";
-import { createRelationKeyObject } from "@components/table-page/types";
+import { createRelationDataObject } from "@components/table-page/types";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
@@ -53,8 +53,8 @@ export default async function EmployeePage() {
 			queryDataParsers={{
 				birthDate: dateParse,
 			}}
-			relationsKeys={[
-				createRelationKeyObject(
+			relationsData={[
+				createRelationDataObject(
 					"skills",
 					sKillTableColumns,
 					getSkills,
