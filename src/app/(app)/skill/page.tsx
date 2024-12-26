@@ -5,6 +5,7 @@ import { DataTableProps } from "@components/data-table/types";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
+import { sKillTableColumns } from "@models/skill";
 import {
 	createSkill,
 	deleteSkill,
@@ -19,20 +20,7 @@ export default async function SchedulePage() {
 	const table: DataTableProps<SkillFragmentType> = {
 		data: skills.data,
 		rowKey: "id",
-		columns: [
-			{
-				dataIndex: "id",
-				title: "Id",
-			},
-			{
-				dataIndex: "description",
-				title: "Descrição",
-			},
-			{
-				dataIndex: "status",
-				title: "Status",
-			},
-		],
+		columns: sKillTableColumns,
 	};
 
 	return (

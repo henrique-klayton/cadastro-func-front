@@ -6,9 +6,8 @@ import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-s
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
-import scheduleTypeFormat from "@utils/schedule-type-format";
+import { scheduleTableColumns } from "@models/schedule";
 import timeParse from "@utils/time-parse";
-import timeTableFormat from "@utils/time-table-format";
 import {
 	createSchedule,
 	deleteSchedule,
@@ -22,31 +21,7 @@ export default async function SchedulePage() {
 
 	const table: DataTableProps<ScheduleFragmentType> = {
 		data: schedules.data,
-		columns: [
-			{
-				dataIndex: "id",
-				title: "Id",
-			},
-			{
-				dataIndex: "startTime",
-				title: "Hora Início",
-				formatter: timeTableFormat,
-			},
-			{
-				dataIndex: "endTime",
-				title: "Hora Fim",
-				formatter: timeTableFormat,
-			},
-			{
-				dataIndex: "type",
-				title: "Tipo Escala",
-				formatter: scheduleTypeFormat,
-			},
-			{
-				dataIndex: "status",
-				title: "Status",
-			},
-		],
+		columns: scheduleTableColumns,
 		rowKey: "id",
 	};
 

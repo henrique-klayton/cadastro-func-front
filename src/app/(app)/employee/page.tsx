@@ -10,9 +10,8 @@ import { createRelationKeyObject } from "@components/table-page/types";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
+import { employeeTableColumns } from "@models/employee";
 import dateParse from "@utils/date-parse";
-import dateTableFormat from "@utils/date-table-format";
-import employeeScheduleTableFormat from "@utils/employee-schedule-table-format";
 import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
@@ -30,36 +29,7 @@ export default async function EmployeePage() {
 	const table: DataTableProps<EmployeeFragmentType> = {
 		data: employees.data,
 		rowKey: "id",
-		columns: [
-			{
-				dataIndex: "id",
-				title: "Id",
-				width: 300,
-			},
-			{
-				dataIndex: "firstName",
-				title: "Nome",
-			},
-			{
-				dataIndex: "lastName",
-				title: "Sobrenome",
-			},
-			{
-				dataIndex: "birthDate",
-				title: "Data de Nascimento",
-				formatter: dateTableFormat,
-				width: 120,
-			},
-			{
-				dataIndex: "schedule",
-				title: "Escala",
-				formatter: employeeScheduleTableFormat,
-			},
-			{
-				dataIndex: "status",
-				title: "Status",
-			},
-		],
+		columns: employeeTableColumns,
 	};
 
 	return (
