@@ -27,6 +27,8 @@ export function useRelation<T>(key: StringKeyof<T>) {
 	return relations[key];
 }
 
-export function useRelationsDispatch() {
-	return useContext(RelationsDispatchContext);
+export function useRelationsDispatch<T>() {
+	return useContext(RelationsDispatchContext) as React.Dispatch<
+		ItemRelationsAction<T>
+	>;
 }

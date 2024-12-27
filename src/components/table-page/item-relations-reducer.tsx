@@ -36,6 +36,9 @@ export default function itemRelationsReducer<T>(
 		case ActionType.SET_PAGINATION:
 			setPagination(state[action.dataKey], action.pagination);
 			break;
+		case ActionType.SET_SELECTED_KEYS:
+			setSelectedDataKeys(state[action.dataKey], action.selectedDataKeys);
+			break;
 		case ActionType.RENDER_TABLE:
 			handleRender(state[action.dataKey], action);
 			break;
@@ -65,6 +68,14 @@ function setPagination<T>(
 ) {
 	console.log(`Changing pagination state for ${relation.dataKey} table`);
 	relation.pagination = pagination;
+}
+
+function setSelectedDataKeys<T>(
+	relation: Relation<T>,
+	selectedDataKeys: IdArray,
+) {
+	console.log(`Changing rows selection state for ${relation.dataKey} table`);
+	relation.selectedDataKeys = selectedDataKeys;
 }
 
 export function reducerInitializer<T>(
@@ -127,7 +138,7 @@ function handleInitialLoad<T>(
 }
 
 function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
-	console.log(`Loading new page for ${action.dataKey} table`);
+	console.log(`Loading new page data for ${action.dataKey} table`);
 	relation.data = action.data;
 	relation.loading = false;
 	relation.pagination = makePaginationConfig({

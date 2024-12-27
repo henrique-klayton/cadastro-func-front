@@ -12,6 +12,7 @@ export type ItemRelationsAction<Item> =
 	| InitialLoadAction<Item>
 	| PageLoadAction<Item>
 	| RenderAction<Item>
+	| SetSelectedDataKeys<Item>
 	| ResetAllAction;
 
 // TODO Move to another file
@@ -22,6 +23,7 @@ export enum ActionType {
 	SET_PAGINATION,
 	INITIAL_LOAD,
 	PAGINATION_LOAD,
+	SET_SELECTED_KEYS,
 	RESET_ALL,
 }
 
@@ -38,6 +40,11 @@ export interface SetLoadingAction<Item> extends BaseAction<Item> {
 export interface SetPaginationAction<Item> extends BaseAction<Item> {
 	type: ActionType.SET_PAGINATION;
 	pagination: TablePaginationConfig;
+}
+
+export interface SetSelectedDataKeys<Item> extends BaseAction<Item> {
+	type: ActionType.SET_SELECTED_KEYS;
+	selectedDataKeys: IdArray;
 }
 
 export interface InitialLoadAction<Item> extends BaseAction<Item> {
