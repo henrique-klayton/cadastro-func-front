@@ -1,6 +1,4 @@
 "use client";
-import { Dispatch } from "react";
-
 import { IdArray } from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import { RelationTableProps } from "../types";
@@ -16,13 +14,15 @@ export type ItemRelationsAction<Item> =
 	| RenderAction<Item>
 	| ResetAllAction;
 
+// TODO Move to another file
+// biome-ignore lint/style/useEnumInitializers: The enum members value doesn't matter
 export enum ActionType {
-	RENDER_TABLE = 0,
-	SET_LOADING = 1,
-	SET_PAGINATION = 2,
-	INITIAL_LOAD = 3,
-	PAGINATION_LOAD = 4,
-	RESET_ALL = 5,
+	RENDER_TABLE,
+	SET_LOADING,
+	SET_PAGINATION,
+	INITIAL_LOAD,
+	PAGINATION_LOAD,
+	RESET_ALL,
 }
 
 export interface BaseAction<Item> {
@@ -45,7 +45,7 @@ export interface InitialLoadAction<Item> extends BaseAction<Item> {
 	data: Relation<Item>["data"];
 	total: number;
 	selectedDataKeys: IdArray;
-	dispatcher: Dispatch<ItemRelationsAction<Item>>;
+	dispatcher: React.Dispatch<ItemRelationsAction<Item>>;
 }
 
 export interface RenderAction<Item> extends BaseAction<Item> {
