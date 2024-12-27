@@ -1,1 +1,2 @@
-export type IdArray = string[] | number[];
+type IdArray = string[] | number[];
+export default IdArray;

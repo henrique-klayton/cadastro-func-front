@@ -1,31 +1,16 @@
 "use client";
-// import { Col, Row } from "antd";
-// import FormItem from "antd/es/form/FormItem";
-
-import Flatten from "@interfaces/flatten.type";
-import { IdArray } from "@interfaces/id-array.type";
-import StringKeyof from "@interfaces/string-keyof.type";
+import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
+import makePaginationConfig from "@components/table-page/make-pagination-config";
+import IdArray from "@interfaces/id-array.type";
 import {
-	ActionType,
 	InitialLoadAction,
-	ItemRelationsAction,
 	PageLoadAction,
 	RenderAction,
-} from "./interfaces/Item-relations-action";
-import TablePaginationConfig from "./interfaces/table-pagination-config";
-import makePaginationConfig from "./make-pagination-config";
-import {
-	RelationDataObject,
-	RelationTableProps,
-	RelationTablePropsObject,
-} from "./types";
+} from "./relation-tables-action";
+import { ActionType } from "./relation-tables-action-type";
+import { Action, RelatedItem, Relation, State } from "./type-aliases";
 
-type RelatedItem<T> = Array<Flatten<T[StringKeyof<T>]>>;
-type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
-type State<Item> = RelationTablePropsObject<Item>;
-type Action<Item> = ItemRelationsAction<Item>;
-
-export default function itemRelationsReducer<T>(
+export default function relationTablesReducer<T>(
 	state: State<T>,
 	action: Action<T>,
 ) {
@@ -76,30 +61,6 @@ function setSelectedDataKeys<T>(
 ) {
 	console.log(`Changing rows selection state for ${relation.dataKey} table`);
 	relation.selectedDataKeys = selectedDataKeys;
-}
-
-export function reducerInitializer<T>(
-	relationsData: Array<RelationDataObject<T>>,
-): RelationTablePropsObject<T> {
-	const initializedState = relationsData.reduce(
-		(state, { key: dataKey, columns, queryRelatedAction }) => {
-			console.log(`Generating props for ${dataKey} table`);
-			const relation: Relation<T> = {
-				data: [] as RelatedItem<T>,
-				dataKey,
-				selectedDataKeys: [] as IdArray,
-				loading: true,
-				element: undefined,
-				columns,
-				pagination: makePaginationConfig({}),
-				queryRelatedAction,
-			};
-			state[dataKey] = relation;
-			return state;
-		},
-		{} as State<T>,
-	);
-	return initializedState;
 }
 
 function handleRender<T>(relation: Relation<T>, action: RenderAction<T>) {

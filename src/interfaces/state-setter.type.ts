@@ -1,1 +1,2 @@
-export type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+type StateSetter<T> = React.Dispatch<React.SetStateAction<T>>;
+export default StateSetter;

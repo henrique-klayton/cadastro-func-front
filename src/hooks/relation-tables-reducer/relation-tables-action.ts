@@ -1,12 +1,11 @@
 "use client";
-import { IdArray } from "@interfaces/id-array.type";
+import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
+import IdArray from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
-import { RelationTableProps } from "../types";
-import TablePaginationConfig from "./table-pagination-config";
+import { ActionType } from "./relation-tables-action-type";
+import { Relation } from "./type-aliases";
 
-type Relation<Item> = RelationTableProps<Item, StringKeyof<Item>>;
-
-export type ItemRelationsAction<Item> =
+export type RelationTablesAction<Item> =
 	| SetLoadingAction<Item>
 	| SetPaginationAction<Item>
 	| InitialLoadAction<Item>
@@ -14,18 +13,6 @@ export type ItemRelationsAction<Item> =
 	| RenderAction<Item>
 	| SetSelectedDataKeys<Item>
 	| ResetAllAction;
-
-// TODO Move to another file
-// biome-ignore lint/style/useEnumInitializers: The enum members value doesn't matter
-export enum ActionType {
-	RENDER_TABLE,
-	SET_LOADING,
-	SET_PAGINATION,
-	INITIAL_LOAD,
-	PAGINATION_LOAD,
-	SET_SELECTED_KEYS,
-	RESET_ALL,
-}
 
 export interface BaseAction<Item> {
 	type: ActionType;
@@ -52,7 +39,7 @@ export interface InitialLoadAction<Item> extends BaseAction<Item> {
 	data: Relation<Item>["data"];
 	total: number;
 	selectedDataKeys: IdArray;
-	dispatcher: React.Dispatch<ItemRelationsAction<Item>>;
+	dispatcher: React.Dispatch<RelationTablesAction<Item>>;
 }
 
 export interface RenderAction<Item> extends BaseAction<Item> {

@@ -1,4 +1,4 @@
-import { GraphQLError } from "@graphql/graphql-error";
+import GraphQLError from "@graphql/graphql-error";
 
 export default function catchGraphQLError(
 	err: unknown,

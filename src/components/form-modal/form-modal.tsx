@@ -1,8 +1,8 @@
 import { Form, Modal } from "antd";
 
+import FormActionsEnum from "@enums/form-actions";
 import { FormInstance } from "antd/lib";
-import { ActionsEnum } from "../../enums/actions";
-import { FormModalProps } from "./types";
+import { FormModalProps } from "./form-modal-props";
 
 export default function FormModal<C, U>({
 	children,
@@ -26,13 +26,13 @@ export default function FormModal<C, U>({
 			okText="Salvar"
 			onOk={() => {
 				switch (action) {
-					case ActionsEnum.CREATE:
+					case FormActionsEnum.CREATE:
 						onSubmit({
 							action,
 							data: form.getFieldsValue(),
 						});
 						break;
-					case ActionsEnum.UPDATE:
+					case FormActionsEnum.UPDATE:
 						onSubmit({
 							action,
 							data: form.getFieldsValue(),

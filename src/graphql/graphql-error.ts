@@ -1,1 +1,1 @@
-export class GraphQLError extends Error {}
+export default class GraphQLError extends Error {}

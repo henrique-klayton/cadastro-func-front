@@ -18,20 +18,21 @@ import { AiOutlinePlus } from "react-icons/ai";
 import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
-import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
-import SkillsSelectTable from "@components/skills-select-table";
-import {
-	createRelationsContext,
-	createRelationsDispatchContext,
-} from "@components/skills-select-table/relations-context";
-import { ActionsEnum } from "@enums/actions";
-import { HaveId } from "@interfaces/have-id";
-import { HaveStatus } from "@interfaces/have-status";
-import { IdArray } from "@interfaces/id-array.type";
-import { PartialNullable } from "@interfaces/partial-nullable.type";
-import { ActionType } from "./interfaces/Item-relations-action";
+import FormModalActions from "@components/form-modal/form-modal.actions";
+import { FormSubmitFunc } from "@components/form-modal/form-submit";
+import RelationSelectTable from "@components/relation-select-table";
+import FormActionsEnum from "@enums/form-actions";
+import relationTablesReducer, {
+	createRelationTablesContext,
+	createRelationTablesDispatchContext,
+} from "@hooks/relation-tables-reducer";
+import { ActionType } from "@hooks/relation-tables-reducer/relation-tables-action-type";
+import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
+import HaveId from "@interfaces/have-id";
+import HaveStatus from "@interfaces/have-status";
+import IdArray from "@interfaces/id-array.type";
+import PartialNullable from "@interfaces/partial-nullable.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
-import relationsReducer, { reducerInitializer } from "./item-relations-reducer";
 import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
@@ -62,7 +63,7 @@ export default function TablePageComponent<
 	relationsData,
 }: TablePageProps<T, C, U>) {
 	const formReset = { status: false } as Partial<U>;
-	const [action, setAction] = useState(ActionsEnum.CREATE);
+	const [action, setAction] = useState(FormActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
 	const [formLoading, setFormLoading] = useState(false);
 	const [formData, setFormData] = useState<Partial<C> | Partial<U>>(formReset);
@@ -73,12 +74,13 @@ export default function TablePageComponent<
 	const [relationTables, setRelationTables] = useState<React.ReactNode[]>([]);
 	const [relationTablesLoaded, setRelationTablesLoaded] = useState(false);
 	const [relationTablesProps, relationsDispatch] = useReducer(
-		relationsReducer<U>,
+		relationTablesReducer<U>,
 		relationsData ?? [],
-		reducerInitializer<U>,
+		relationTablesInitializer<U>,
 	);
-	const RelationTablesContext = createRelationsContext<U>();
-	const RelationTablesDispatchContext = createRelationsDispatchContext<U>();
+	const RelationTablesContext = createRelationTablesContext<U>();
+	const RelationTablesDispatchContext =
+		createRelationTablesDispatchContext<U>();
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -146,7 +148,7 @@ export default function TablePageComponent<
 				}
 				return obj;
 			});
-			openFormModal(ActionsEnum.UPDATE, item as Promise<U>);
+			openFormModal(FormActionsEnum.UPDATE, item as Promise<U>);
 		},
 		onDeleteClick: async (id: T["id"]) => {
 			const confirmModalProps: ModalFuncProps = {
@@ -173,7 +175,7 @@ export default function TablePageComponent<
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
 			switch (action) {
-				case ActionsEnum.CREATE:
+				case FormActionsEnum.CREATE:
 					createAction(data)
 						.then((item) => {
 							message.success(`${itemName} criado(a) com sucesso!`);
@@ -184,7 +186,7 @@ export default function TablePageComponent<
 							message.error(err.message);
 						});
 					break;
-				case ActionsEnum.UPDATE:
+				case FormActionsEnum.UPDATE:
 					updateAction(id, data)
 						.then((item) => {
 							message.success(`${itemName} atualizado(a) com sucesso!`);
@@ -250,7 +252,7 @@ export default function TablePageComponent<
 				<Row key={relation.dataKey}>
 					<Col span={24}>
 						<Form.Item name={relation.dataKey as string} key={relation.dataKey}>
-							<SkillsSelectTable dataKey={relation.dataKey} />
+							<RelationSelectTable dataKey={relation.dataKey} />
 						</Form.Item>
 					</Col>
 				</Row>
@@ -289,7 +291,7 @@ export default function TablePageComponent<
 
 	// Delete Confirm Modal Functions
 	const handleDeleteConfirm = async (id: T["id"], confirm: boolean) => {
-		setAction(ActionsEnum.DELETE);
+		setAction(FormActionsEnum.DELETE);
 		if (confirm) return deleteAction(id);
 	};
 
@@ -332,7 +334,7 @@ export default function TablePageComponent<
 							tooltip={`Criar ${itemName}`}
 							icon={<AiOutlinePlus />}
 							onClick={() => {
-								openFormModal(ActionsEnum.CREATE);
+								openFormModal(FormActionsEnum.CREATE);
 							}}
 						/>
 					</Flex>

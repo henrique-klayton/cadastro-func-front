@@ -1,7 +1,7 @@
 import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
-import { HaveId } from "@interfaces/have-id";
+import HaveId from "@interfaces/have-id";
 import { DataTablePageProps } from "./types";
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {

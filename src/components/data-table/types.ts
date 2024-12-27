@@ -1,7 +1,7 @@
 import { TablePaginationConfig } from "antd/lib";
 import { ColumnProps } from "antd/lib/table";
 
-import { HaveId } from "@interfaces/have-id";
+import HaveId from "@interfaces/have-id";
 import StringKeyof from "@interfaces/string-keyof.type";
 
 export interface DataTableActions<T extends HaveId> {

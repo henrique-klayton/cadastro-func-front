@@ -1,3 +1,3 @@
-export interface HaveId {
+export default interface HaveId {
 	id: string | number;
 }

@@ -1,7 +1,7 @@
 import { TypedDocumentString } from "@graphql/types/graphql";
 import { CombinedError } from "urql";
 import getUrqlClient from "./client";
-import { GraphQLError } from "./graphql-error";
+import GraphQLError from "./graphql-error";
 
 export default async function runQuery<R, V>(
 	query: TypedDocumentString<R, V>,

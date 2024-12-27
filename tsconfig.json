@@ -27,6 +27,7 @@
       "@models/*": [ "./src/models/*" ],
       "@interfaces/*": [ "./src/interfaces/*" ],
       "@enums/*": [ "./src/enums/*" ],
+      "@hooks/*": [ "./src/hooks/*" ],
       "@utils/*": [ "./src/utils/*" ],
       "@fragments/*": [ "./src/graphql/fragments/*" ],
       "@queries/*": [ "./src/graphql/queries/*" ],

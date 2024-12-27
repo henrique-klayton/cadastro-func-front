@@ -2,18 +2,21 @@
 import { Table } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 
-import { ActionType } from "@components/table-page/interfaces/Item-relations-action";
-import { RelationData } from "@components/table-page/types";
+import { RelationData } from "@components/table-page/relation.data.type";
+import {
+	useRelationTable,
+	useRelationTablesDispatch,
+} from "@hooks/relation-tables-reducer";
+import { ActionType } from "@hooks/relation-tables-reducer/relation-tables-action-type";
 import Flatten from "@interfaces/flatten.type";
-import { IdArray } from "@interfaces/id-array.type";
-import { useRelation, useRelationsDispatch } from "./relations-context";
-import { SkillsSelectTableProps } from "./types";
+import IdArray from "@interfaces/id-array.type";
+import { RelationSelectTableProps } from "./types";
 
-export default function SkillsSelectTable<T>({
+export default function RelationSelectTable<T>({
 	dataKey,
-}: SkillsSelectTableProps<T>) {
-	const relation = useRelation<T>(dataKey);
-	const dispatch = useRelationsDispatch<T>();
+}: RelationSelectTableProps<T>) {
+	const relation = useRelationTable<T>(dataKey);
+	const dispatch = useRelationTablesDispatch<T>();
 	const rowSelection: TableRowSelection<Flatten<RelationData<T>>> = {
 		selectedRowKeys: relation.selectedDataKeys,
 		onChange: (selectedDataKeys) => {
