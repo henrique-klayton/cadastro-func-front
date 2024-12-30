@@ -13,6 +13,7 @@ import Optional from "@interfaces/optional.type";
 import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
+import RelationTypeIds from "./interfaces/relation-type-ids.type";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
@@ -44,6 +45,10 @@ export interface TablePageProps<
 	>;
 }
 
+export type ServerActionRelations<T> = {
+	[P in keyof T]?: RelationTypeIds<T>;
+};
+
 export interface ServerActions<
 	TableItem extends HaveId,
 	CreateItem,
@@ -51,10 +56,14 @@ export interface ServerActions<
 > {
 	tableQueryAction: PaginationQueryFuncType<TableItem>;
 	formQueryAction: (id: TableItem["id"]) => Promise<UpdateItem>;
-	createAction: (data: CreateItem) => Promise<Optional<TableItem>>;
+	createAction: (
+		data: CreateItem,
+		relations?: ServerActionRelations<UpdateItem>,
+	) => Promise<Optional<TableItem>>;
 	updateAction: (
 		id: TableItem["id"],
 		data: UpdateItem,
+		relations?: ServerActionRelations<UpdateItem>,
 	) => Promise<Optional<TableItem>>;
 	deleteAction: (id: TableItem["id"]) => Promise<Optional<TableItem>>;
 }

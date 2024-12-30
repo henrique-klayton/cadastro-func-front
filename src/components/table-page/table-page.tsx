@@ -35,6 +35,7 @@ import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
+	ServerActionRelations,
 	TablePageFormModalProps,
 	TablePageProps,
 } from "./types";
@@ -77,6 +78,7 @@ export default function TablePageComponent<
 		relationsData ?? [],
 		relationTablesInitializer<U>,
 	);
+
 	const RelationTablesContext = createRelationTablesContext<U>();
 	const RelationTablesDispatchContext =
 		createRelationTablesDispatchContext<U>();
@@ -173,9 +175,17 @@ export default function TablePageComponent<
 	// Form Modal Functions
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
 		form.validateFields().then(() => {
+			const relations: ServerActionRelations<U> = {};
+			if (relationsData) {
+				for (const relation of relationsData) {
+					const key = relation.key;
+					relations[key] = relationTablesProps[key].selectedDataKeys;
+				}
+			}
+
 			switch (action) {
 				case FormActionsEnum.CREATE:
-					createAction(data)
+					createAction(data, relations)
 						.then((item) => {
 							message.success(`${itemName} criado(a) com sucesso!`);
 							if (item) addItemToTable(item);
@@ -185,8 +195,9 @@ export default function TablePageComponent<
 							message.error(err.message);
 						});
 					break;
+
 				case FormActionsEnum.UPDATE:
-					updateAction(id, data)
+					updateAction(id, data, relations)
 						.then((item) => {
 							message.success(`${itemName} atualizado(a) com sucesso!`);
 							if (item) updateItemOnTable(item);

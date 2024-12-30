@@ -1,7 +1,7 @@
 "use client";
+import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import makePaginationConfig from "@components/table-page/make-pagination-config";
 import { RelationDataObject } from "@components/table-page/types";
-import IdArray from "@interfaces/id-array.type";
 import { RelatedItem, Relation, State } from "./type-aliases";
 import { RelationTablesConfigsObject } from "./types";
 
@@ -14,7 +14,7 @@ export default function relationTablesInitializer<T>(
 			const relation: Relation<T> = {
 				data: [] as RelatedItem<T>,
 				dataKey,
-				selectedDataKeys: [] as IdArray,
+				selectedDataKeys: [] as RelationTypeIds<T>,
 				loading: true,
 				element: undefined,
 				columns,

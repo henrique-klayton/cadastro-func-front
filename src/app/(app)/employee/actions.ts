@@ -62,12 +62,12 @@ export async function getEmployees(
 
 export async function createEmployee(
 	data: EmployeeCreateDto,
-	skills?: number[],
+	relations?: { skills?: number[] },
 ) {
 	try {
 		const created = await runMutation(createEmployeeMutation, {
 			employee: createSerializer(data),
-			skills,
+			skills: relations?.skills,
 		});
 		const employee = Employee(created.createEmployee);
 		revalidateTag(queryTag);
@@ -80,13 +80,13 @@ export async function createEmployee(
 export async function updateEmployee(
 	id: string,
 	data: EmployeeUpdateDto,
-	skills?: number[],
+	relations?: { skills?: number[] },
 ): Promise<EmployeeFragmentType> {
 	try {
 		const updated = await runMutation(updateEmployeeMutation, {
 			id,
 			employee: updateSerializer(data),
-			skills,
+			skills: relations?.skills,
 		});
 		const employee = Employee(updated.updateEmployee);
 		revalidateTag(queryTag);

@@ -56,12 +56,12 @@ export async function getSkills(
 
 export async function createSkill(
 	data: SkillCreateDto,
-	employees?: string[],
+	// employees?: string[],
 ): Promise<SkillFragmentType> {
 	try {
 		const created = await runMutation(createSkillMutation, {
 			skill: createSerializer(data),
-			employees,
+			// employees,
 		});
 		const skill = Skill(created.createSkill);
 		revalidateTag(queryTag);
@@ -74,13 +74,13 @@ export async function createSkill(
 export async function updateSkill(
 	id: number,
 	data: SkillUpdateDto,
-	employees?: string[],
+	// employees?: string[],
 ): Promise<SkillFragmentType> {
 	try {
 		const updated = await runMutation(updateSkillMutation, {
 			id,
 			skill: updateSerializer(data),
-			employees,
+			// employees,
 		});
 		const skill = Skill(updated.updateSkill);
 		revalidateTag(queryTag);
