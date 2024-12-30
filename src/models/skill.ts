@@ -1,5 +1,7 @@
 import { TableColumn } from "@components/data-table/types";
+import { FormDataSerializer } from "@components/table-page/types";
 import { SkillFragmentType } from "@fragments/skill";
+import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
 
 export default interface Skill {
 	id: number;
@@ -21,3 +23,15 @@ export const sKillTableColumns: Array<TableColumn<SkillFragmentType>> = [
 		title: "Status",
 	},
 ];
+
+export const createSerializer: FormDataSerializer<SkillCreateDto> = (data) => {
+	// console.log(data.birthDate);
+	// data.birthDate = dateSerialize(data.birthDate);
+	// console.log(data.birthDate);
+	return data;
+};
+
+export const updateSerializer: FormDataSerializer<SkillUpdateDto> = (data) => {
+	// if (data.birthDate) data.birthDate = dateSerialize(data.birthDate);
+	return data;
+};

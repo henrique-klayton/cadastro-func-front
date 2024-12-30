@@ -1,5 +1,4 @@
 "use server";
-import { FormDataSerializer } from "@components/table-page/types";
 import {
 	PaginatedSchedule,
 	Schedule,
@@ -8,6 +7,7 @@ import {
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import { createSerializer, updateSerializer } from "@models/schedule";
 import {
 	createScheduleMutation,
 	deleteScheduleMutation,
@@ -17,7 +17,6 @@ import {
 } from "@queries/schedule";
 import { calculateLimitOffset } from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
-import timeSerialize from "@utils/time-serialize";
 import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Escala!";
@@ -26,22 +25,6 @@ const createErrorMsg = "Erro ao criar Escala!";
 const updateErrorMsg = "Erro ao atualizar Escala!";
 const deleteErrorMsg = "Erro ao remover Escala!";
 const queryTag = "schedulesList";
-
-const createSerializer: FormDataSerializer<ScheduleCreateDto> = (
-	data: ScheduleCreateDto,
-) => {
-	data.startTime = timeSerialize(data.startTime);
-	data.endTime = timeSerialize(data.endTime);
-	return data;
-};
-
-const updateSerializer: FormDataSerializer<ScheduleUpdateDto> = (
-	data: ScheduleUpdateDto,
-) => {
-	if (data.startTime) data.startTime = timeSerialize(data.startTime);
-	if (data.endTime) data.endTime = timeSerialize(data.endTime);
-	return data;
-};
 
 export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 	try {

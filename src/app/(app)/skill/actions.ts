@@ -1,9 +1,9 @@
 "use server";
-import { FormDataSerializer } from "@components/table-page/types";
 import { PaginatedSkill, Skill, SkillFragmentType } from "@fragments/skill";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
+import { createSerializer, updateSerializer } from "@models/skill";
 import {
 	createSkillMutation,
 	deleteSkillMutation,
@@ -21,18 +21,6 @@ const createErrorMsg = "Erro ao criar Habilidade!";
 const updateErrorMsg = "Erro ao atualizar Habilidade!";
 const deleteErrorMsg = "Erro ao remover Habilidade!";
 const queryTag = "skillsList";
-
-const createSerializer: FormDataSerializer<SkillCreateDto> = (data) => {
-	// console.log(data.birthDate);
-	// data.birthDate = dateSerialize(data.birthDate);
-	// console.log(data.birthDate);
-	return data;
-};
-
-const updateSerializer: FormDataSerializer<SkillUpdateDto> = (data) => {
-	// if (data.birthDate) data.birthDate = dateSerialize(data.birthDate);
-	return data;
-};
 
 export async function getSkill(id: number): Promise<SkillFragmentType> {
 	try {

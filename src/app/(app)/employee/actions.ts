@@ -1,15 +1,14 @@
 "use server";
-import { FormDataSerializer } from "@components/table-page/types";
 import {
 	Employee,
 	EmployeeFragmentType,
 	PaginatedEmployee,
 } from "@fragments/employee";
-import { FullEmployeeType } from "@fragments/full-employee";
-import { FullEmployee } from "@fragments/full-employee";
+import { FullEmployee, FullEmployeeType } from "@fragments/full-employee";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import { EmployeeCreateDto, EmployeeUpdateDto } from "@graphql/types/graphql";
+import { createSerializer, updateSerializer } from "@models/employee";
 import {
 	createEmployeeMutation,
 	deleteEmployeeMutation,
@@ -27,18 +26,6 @@ const createErrorMsg = "Erro ao criar Funcionário!";
 const updateErrorMsg = "Erro ao atualizar Funcionário!";
 const deleteErrorMsg = "Erro ao remover Funcionário!";
 const queryTag = "employeesList";
-
-const createSerializer: FormDataSerializer<EmployeeCreateDto> = (data) => {
-	// console.log(data.birthDate);
-	// data.birthDate = dateSerialize(data.birthDate);
-	// console.log(data.birthDate);
-	return data;
-};
-
-const updateSerializer: FormDataSerializer<EmployeeUpdateDto> = (data) => {
-	// if (data.birthDate) data.birthDate = dateSerialize(data.birthDate);
-	return data;
-};
 
 export async function getEmployeeWithRelations(
 	id: string,
