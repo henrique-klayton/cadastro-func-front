@@ -2,8 +2,8 @@
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import IdArray from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
-import { ActionType } from "./relation-tables-action-type";
-import { Relation } from "./type-aliases";
+import { Relation } from "../type-aliases";
+import ActionType from "./relation-tables-action-type";
 
 export type RelationTablesAction<Item> =
 	| SetLoadingAction<Item>

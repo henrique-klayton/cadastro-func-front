@@ -1,10 +1,10 @@
 "use server";
+import { DefaultOptionType } from "antd/es/select";
 
 import runQuery from "@graphql/run-query";
 import { ScheduleType } from "@graphql/types/graphql";
 import scheduleTypeValuesQuery from "@queries/schedule-type";
 import scheduleTypeFormat from "@utils/schedule-type-format-server";
-import { DefaultOptionType } from "antd/es/select";
 
 export default async function loadScheduleTypeSelect(): Promise<
 	DefaultOptionType[]

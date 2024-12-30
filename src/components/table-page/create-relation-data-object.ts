@@ -1,8 +1,8 @@
 import { TableColumn } from "@components/data-table/types";
-import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/relation-table-config";
+import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/types";
 import Flatten from "@interfaces/flatten.type";
+import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import StringKeyof from "@interfaces/string-keyof.type";
-import PaginationQueryFuncType from "../../interfaces/pagination-query-type";
 import { RelationDataObject } from "./types";
 
 export default function createRelationDataObject<

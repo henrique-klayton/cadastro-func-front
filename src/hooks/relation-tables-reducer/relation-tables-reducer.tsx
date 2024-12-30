@@ -2,13 +2,13 @@
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import makePaginationConfig from "@components/table-page/make-pagination-config";
 import IdArray from "@interfaces/id-array.type";
+import { Action, RelatedItem, Relation, State } from "./type-aliases";
 import {
+	ActionType,
 	InitialLoadAction,
 	PageLoadAction,
 	RenderAction,
-} from "./relation-tables-action";
-import { ActionType } from "./relation-tables-action-type";
-import { Action, RelatedItem, Relation, State } from "./type-aliases";
+} from "./types";
 
 export default function relationTablesReducer<T>(
 	state: State<T>,

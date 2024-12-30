@@ -18,16 +18,15 @@ import { AiOutlinePlus } from "react-icons/ai";
 import DataTable from "@components/data-table";
 import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
-import FormModalActions from "@components/form-modal/form-modal.actions";
-import { FormSubmitFunc } from "@components/form-modal/form-submit";
+import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
 import FormActionsEnum from "@enums/form-actions";
 import relationTablesReducer, {
 	createRelationTablesContext,
 	createRelationTablesDispatchContext,
 } from "@hooks/relation-tables-reducer";
-import { ActionType } from "@hooks/relation-tables-reducer/relation-tables-action-type";
 import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
+import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import IdArray from "@interfaces/id-array.type";

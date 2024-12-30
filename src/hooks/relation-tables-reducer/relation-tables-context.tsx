@@ -1,9 +1,8 @@
 "use client";
 import { createContext, useContext } from "react";
 
-import { RelationTablesAction } from "@hooks/relation-tables-reducer/relation-tables-action";
 import StringKeyof from "@interfaces/string-keyof.type";
-import { RelationTablesConfigsObject } from "./relation-table-config";
+import { RelationTablesAction, RelationTablesConfigsObject } from "./types";
 
 export const RelationTablesContext = createContext(
 	{} as RelationTablesConfigsObject<object>,

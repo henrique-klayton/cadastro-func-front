@@ -1,8 +1,8 @@
 import { Form, Modal } from "antd";
+import { FormInstance } from "antd/lib";
 
 import FormActionsEnum from "@enums/form-actions";
-import { FormInstance } from "antd/lib";
-import { FormModalProps } from "./form-modal-props";
+import { FormModalProps } from "./types";
 
 export default function FormModal<C, U>({
 	children,

@@ -2,8 +2,8 @@
 import makePaginationConfig from "@components/table-page/make-pagination-config";
 import { RelationDataObject } from "@components/table-page/types";
 import IdArray from "@interfaces/id-array.type";
-import { RelationTablesConfigsObject } from "./relation-table-config";
 import { RelatedItem, Relation, State } from "./type-aliases";
+import { RelationTablesConfigsObject } from "./types";
 
 export default function relationTablesInitializer<T>(
 	relationsData: Array<RelationDataObject<T>>,

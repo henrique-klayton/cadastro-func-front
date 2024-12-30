@@ -2,12 +2,12 @@
 import { Table } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 
-import { RelationData } from "@components/table-page/relation.data.type";
+import RelationData from "@components/table-page/interfaces/relation.data.type";
 import {
 	useRelationTable,
 	useRelationTablesDispatch,
 } from "@hooks/relation-tables-reducer";
-import { ActionType } from "@hooks/relation-tables-reducer/relation-tables-action-type";
+import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import Flatten from "@interfaces/flatten.type";
 import IdArray from "@interfaces/id-array.type";
 import { RelationSelectTableProps } from "./types";

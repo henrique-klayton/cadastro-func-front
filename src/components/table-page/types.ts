@@ -1,18 +1,18 @@
 import { DataTableProps, TableColumn } from "@components/data-table/types";
-import FormData from "@components/form-modal/form-data";
 import {
+	FormData,
 	FormModalCreateProps,
 	FormModalUpdateProps,
 	MergedFormModalProps,
-} from "@components/form-modal/form-modal-props";
-import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/relation-table-config";
+} from "@components/form-modal/types";
+import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/types";
 import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import Optional from "@interfaces/optional.type";
+import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
-import PaginationQueryFuncType from "../../interfaces/pagination-query-type";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
