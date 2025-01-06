@@ -27,7 +27,7 @@
     - [x] Failure
     - [x] Success
 - [x] Validate form before submit
-- [ ] Add/remove employee skills
+- [x] Add/remove employee skills
   - [x] Create tables to update entity relations
 - [x] Add table pagination
 - [ ] Add table filtering
@@ -37,6 +37,7 @@
 - [ ] Gerar relatórios em CSV
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
+- [ ] Fix sidebar menu current route without active decoration
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?
