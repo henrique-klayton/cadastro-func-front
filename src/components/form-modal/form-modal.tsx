@@ -2,6 +2,7 @@ import { Form, Modal } from "antd";
 import { FormInstance } from "antd/lib";
 
 import FormActionsEnum from "@enums/form-actions";
+import { useRelationTables } from "@hooks/relation-tables-reducer";
 import { FormModalProps } from "./types";
 
 export default function FormModal<C, U>({
@@ -18,6 +19,7 @@ export default function FormModal<C, U>({
 	onFieldsChange,
 }: FormModalProps<C, U>) {
 	form.setFieldsValue(initialData as object);
+	const state = useRelationTables<U>();
 	return (
 		<Modal
 			title={`${action} ${objectName}`}
@@ -50,6 +52,7 @@ export default function FormModal<C, U>({
 				onFieldsChange={onFieldsChange}
 			>
 				{children}
+				{state.tables}
 			</Form>
 		</Modal>
 	);

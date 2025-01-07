@@ -76,11 +76,8 @@ export default function TablePageComponent<
 		relationsData ?? [],
 		relationTablesInitializer<U>,
 	);
-	const {
-		tables: relationTables,
-		loaded: relationTablesLoaded,
-		config: relationTablesProps,
-	} = relationTablesState;
+	const { loaded: relationTablesLoaded, config: relationTablesProps } =
+		relationTablesState;
 
 	const RelationTablesContext = createRelationTablesContext<U>();
 	const RelationTablesDispatchContext =
@@ -220,25 +217,25 @@ export default function TablePageComponent<
 		initialData: Promise<U | undefined> = Promise.resolve(undefined),
 	) => {
 		try {
-		setAction(action);
-		setFormLoading(true);
+			setAction(action);
+			setFormLoading(true);
 			setFormOpen(true);
 			// Render tables before form load
 			renderRelationTables();
 
 			const data = await initialData;
-						if (data) setFormData(data);
-						else setFormData(formReset);
-						setFormLoading(false);
+			if (data) setFormData(data);
+			else setFormData(formReset);
+			setFormLoading(false);
 
 			await loadRelationsListData(data);
 		} catch (err: unknown) {
-				const error =
-					err instanceof Error ? err : new Error(String(err), { cause: err });
-				console.error(error);
-				console.error(error.message);
-				message.error("Erro ao carregar formulário!");
-				closeFormModal();
+			const error =
+				err instanceof Error ? err : new Error(String(err), { cause: err });
+			console.error(error);
+			console.error(error.message);
+			message.error("Erro ao carregar formulário!");
+			closeFormModal();
 		}
 	};
 
@@ -255,28 +252,28 @@ export default function TablePageComponent<
 	// Relation Tables Functions
 	const renderRelationTables = () => {
 		if (!relationTablesLoaded) {
-		const elements: React.ReactNode[] = [];
-		for (const key in relationTablesProps) {
-			console.log(`Render ${key} relation table`);
-			const relation = relationTablesProps[key];
-			const element = (
-				<Row key={relation.dataKey}>
-					<Col span={24}>
+			const elements: React.ReactNode[] = [];
+			for (const key in relationTablesProps) {
+				console.log(`Render ${key} relation table`);
+				const relation = relationTablesProps[key];
+				const element = (
+					<Row key={relation.dataKey}>
+						<Col span={24}>
 							<Form.Item
 								name={relation.dataKey as string}
 								key={relation.dataKey}
 							>
-							<RelationSelectTable dataKey={relation.dataKey} />
-						</Form.Item>
-					</Col>
-				</Row>
-			);
-			elements.push(element);
-		}
-		relationsDispatch({
-			type: ActionType.RENDER_ALL,
-			elements,
-		});
+								<RelationSelectTable dataKey={relation.dataKey} />
+							</Form.Item>
+						</Col>
+					</Row>
+				);
+				elements.push(element);
+			}
+			relationsDispatch({
+				type: ActionType.RENDER_ALL,
+				elements,
+			});
 		}
 	};
 
@@ -330,7 +327,6 @@ export default function TablePageComponent<
 					onCancel={handleFormModalCancel}
 				>
 					{children}
-					{relationTables}
 				</FormModal>
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>
