@@ -2,16 +2,11 @@
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import makePaginationConfig from "@components/table-page/make-pagination-config";
 import { RelationDataObject } from "@components/table-page/types";
-import {
-	RelatedItem,
-	Relation,
-	RelationTablesConfigsObject,
-	State,
-} from "./types";
+import { Config, RelatedItem, Relation, RelationTablesState } from "./types";
 
 export default function relationTablesInitializer<T>(
 	relationsData: Array<RelationDataObject<T>>,
-): RelationTablesConfigsObject<T> {
+): RelationTablesState<T> {
 	const initializedState = relationsData.reduce(
 		(state, { key: dataKey, columns, queryRelatedAction }) => {
 			console.log(`Generating props for ${dataKey} table`);
@@ -20,7 +15,6 @@ export default function relationTablesInitializer<T>(
 				dataKey,
 				selectedDataKeys: [] as RelationTypeIds<T>,
 				loading: true,
-				element: undefined,
 				columns,
 				pagination: makePaginationConfig({}),
 				queryRelatedAction,
@@ -28,7 +22,11 @@ export default function relationTablesInitializer<T>(
 			state[dataKey] = relation;
 			return state;
 		},
-		{} as State<T>,
+		{} as Config<T>,
 	);
-	return initializedState;
+	return {
+		tables: [],
+		loaded: false,
+		config: initializedState,
+	};
 }

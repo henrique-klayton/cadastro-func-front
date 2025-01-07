@@ -5,6 +5,7 @@ import makePaginationConfig from "@components/table-page/make-pagination-config"
 import {
 	Action,
 	ActionType,
+	Config,
 	InitialLoadAction,
 	PageLoadAction,
 	RelatedItem,
@@ -16,28 +17,28 @@ import {
 export default function relationTablesReducer<T>(
 	state: State<T>,
 	action: Action<T>,
-) {
+): State<T> {
+	const config = state.config;
 	switch (action.type) {
+		case ActionType.RENDER_ALL:
+			return handleRender(state, config, action);
 		case ActionType.SET_LOADING:
-			setLoading(state[action.dataKey], action.loading);
+			setLoading(config[action.dataKey], action.loading);
 			break;
 		case ActionType.SET_PAGINATION:
-			setPagination(state[action.dataKey], action.pagination);
+			setPagination(config[action.dataKey], action.pagination);
 			break;
 		case ActionType.SET_SELECTED_KEYS:
-			setSelectedDataKeys(state[action.dataKey], action.selectedDataKeys);
-			break;
-		case ActionType.RENDER_TABLE:
-			handleRender(state[action.dataKey], action);
+			setSelectedDataKeys(config[action.dataKey], action.selectedDataKeys);
 			break;
 		case ActionType.INITIAL_LOAD:
-			handleInitialLoad(state[action.dataKey], action);
+			handleInitialLoad(config[action.dataKey], action);
 			break;
 		case ActionType.PAGINATION_LOAD:
-			handlePageLoad(state[action.dataKey], action);
+			handlePageLoad(config[action.dataKey], action);
 			break;
 		case ActionType.RESET_ALL:
-			handleReset(state);
+			handleReset(config);
 			break;
 		default:
 			return action satisfies never;
@@ -66,10 +67,23 @@ function setSelectedDataKeys<T>(
 	relation.selectedDataKeys = selectedDataKeys;
 }
 
-function handleRender<T>(relation: Relation<T>, action: RenderAction<T>) {
-	console.log(`Save rendered ${action.dataKey} table`);
-	relation.element = action.element;
-	relation.loading = true;
+function handleRender<T>(
+	state: State<T>,
+	config: Config<T>,
+	action: RenderAction,
+) {
+	if (state.loaded) return state;
+
+	console.log("Rendering relation tables");
+	for (const key in config) {
+		config[key].loading = true;
+	}
+
+	return {
+		tables: action.elements,
+		loaded: true,
+		config: config,
+	};
 }
 
 function handleInitialLoad<T>(
@@ -111,12 +125,12 @@ function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
 	});
 }
 
-function handleReset<T>(state: State<T>) {
-	for (const key in state) {
+function handleReset<T>(config: Config<T>) {
+	for (const key in config) {
 		console.log(`Resetting ${key} table`);
-		state[key].data = [] as RelatedItem<T>;
-		state[key].selectedDataKeys = [];
-		state[key].pagination = makePaginationConfig({});
-		state[key].loading = true;
+		config[key].data = [] as RelatedItem<T>;
+		config[key].selectedDataKeys = [];
+		config[key].pagination = makePaginationConfig({});
+		config[key].loading = true;
 	}
 }

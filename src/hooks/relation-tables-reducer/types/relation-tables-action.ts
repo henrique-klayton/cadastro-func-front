@@ -6,14 +6,23 @@ import ActionType from "./relation-tables-action-type";
 import { Relation } from "./type-aliases";
 
 type RelationTablesAction<Item> =
+	| RenderAction
 	| SetLoadingAction<Item>
 	| SetPaginationAction<Item>
 	| InitialLoadAction<Item>
 	| PageLoadAction<Item>
-	| RenderAction<Item>
 	| SetSelectedDataKeys<Item>
 	| ResetAllAction;
 export default RelationTablesAction;
+
+export interface RenderAction {
+	type: ActionType.RENDER_ALL;
+	elements: React.ReactNode[];
+}
+
+export interface ResetAllAction {
+	type: ActionType.RESET_ALL;
+}
 
 export interface BaseAction<Item> {
 	type: ActionType;
@@ -43,17 +52,8 @@ export interface InitialLoadAction<Item> extends BaseAction<Item> {
 	dispatcher: React.Dispatch<RelationTablesAction<Item>>;
 }
 
-export interface RenderAction<Item> extends BaseAction<Item> {
-	type: ActionType.RENDER_TABLE;
-	element: React.ReactNode;
-}
-
 export interface PageLoadAction<Item> extends BaseAction<Item> {
 	type: ActionType.PAGINATION_LOAD;
 	data: Relation<Item>["data"];
 	total: number;
-}
-
-export interface ResetAllAction {
-	type: ActionType.RESET_ALL;
 }

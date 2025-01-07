@@ -21,7 +21,6 @@ export interface RelationTableConfig<
 	loading: boolean;
 	columns: Array<TableColumn<RelationType>>;
 	pagination: TablePaginationConfig;
-	element: React.ReactNode;
 	queryRelatedAction: PaginationQueryFuncType<RelationType>;
 }
 

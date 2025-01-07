@@ -71,13 +71,16 @@ export default function TablePageComponent<
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 
 	// Relation Tables States & Reducer
-	const [relationTables, setRelationTables] = useState<React.ReactNode[]>([]);
-	const [relationTablesLoaded, setRelationTablesLoaded] = useState(false);
-	const [relationTablesProps, relationsDispatch] = useReducer(
+	const [relationTablesState, relationsDispatch] = useReducer(
 		relationTablesReducer<U>,
 		relationsData ?? [],
 		relationTablesInitializer<U>,
 	);
+	const {
+		tables: relationTables,
+		loaded: relationTablesLoaded,
+		config: relationTablesProps,
+	} = relationTablesState;
 
 	const RelationTablesContext = createRelationTablesContext<U>();
 	const RelationTablesDispatchContext =
@@ -268,14 +271,11 @@ export default function TablePageComponent<
 				</Row>
 			);
 			elements.push(element);
-			relationsDispatch({
-				type: ActionType.RENDER_TABLE,
-				dataKey: key,
-				element,
-			});
 		}
-		setRelationTables(elements);
-		setRelationTablesLoaded(true);
+		relationsDispatch({
+			type: ActionType.RENDER_ALL,
+			elements,
+		});
 	};
 
 	const loadRelationsListData = async (formData?: U) => {
@@ -318,7 +318,7 @@ export default function TablePageComponent<
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
-		<RelationTablesContext.Provider value={relationTablesProps}>
+		<RelationTablesContext.Provider value={relationTablesState}>
 			<RelationTablesDispatchContext.Provider value={relationsDispatch}>
 				<FormModal<C, U>
 					{...formModalStates}
