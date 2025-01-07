@@ -2,8 +2,8 @@
 import { Table } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 
+import RelationData from "@components/table-page/interfaces/relation-data.type";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
-import RelationData from "@components/table-page/interfaces/relation.data.type";
 import {
 	useRelationTable,
 	useRelationTablesDispatch,
