@@ -29,8 +29,8 @@ import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-t
 import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
-import IdArray from "@interfaces/id-array.type";
 import PartialNullable from "@interfaces/partial-nullable.type";
+import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 import makePaginationConfig from "./make-pagination-config";
 import {
@@ -284,9 +284,11 @@ export default function TablePageComponent<
 			console.log(`Getting data to load ${key} table`);
 			const relation = relationTablesProps[key];
 			const { data, total } = await relation.queryRelatedAction();
-			const relatedData: IdArray = [];
+			let relatedData: RelationTypeIds<U> = [];
 			if (formData && Array.isArray(formData[key])) {
-				relatedData.concat(formData[key].map((item) => item.id));
+				relatedData = formData[key].map(
+					(item) => item.id,
+				) as RelationTypeIds<U>;
 			}
 			relationsDispatch({
 				type: ActionType.INITIAL_LOAD,

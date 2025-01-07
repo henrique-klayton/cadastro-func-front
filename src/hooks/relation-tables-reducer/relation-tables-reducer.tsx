@@ -1,7 +1,7 @@
 "use client";
+import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import makePaginationConfig from "@components/table-page/make-pagination-config";
-import IdArray from "@interfaces/id-array.type";
 import { Action, RelatedItem, Relation, State } from "./type-aliases";
 import {
 	ActionType,
@@ -57,7 +57,7 @@ function setPagination<T>(
 
 function setSelectedDataKeys<T>(
 	relation: Relation<T>,
-	selectedDataKeys: IdArray,
+	selectedDataKeys: RelationTypeIds<T>,
 ) {
 	console.log(`Changing rows selection state for ${relation.dataKey} table`);
 	relation.selectedDataKeys = selectedDataKeys;

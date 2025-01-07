@@ -2,6 +2,7 @@
 import { Table } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 
+import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import RelationData from "@components/table-page/interfaces/relation.data.type";
 import {
 	useRelationTable,
@@ -9,7 +10,6 @@ import {
 } from "@hooks/relation-tables-reducer";
 import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import Flatten from "@interfaces/flatten.type";
-import IdArray from "@interfaces/id-array.type";
 import { RelationSelectTableProps } from "./types";
 
 export default function RelationSelectTable<T>({
@@ -23,7 +23,7 @@ export default function RelationSelectTable<T>({
 			dispatch({
 				type: ActionType.SET_SELECTED_KEYS,
 				dataKey,
-				selectedDataKeys: selectedDataKeys as IdArray,
+				selectedDataKeys: selectedDataKeys as RelationTypeIds<T>,
 			});
 		},
 	};

@@ -1,6 +1,6 @@
 "use client";
+import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
-import IdArray from "@interfaces/id-array.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import { Relation } from "../type-aliases";
 import ActionType from "./relation-tables-action-type";
@@ -31,14 +31,14 @@ export interface SetPaginationAction<Item> extends BaseAction<Item> {
 
 export interface SetSelectedDataKeys<Item> extends BaseAction<Item> {
 	type: ActionType.SET_SELECTED_KEYS;
-	selectedDataKeys: IdArray;
+	selectedDataKeys: RelationTypeIds<Item>;
 }
 
 export interface InitialLoadAction<Item> extends BaseAction<Item> {
 	type: ActionType.INITIAL_LOAD;
 	data: Relation<Item>["data"];
 	total: number;
-	selectedDataKeys: IdArray;
+	selectedDataKeys: RelationTypeIds<Item>;
 	dispatcher: React.Dispatch<RelationTablesAction<Item>>;
 }
 
