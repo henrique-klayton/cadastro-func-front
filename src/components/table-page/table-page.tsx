@@ -215,34 +215,31 @@ export default function TablePageComponent<
 		});
 	};
 
-	const openFormModal = (
+	const openFormModal = async (
 		action: FormModalActions,
 		initialData: Promise<U | undefined> = Promise.resolve(undefined),
 	) => {
+		try {
 		setAction(action);
-		if (!relationTablesLoaded) renderTables();
 		setFormLoading(true);
-		initialData
-			.then((data) => {
-				loadRelationsListData(data)
-					.then(() => {
+			setFormOpen(true);
+			// Render tables before form load
+			renderRelationTables();
+
+			const data = await initialData;
 						if (data) setFormData(data);
 						else setFormData(formReset);
 						setFormLoading(false);
-					})
-					.catch((err) => {
-						throw err;
-					});
-			})
-			.catch((err: unknown) => {
+
+			await loadRelationsListData(data);
+		} catch (err: unknown) {
 				const error =
 					err instanceof Error ? err : new Error(String(err), { cause: err });
 				console.error(error);
 				console.error(error.message);
 				message.error("Erro ao carregar formulário!");
 				closeFormModal();
-			});
-		setFormOpen(true);
+		}
 	};
 
 	const closeFormModal = () => {
@@ -256,7 +253,8 @@ export default function TablePageComponent<
 	};
 
 	// Relation Tables Functions
-	const renderTables = () => {
+	const renderRelationTables = () => {
+		if (!relationTablesLoaded) {
 		const elements: React.ReactNode[] = [];
 		for (const key in relationTablesProps) {
 			console.log(`Render ${key} relation table`);
@@ -264,7 +262,10 @@ export default function TablePageComponent<
 			const element = (
 				<Row key={relation.dataKey}>
 					<Col span={24}>
-						<Form.Item name={relation.dataKey as string} key={relation.dataKey}>
+							<Form.Item
+								name={relation.dataKey as string}
+								key={relation.dataKey}
+							>
 							<RelationSelectTable dataKey={relation.dataKey} />
 						</Form.Item>
 					</Col>
@@ -276,6 +277,7 @@ export default function TablePageComponent<
 			type: ActionType.RENDER_ALL,
 			elements,
 		});
+		}
 	};
 
 	const loadRelationsListData = async (formData?: U) => {
