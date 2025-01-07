@@ -2,10 +2,10 @@
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import StringKeyof from "@interfaces/string-keyof.type";
-import { Relation } from "../type-aliases";
 import ActionType from "./relation-tables-action-type";
+import { Relation } from "./type-aliases";
 
-export type RelationTablesAction<Item> =
+type RelationTablesAction<Item> =
 	| SetLoadingAction<Item>
 	| SetPaginationAction<Item>
 	| InitialLoadAction<Item>
@@ -13,6 +13,7 @@ export type RelationTablesAction<Item> =
 	| RenderAction<Item>
 	| SetSelectedDataKeys<Item>
 	| ResetAllAction;
+export default RelationTablesAction;
 
 export interface BaseAction<Item> {
 	type: ActionType;

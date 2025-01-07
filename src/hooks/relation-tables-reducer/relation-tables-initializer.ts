@@ -2,8 +2,12 @@
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import makePaginationConfig from "@components/table-page/make-pagination-config";
 import { RelationDataObject } from "@components/table-page/types";
-import { RelatedItem, Relation, State } from "./type-aliases";
-import { RelationTablesConfigsObject } from "./types";
+import {
+	RelatedItem,
+	Relation,
+	RelationTablesConfigsObject,
+	State,
+} from "./types";
 
 export default function relationTablesInitializer<T>(
 	relationsData: Array<RelationDataObject<T>>,
