@@ -1,6 +1,6 @@
 "use client";
 import { Menu, MenuProps } from "antd";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 type MenuItem = Required<MenuProps>["items"][number];
 const items: MenuItem[] = [
@@ -24,13 +24,21 @@ const items: MenuItem[] = [
 
 export default function Sidebar() {
 	const router = useRouter();
+	const path = usePathname();
+	const routeName = path.split("/")[1];
 	const onClick = (ev: { key: string }) => {
 		router.push(`/${ev.key}`);
 	};
 
 	return (
 		<nav className="contents">
-			<Menu className="h-full" onClick={onClick} mode="inline" items={items} />
+			<Menu
+				className="h-full"
+				onClick={onClick}
+				selectedKeys={[routeName]}
+				mode="inline"
+				items={items}
+			/>
 		</nav>
 	);
 }

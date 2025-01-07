@@ -37,7 +37,7 @@
 - [ ] Gerar relatórios em CSV
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
-- [ ] Fix sidebar menu current route without active decoration
+- [x] Fix sidebar menu current route without active decoration
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?
