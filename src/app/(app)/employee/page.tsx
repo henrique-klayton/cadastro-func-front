@@ -56,7 +56,7 @@ export default async function EmployeePage() {
 			relationsData={[
 				createRelationDataObject(
 					"skills",
-					sKillTableColumns,
+					sKillRelationTableColumns,
 					getSkills,
 					RelationSelectTable,
 				),

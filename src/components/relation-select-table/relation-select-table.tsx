@@ -19,6 +19,7 @@ export default function RelationSelectTable<T>({
 	const dispatch = useRelationTablesDispatch<T>();
 	const rowSelection: TableRowSelection<Flatten<RelationData<T>>> = {
 		selectedRowKeys: relation.selectedDataKeys,
+		columnWidth: "48x",
 		onChange: (selectedDataKeys) => {
 			dispatch({
 				type: ActionType.SET_SELECTED_KEYS,
@@ -30,6 +31,7 @@ export default function RelationSelectTable<T>({
 	return (
 		<Table<Flatten<RelationData<T>>>
 			rowKey="id"
+			bordered={true}
 			columns={relation.columns}
 			dataSource={relation.data}
 			pagination={relation.pagination}
