@@ -13,7 +13,7 @@ type IncludedFormItemProps =
 	| "validateStatus"
 	| "validateTrigger";
 
-export interface FormItemConfig<C, U, P>
+export default interface FormItemConfig<C, U, P>
 	extends Partial<Pick<FormItemProps, IncludedFormItemProps>> {
 	key: keyof C | U;
 	input: React.ReactElement<P>;
