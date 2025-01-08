@@ -30,9 +30,9 @@ import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-act
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@interfaces/partial-nullable.type";
+import buildPaginationConfig from "./build-pagination-config";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
-import makePaginationConfig from "./make-pagination-config";
 import {
 	FormModalStateProps,
 	ServerActionRelations,
@@ -99,7 +99,7 @@ export default function TablePageComponent<
 			.then((res) => {
 				setTableData(res.data);
 				setPagination(
-					makePaginationConfig({ ...pagination, page: page, pageSize }),
+					buildPaginationConfig({ ...pagination, page: page, pageSize }),
 				);
 				setTableLoading(false);
 			})
@@ -110,7 +110,7 @@ export default function TablePageComponent<
 	};
 
 	const [pagination, setPagination] = useState<TablePaginationConfig>(
-		makePaginationConfig({ total, onChange: loadTableData }),
+		buildPaginationConfig({ total, onChange: loadTableData }),
 	);
 
 	const addItemToTable = (item: T) => {

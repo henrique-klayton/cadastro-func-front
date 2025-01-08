@@ -1,7 +1,7 @@
 "use client";
+import buildPaginationConfig from "@components/table-page/build-pagination-config";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
-import makePaginationConfig from "@components/table-page/make-pagination-config";
 import {
 	Action,
 	ActionType,
@@ -94,7 +94,7 @@ function handleInitialLoad<T>(
 	relation.data = action.data;
 	relation.selectedDataKeys = action.selectedDataKeys;
 	relation.loading = false;
-	relation.pagination = makePaginationConfig({
+	relation.pagination = buildPaginationConfig({
 		...relation.pagination,
 		total: action.total,
 		onChange: (page: number, pageSize: number) => {
@@ -119,7 +119,7 @@ function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
 	console.log(`Loading new page data for ${action.dataKey} table`);
 	relation.data = action.data;
 	relation.loading = false;
-	relation.pagination = makePaginationConfig({
+	relation.pagination = buildPaginationConfig({
 		...relation.pagination,
 		total: action.total,
 	});
@@ -130,7 +130,7 @@ function handleReset<T>(config: Config<T>) {
 		console.log(`Resetting ${key} table`);
 		config[key].data = [] as RelatedItem<T>;
 		config[key].selectedDataKeys = [];
-		config[key].pagination = makePaginationConfig({});
+		config[key].pagination = buildPaginationConfig({});
 		config[key].loading = true;
 	}
 }

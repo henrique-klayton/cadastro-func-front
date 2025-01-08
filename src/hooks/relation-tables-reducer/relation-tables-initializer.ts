@@ -1,6 +1,6 @@
 "use client";
+import buildPaginationConfig from "@components/table-page/build-pagination-config";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
-import makePaginationConfig from "@components/table-page/make-pagination-config";
 import { RelationDataObject } from "@components/table-page/types";
 import { Config, RelatedItem, Relation, RelationTablesState } from "./types";
 
@@ -16,7 +16,7 @@ export default function relationTablesInitializer<T>(
 				selectedDataKeys: [] as RelationTypeIds<T>,
 				loading: true,
 				columns,
-				pagination: makePaginationConfig({}),
+				pagination: buildPaginationConfig({}),
 				queryRelatedAction,
 			};
 			state[dataKey] = relation;

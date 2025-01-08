@@ -2,7 +2,7 @@
 import { TablePaginationConfig as AntdTablePaginationConfig } from "antd/lib";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 
-export default function makePaginationConfig({
+export default function buildPaginationConfig({
 	current,
 	page,
 	pageSize,
