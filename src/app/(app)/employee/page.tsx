@@ -7,12 +7,16 @@ import { DataTableProps } from "@components/data-table/types";
 import RelationSelectTable from "@components/relation-select-table";
 import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
+import TableFiltersObject from "@components/table-page/interfaces/table-filters-object";
+import StatusEnum from "@enums/status";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
-import { sKillTableColumns } from "@models/skill";
+import sKillRelationTableColumns from "@models/sKill-relation-table-columns";
+import buildFilterConfig from "@utils/build-filter-config";
 import dateParse from "@utils/date-parse";
+import statusFilter from "@utils/status-filter";
 import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
@@ -31,6 +35,30 @@ export default async function EmployeePage() {
 		data: employees.data,
 		rowKey: "id",
 		columns: employeeTableColumns,
+	};
+
+	const filters: TableFiltersObject<EmployeeFragmentType> = {
+		status: buildFilterConfig({
+			value: StatusEnum.ALL,
+			label: "Status",
+			name: "status",
+			colSpan: 4,
+			options: [
+				{
+					label: "Todos",
+					value: StatusEnum.ALL,
+				},
+				{
+					label: "Ativos",
+					value: StatusEnum.ACTIVE,
+				},
+				{
+					label: "Inativos",
+					value: StatusEnum.INACTIVE,
+				},
+			],
+			filterFunction: statusFilter,
+		}),
 	};
 
 	return (
@@ -61,6 +89,7 @@ export default async function EmployeePage() {
 					RelationSelectTable,
 				),
 			]}
+			filters={filters}
 		>
 			<Row gutter={16}>
 				<Col span={12}>

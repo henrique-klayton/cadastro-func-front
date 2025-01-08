@@ -14,6 +14,7 @@ import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
+import TableFiltersObject from "./interfaces/table-filters-object";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };
@@ -43,6 +44,7 @@ export interface TablePageProps<
 	relationsData?: Array<
 		RelationDataObject<UpdateItem, StringKeyof<UpdateItem>>
 	>;
+	filters: TableFiltersObject<TableItem>;
 }
 
 export type ServerActionRelations<T> = {

@@ -31,7 +31,7 @@
   - [x] Create tables to update entity relations
 - [x] Add table pagination
 - [ ] Add table filtering
-  - [ ] Status filter
+  - [x] Status filter
   - [ ] Other filters
 - [ ] Fixed rows height at <= 65px
 - [ ] Gerar relatórios em CSV

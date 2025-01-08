@@ -9,6 +9,7 @@ import {
 	Form,
 	ModalFuncProps,
 	Row,
+	Select,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
@@ -61,6 +62,7 @@ export default function TablePageComponent<
 	},
 	queryDataParsers: parsers,
 	relationsData,
+	filters: filtersProps,
 }: TablePageProps<T, C, U>) {
 	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(FormActionsEnum.CREATE);
@@ -90,14 +92,14 @@ export default function TablePageComponent<
 	// DataTable Component States & Functions
 	const [tableLoading, setTableLoading] = useState(false);
 	const [tableData, setTableData] = useState(tableProps.data);
-	tableProps.data = tableData;
+	const [filteredTableData, setFilteredTableData] = useState(tableProps.data);
 
 	const loadTableData = (page: number, pageSize: number) => {
 		setTableLoading(true);
-		setTableData([]);
+		setFilteredTableData([]);
 		tableQueryAction(page, pageSize)
 			.then((res) => {
-				setTableData(res.data);
+				updateTableData(res.data);
 				setPagination(
 					buildPaginationConfig({ ...pagination, page: page, pageSize }),
 				);
@@ -109,33 +111,43 @@ export default function TablePageComponent<
 			});
 	};
 
+	// FIXME Update total when filter changes
 	const [pagination, setPagination] = useState<TablePaginationConfig>(
 		buildPaginationConfig({ total, onChange: loadTableData }),
 	);
 
+	// FIXME Update pagination total
 	const addItemToTable = (item: T) => {
 		if (item.status) {
-			const data = [...tableData, item];
-			setTableData(data);
+			setTableData([...tableData, item]);
+			if (filterWithAllFilters(item))
+				setFilteredTableData([...filteredTableData, item]);
 		}
 	};
 
+	// FIXME Update pagination total if data is filtered
+	// FIXME Check if data should be filtered from pagination
 	const updateItemOnTable = (item: T) => {
 		const itemIndex = tableData.findIndex((old) => old.id === item.id);
-		if (!item.status) {
-			setTableData(tableData.toSpliced(itemIndex, 1));
-			return;
-		}
-
+		const filteredItemIndex = filteredTableData.findIndex(
+			(old) => old.id === item.id,
+		);
 		const data = [...tableData];
-		const updated = data[itemIndex];
-		Object.assign(updated, item);
+		const filteredData = [...filteredTableData];
+		Object.assign(data[itemIndex], item);
+		Object.assign(filteredData[filteredItemIndex], item);
 		setTableData(data);
+		setFilteredTableData(filteredData);
 	};
 
+	// FIXME Update pagination total
 	const removeItemFromTable = (id: T["id"]) => {
-		const data = tableData.filter((item) => item.id !== id);
-		setTableData(data);
+		const itemIndex = tableData.findIndex((item) => item.id === id);
+		const filteredItemIndex = filteredTableData.findIndex(
+			(item) => item.id === id,
+		);
+		setTableData(tableData.toSpliced(itemIndex, 1));
+		setFilteredTableData(filteredTableData.toSpliced(filteredItemIndex, 1));
 	};
 
 	const actions: DataTableActions<T> = {
@@ -306,6 +318,50 @@ export default function TablePageComponent<
 		if (confirm) return deleteAction(id);
 	};
 
+	// Filter Inputs and Functions
+	const filters = [];
+	for (const key in filtersProps) {
+		const props = filtersProps[key];
+		if (!props) continue;
+		const onChange = (option: number) => {
+			props.value = option;
+			setFilteredTableData(
+				tableData.filter((value) =>
+					props.filterFunction(value[key], value, option),
+				),
+			);
+		};
+		// TODO Move to another component
+		const node = (
+			<Col key={props.name} span={4}>
+				<Form.Item label={props.label} name={props.name as string}>
+					<Select
+						defaultValue={props.value}
+						options={props.options}
+						onChange={onChange}
+					/>
+				</Form.Item>
+			</Col>
+		);
+		filters.push(node);
+	}
+
+	const filterWithAllFilters = (value: T) => {
+		for (const key in filtersProps) {
+			const props = filtersProps[key];
+			if (!props) continue;
+			if (!props.filterFunction(value[key], value, props.value)) {
+				return false;
+			}
+		}
+		return true;
+	};
+
+	const updateTableData = (data: T[]) => {
+		setTableData(data);
+		setFilteredTableData(data.filter(filterWithAllFilters));
+	};
+
 	// Form Modal Props
 	const formModalStates = {
 		action: action as FormModalActions,
@@ -330,9 +386,13 @@ export default function TablePageComponent<
 				</FormModal>
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>
+						{/* TODO Move to another component */}
+						<Form layout="vertical">
+							<Row gutter={24}>{filters}</Row>
+						</Form>
 						<DataTable<T>
 							{...tableProps}
-							data={tableData}
+							data={filteredTableData}
 							loading={tableLoading}
 							actions={actions}
 							pagination={pagination}
