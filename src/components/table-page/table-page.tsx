@@ -20,7 +20,7 @@ import DataTableActions from "@components/data-table/interfaces/data-table-actio
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
-import TableFilterComponent from "@components/table-filter/table-filter";
+import TableFilterComponent from "@components/table-filter";
 import FormActionsEnum from "@enums/form-actions.enum";
 import relationTablesReducer, {
 	createRelationTablesContext,
