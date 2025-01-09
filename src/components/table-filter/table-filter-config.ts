@@ -6,7 +6,7 @@ export default interface TableFilterConfig<
 	K extends StringKeyof<T>,
 	O extends number,
 > {
-	value: O;
+	initialValue: O;
 	name: K;
 	label: string;
 	colSpan: number;

@@ -5,6 +5,7 @@ import {
 	FormModalUpdateProps,
 	MergedFormModalProps,
 } from "@components/form-modal/types";
+import TableFiltersObject from "@components/table-filter/table-filters-object";
 import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/types";
 import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
@@ -14,7 +15,6 @@ import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
-import TableFiltersObject from "./interfaces/table-filters-object";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
 export type QueryDataParsers<T> = { [P in keyof T]: (value: T[P]) => any };

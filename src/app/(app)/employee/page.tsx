@@ -5,16 +5,16 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import { DataTableProps } from "@components/data-table/types";
 import RelationSelectTable from "@components/relation-select-table";
+import buildFilterConfig from "@components/table-filter/build-filter-config";
+import TableFiltersObject from "@components/table-filter/table-filters-object";
 import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
-import TableFiltersObject from "@components/table-page/interfaces/table-filters-object";
 import StatusEnum from "@enums/status.enum";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
 import sKillRelationTableColumns from "@models/sKill-relation-table-columns";
-import buildFilterConfig from "@utils/build-filter-config";
 import dateParse from "@utils/date-parse";
 import statusFilter from "@utils/status-filter";
 import { getSkills } from "../skill/actions";
@@ -39,7 +39,7 @@ export default async function EmployeePage() {
 
 	const filters: TableFiltersObject<EmployeeFragmentType> = {
 		status: buildFilterConfig({
-			value: StatusEnum.ALL,
+			initialValue: StatusEnum.ALL,
 			label: "Status",
 			name: "status",
 			colSpan: 4,

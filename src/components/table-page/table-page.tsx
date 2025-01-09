@@ -9,7 +9,6 @@ import {
 	Form,
 	ModalFuncProps,
 	Row,
-	Select,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
@@ -21,6 +20,7 @@ import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
+import TableFilterComponent from "@components/table-filter/table-filter";
 import FormActionsEnum from "@enums/form-actions.enum";
 import relationTablesReducer, {
 	createRelationTablesContext,
@@ -31,6 +31,7 @@ import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-act
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@interfaces/partial-nullable.type";
+import StringKeyof from "@interfaces/string-keyof.type";
 import buildPaginationConfig from "./build-pagination-config";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
@@ -72,7 +73,7 @@ export default function TablePageComponent<
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 
-	// Relation Tables States & Reducer
+	// Relation Tables Reducer & Context
 	const [relationTablesState, relationsDispatch] = useReducer(
 		relationTablesReducer<U>,
 		relationsData ?? [],
@@ -84,6 +85,16 @@ export default function TablePageComponent<
 	const RelationTablesContext = createRelationTablesContext<U>();
 	const RelationTablesDispatchContext =
 		createRelationTablesDispatchContext<U>();
+
+	// TableFilter State
+	type FilterValues = { [P in keyof T]?: number };
+	const [filterValues, setFilterValues] = useState<FilterValues>(() => {
+		const obj: FilterValues = {};
+		for (const key in filtersProps) {
+			obj[key] = filtersProps[key]?.initialValue;
+		}
+		return obj;
+	});
 
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
@@ -110,7 +121,6 @@ export default function TablePageComponent<
 				setTableLoading(false);
 			});
 	};
-
 	// FIXME Update total when filter changes
 	const [pagination, setPagination] = useState<TablePaginationConfig>(
 		buildPaginationConfig({ total, onChange: loadTableData }),
@@ -126,7 +136,7 @@ export default function TablePageComponent<
 	};
 
 	// FIXME Update pagination total if data is filtered
-	// FIXME Check if data should be filtered from pagination
+	// BUG Check if item should be removed by filter before updating table
 	const updateItemOnTable = (item: T) => {
 		const itemIndex = tableData.findIndex((old) => old.id === item.id);
 		const filteredItemIndex = filteredTableData.findIndex(
@@ -319,42 +329,25 @@ export default function TablePageComponent<
 	};
 
 	// Filter Inputs and Functions
-	const filters = [];
-	for (const key in filtersProps) {
-		const props = filtersProps[key];
-		if (!props) continue;
-		const onChange = (option: number) => {
-			props.value = option;
-			setFilteredTableData(
-				tableData.filter((value) =>
-					props.filterFunction(value[key], value, option),
-				),
-			);
-		};
-		// TODO Move to another component
-		const node = (
-			<Col key={props.name} span={4}>
-				<Form.Item label={props.label} name={props.name as string}>
-					<Select
-						defaultValue={props.value}
-						options={props.options}
-						onChange={onChange}
-					/>
-				</Form.Item>
-			</Col>
-		);
-		filters.push(node);
-	}
-
 	const filterWithAllFilters = (value: T) => {
 		for (const key in filtersProps) {
 			const props = filtersProps[key];
 			if (!props) continue;
-			if (!props.filterFunction(value[key], value, props.value)) {
+			// biome-ignore lint/style/noNonNullAssertion: filterValues is built from filterProps keys
+			if (!props.filterFunction(value[key], value, filterValues[key]!)) {
 				return false;
 			}
 		}
 		return true;
+	};
+
+	const handleFilterChanges = (
+		key: StringKeyof<T>,
+		value: number,
+		filteredData: T[],
+	) => {
+		if (filteredData) setFilteredTableData(filteredData);
+		setFilterValues({ ...filterValues, [key]: value });
 	};
 
 	const updateTableData = (data: T[]) => {
@@ -386,10 +379,11 @@ export default function TablePageComponent<
 				</FormModal>
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>
-						{/* TODO Move to another component */}
-						<Form layout="vertical">
-							<Row gutter={24}>{filters}</Row>
-						</Form>
+						<TableFilterComponent
+							tableData={tableData}
+							filters={filtersProps}
+							onFilterChange={handleFilterChanges}
+						/>
 						<DataTable<T>
 							{...tableProps}
 							data={filteredTableData}
@@ -398,6 +392,7 @@ export default function TablePageComponent<
 							pagination={pagination}
 							registerName={itemName}
 						/>
+						{/* TODO Create component */}
 						<FloatButton
 							className="create-button"
 							type="primary"

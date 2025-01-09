@@ -1,4 +1,4 @@
-import TableFilterConfig from "@components/table-page/interfaces/table-filter-config";
+import TableFilterConfig from "@components/table-filter/table-filter-config";
 import StringKeyof from "@interfaces/string-keyof.type";
 
 export default function buildFilterConfig<
@@ -6,7 +6,7 @@ export default function buildFilterConfig<
 	K extends StringKeyof<T>,
 	O extends number,
 >({
-	value,
+	initialValue,
 	name,
 	label,
 	colSpan,
@@ -14,7 +14,7 @@ export default function buildFilterConfig<
 	filterFunction,
 }: TableFilterConfig<T, K, O>) {
 	return {
-		value,
+		initialValue,
 		name,
 		label,
 		colSpan,
