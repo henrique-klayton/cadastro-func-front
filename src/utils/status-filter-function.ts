@@ -2,7 +2,7 @@
 import StatusEnum from "@enums/status.enum";
 import HaveStatus from "@interfaces/have-status";
 
-export default function statusFilter(
+export default function statusFilterFunction(
 	value: boolean | null | undefined,
 	_data: HaveStatus,
 	option: StatusEnum,

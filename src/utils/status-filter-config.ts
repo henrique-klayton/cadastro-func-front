@@ -1,6 +1,6 @@
 import buildFilterConfig from "@components/table-filter/build-filter-config";
 import StatusEnum from "@enums/status.enum";
-import statusFilter from "./status-filter";
+import statusFilterFunction from "./status-filter-function";
 
 const statusFilterConfig = buildFilterConfig({
 	initialValue: StatusEnum.ALL,
@@ -21,6 +21,6 @@ const statusFilterConfig = buildFilterConfig({
 			value: StatusEnum.INACTIVE,
 		},
 	],
-	filterFunction: statusFilter,
+	filterFunction: statusFilterFunction,
 });
 export default statusFilterConfig;
