@@ -1,6 +1,6 @@
 "use client";
 import { ScheduleFragmentType } from "@fragments/schedule";
-import scheduleTypeFormat from "./schedule-type-format";
+import scheduleTypeFormat from "../schedule/schedule-type-format";
 
 export default function employeeScheduleTableFormat(
 	schedule?: Pick<ScheduleFragmentType, "type">,

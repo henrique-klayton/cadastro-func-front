@@ -2,7 +2,7 @@
 import TableColumn from "@components/data-table/types/table-column";
 import { SkillFragmentType } from "@fragments/skill";
 
-const sKillRelationTableColumns: Array<TableColumn<SkillFragmentType>> = [
+const employeeSkillsRelationColumns: Array<TableColumn<SkillFragmentType>> = [
 	{
 		dataIndex: "description",
 		title: "Descrição",
@@ -15,4 +15,4 @@ const sKillRelationTableColumns: Array<TableColumn<SkillFragmentType>> = [
 		},
 	},
 ];
-export default sKillRelationTableColumns;
+export default employeeSkillsRelationColumns;

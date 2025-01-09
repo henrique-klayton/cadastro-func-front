@@ -12,9 +12,9 @@ import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
-import sKillRelationTableColumns from "@models/sKill-relation-table-columns";
-import dateParse from "@utils/date-parse";
-import statusFilterConfig from "@utils/status-filter-config";
+import dateParse from "@utils/date/date-parse";
+import employeeSkillsRelationColumns from "@utils/employee/employee-skills-relation-columns";
+import statusFilterConfig from "@utils/status-filter/status-filter-config";
 import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
@@ -62,7 +62,7 @@ export default async function EmployeePage() {
 			relationsData={[
 				createRelationDataObject(
 					"skills",
-					sKillRelationTableColumns,
+					employeeSkillsRelationColumns,
 					getSkills,
 					RelationSelectTable,
 				),

@@ -2,8 +2,8 @@ import TableColumn from "@components/data-table/types/table-column";
 import { FormDataSerializer } from "@components/table-page/types";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { EmployeeCreateDto, EmployeeUpdateDto } from "@graphql/types/graphql";
-import dateTableFormat from "@utils/date-table-format";
-import employeeScheduleTableFormat from "@utils/employee-schedule-table-format";
+import dateTableFormat from "@utils/date/date-table-format";
+import employeeScheduleTableFormat from "@utils/employee/employee-schedule-table-format";
 
 export const employeeTableColumns: Array<TableColumn<EmployeeFragmentType>> = [
 	{

@@ -8,8 +8,8 @@ import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import { scheduleTableColumns } from "@models/schedule";
-import statusFilterConfig from "@utils/status-filter-config";
-import timeParse from "@utils/time-parse";
+import statusFilterConfig from "@utils/status-filter/status-filter-config";
+import timeParse from "@utils/time/time-parse";
 import {
 	createSchedule,
 	deleteSchedule,
