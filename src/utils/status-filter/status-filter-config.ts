@@ -3,7 +3,7 @@ import StatusEnum from "@enums/status.enum";
 import statusFilterFunction from "./status-filter-function";
 
 const statusFilterConfig = buildFilterConfig({
-	initialValue: StatusEnum.ALL,
+	initialValue: StatusEnum.ACTIVE,
 	label: "Status",
 	name: "status",
 	colSpan: 3,
