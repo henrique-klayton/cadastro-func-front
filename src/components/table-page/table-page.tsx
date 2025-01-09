@@ -21,7 +21,7 @@ import { DataTableActions } from "@components/data-table/types";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
-import FormActionsEnum from "@enums/form-actions";
+import FormActionsEnum from "@enums/form-actions.enum";
 import relationTablesReducer, {
 	createRelationTablesContext,
 	createRelationTablesDispatchContext,

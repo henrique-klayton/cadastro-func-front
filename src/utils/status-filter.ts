@@ -1,5 +1,5 @@
 "use client";
-import StatusEnum from "@enums/status";
+import StatusEnum from "@enums/status.enum";
 import HaveStatus from "@interfaces/have-status";
 
 export default function statusFilter(

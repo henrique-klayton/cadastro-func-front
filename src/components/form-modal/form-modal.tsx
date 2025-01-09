@@ -1,7 +1,7 @@
 import { Form, Modal } from "antd";
 import { FormInstance } from "antd/lib";
 
-import FormActionsEnum from "@enums/form-actions";
+import FormActionsEnum from "@enums/form-actions.enum";
 import { useRelationTables } from "@hooks/relation-tables-reducer";
 import { FormModalProps } from "./types";
 

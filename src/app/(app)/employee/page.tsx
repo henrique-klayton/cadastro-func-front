@@ -8,7 +8,7 @@ import RelationSelectTable from "@components/relation-select-table";
 import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
 import TableFiltersObject from "@components/table-page/interfaces/table-filters-object";
-import StatusEnum from "@enums/status";
+import StatusEnum from "@enums/status.enum";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
