@@ -5,18 +5,16 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import { DataTableProps } from "@components/data-table/types";
 import RelationSelectTable from "@components/relation-select-table";
-import buildFilterConfig from "@components/table-filter/build-filter-config";
 import TableFiltersObject from "@components/table-filter/table-filters-object";
 import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
-import StatusEnum from "@enums/status.enum";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
 import { EmployeeCreateDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
 import sKillRelationTableColumns from "@models/sKill-relation-table-columns";
 import dateParse from "@utils/date-parse";
-import statusFilter from "@utils/status-filter";
+import statusFilterConfig from "@utils/status-filter-config";
 import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
@@ -38,27 +36,7 @@ export default async function EmployeePage() {
 	};
 
 	const filters: TableFiltersObject<EmployeeFragmentType> = {
-		status: buildFilterConfig({
-			initialValue: StatusEnum.ALL,
-			label: "Status",
-			name: "status",
-			colSpan: 4,
-			options: [
-				{
-					label: "Todos",
-					value: StatusEnum.ALL,
-				},
-				{
-					label: "Ativos",
-					value: StatusEnum.ACTIVE,
-				},
-				{
-					label: "Inativos",
-					value: StatusEnum.INACTIVE,
-				},
-			],
-			filterFunction: statusFilter,
-		}),
+		status: statusFilterConfig,
 	};
 
 	return (
