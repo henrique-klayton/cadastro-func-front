@@ -2,10 +2,12 @@ import { Input, Switch } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import { DataTableProps } from "@components/data-table/types";
+import TableFiltersObject from "@components/table-filter/table-filters-object";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
 import { sKillTableColumns } from "@models/skill";
+import statusFilterConfig from "@utils/status-filter-config";
 import {
 	createSkill,
 	deleteSkill,
@@ -23,6 +25,10 @@ export default async function SchedulePage() {
 		columns: sKillTableColumns,
 	};
 
+	const filters: TableFiltersObject<SkillFragmentType> = {
+		status: statusFilterConfig,
+	};
+
 	return (
 		<TablePageComponent<SkillFragmentType, SkillCreateDto, SkillUpdateDto>
 			table={table}
@@ -37,6 +43,7 @@ export default async function SchedulePage() {
 				deleteAction: deleteSkill,
 			}}
 			queryDataParsers={{}}
+			filters={filters}
 		>
 			<FormItem
 				label="Descrição"

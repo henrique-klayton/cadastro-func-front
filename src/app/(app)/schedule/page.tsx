@@ -3,10 +3,12 @@ import FormItem from "antd/es/form/FormItem";
 
 import { DataTableProps } from "@components/data-table/types";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
+import TableFiltersObject from "@components/table-filter/table-filters-object";
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
 import { scheduleTableColumns } from "@models/schedule";
+import statusFilterConfig from "@utils/status-filter-config";
 import timeParse from "@utils/time-parse";
 import {
 	createSchedule,
@@ -23,6 +25,10 @@ export default async function SchedulePage() {
 		data: schedules.data,
 		columns: scheduleTableColumns,
 		rowKey: "id",
+	};
+
+	const filters: TableFiltersObject<ScheduleFragmentType> = {
+		status: statusFilterConfig,
 	};
 
 	// const config: FormItemConfig<ScheduleCreateDto, ScheduleUpdateDto> = {
@@ -51,6 +57,7 @@ export default async function SchedulePage() {
 				startTime: timeParse,
 				endTime: timeParse,
 			}}
+			filters={filters}
 		>
 			<FormItem
 				label="Horário Início"
