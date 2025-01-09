@@ -5,7 +5,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 
 import DataTableProps from "@components/data-table/interfaces/data-table-props";
 import RelationSelectTable from "@components/relation-select-table";
-import TableFiltersObject from "@components/table-filter/table-filters-object";
+import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
 import { EmployeeFragmentType } from "@fragments/employee";
@@ -35,7 +35,7 @@ export default async function EmployeePage() {
 		columns: employeeTableColumns,
 	};
 
-	const filters: TableFiltersObject<EmployeeFragmentType> = {
+	const filters: TableFilterConfigsObject<EmployeeFragmentType> = {
 		status: statusFilterConfig,
 	};
 

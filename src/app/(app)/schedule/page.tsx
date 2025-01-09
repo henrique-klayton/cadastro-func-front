@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 
 import DataTableProps from "@components/data-table/interfaces/data-table-props";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
-import TableFiltersObject from "@components/table-filter/table-filters-object";
+import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
@@ -27,7 +27,7 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
-	const filters: TableFiltersObject<ScheduleFragmentType> = {
+	const filters: TableFilterConfigsObject<ScheduleFragmentType> = {
 		status: statusFilterConfig,
 	};
 

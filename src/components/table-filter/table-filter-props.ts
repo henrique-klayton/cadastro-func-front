@@ -1,8 +1,8 @@
 import StringKeyof from "@interfaces/string-keyof.type";
-import TableFiltersObject from "./table-filters-object";
+import TableFilterConfigsObject from "./table-filter-configs-object";
 
 export default interface TableFilterProps<T> {
-	filters: TableFiltersObject<T>;
+	filters: TableFilterConfigsObject<T>;
 	tableData: T[];
 	onFilterChange: (
 		key: StringKeyof<T>,

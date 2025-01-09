@@ -6,7 +6,7 @@ import {
 	FormModalUpdateProps,
 	MergedFormModalProps,
 } from "@components/form-modal/types";
-import TableFiltersObject from "@components/table-filter/table-filters-object";
+import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/relation-table-component-props";
 import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
@@ -45,7 +45,7 @@ export interface TablePageProps<
 	relationsData?: Array<
 		RelationDataObject<UpdateItem, StringKeyof<UpdateItem>>
 	>;
-	filters: TableFiltersObject<TableItem>;
+	filters: TableFilterConfigsObject<TableItem>;
 }
 
 export type ServerActionRelations<T> = {

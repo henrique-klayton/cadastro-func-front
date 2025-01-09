@@ -2,7 +2,7 @@ import { Input, Switch } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import DataTableProps from "@components/data-table/interfaces/data-table-props";
-import TableFiltersObject from "@components/table-filter/table-filters-object";
+import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
@@ -25,7 +25,7 @@ export default async function SchedulePage() {
 		columns: sKillTableColumns,
 	};
 
-	const filters: TableFiltersObject<SkillFragmentType> = {
+	const filters: TableFilterConfigsObject<SkillFragmentType> = {
 		status: statusFilterConfig,
 	};
 

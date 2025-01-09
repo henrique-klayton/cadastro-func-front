@@ -1,6 +1,6 @@
 import TableFilterConfig from "./table-filter-config";
 
-type TableFiltersObject<T> = {
+type TableFilterConfigsObject<T> = {
 	[P in keyof T]?: TableFilterConfig<T, Extract<P, string>, number>;
 };
-export default TableFiltersObject;
+export default TableFilterConfigsObject;
