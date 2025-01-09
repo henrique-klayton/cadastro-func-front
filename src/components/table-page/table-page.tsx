@@ -16,7 +16,7 @@ import { useReducer, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
-import { DataTableActions } from "@components/data-table/types";
+import DataTableActions from "@components/data-table/interfaces/data-table-actions";
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";

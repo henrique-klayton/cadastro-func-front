@@ -2,7 +2,7 @@ import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
 import HaveId from "@interfaces/have-id";
-import { DataTablePageProps } from "./types";
+import DataTablePageProps from "./interfaces/data-table-page-props";
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";

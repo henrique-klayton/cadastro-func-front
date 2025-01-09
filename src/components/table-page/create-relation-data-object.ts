@@ -1,4 +1,4 @@
-import { TableColumn } from "@components/data-table/types";
+import TableColumn from "@components/data-table/types/table-column";
 import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/types";
 import Flatten from "@interfaces/flatten.type";
 import PaginationQueryFuncType from "@interfaces/pagination-query-type";

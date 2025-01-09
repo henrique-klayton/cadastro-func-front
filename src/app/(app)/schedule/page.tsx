@@ -1,7 +1,7 @@
 import { Switch, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import { DataTableProps } from "@components/data-table/types";
+import DataTableProps from "@components/data-table/interfaces/data-table-props";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TableFiltersObject from "@components/table-filter/table-filters-object";
 import TablePageComponent from "@components/table-page";

@@ -1,4 +1,4 @@
-import { TableColumn } from "@components/data-table/types";
+import TableColumn from "@components/data-table/types/table-column";
 import { FormDataSerializer } from "@components/table-page/types";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";

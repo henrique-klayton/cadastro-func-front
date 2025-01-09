@@ -1,4 +1,5 @@
-import { DataTableProps, TableColumn } from "@components/data-table/types";
+import DataTableProps from "@components/data-table/interfaces/data-table-props";
+import TableColumn from "@components/data-table/types/table-column";
 import {
 	FormData,
 	FormModalCreateProps,
