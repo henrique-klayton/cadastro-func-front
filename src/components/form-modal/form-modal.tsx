@@ -2,7 +2,7 @@ import { Form, Modal } from "antd";
 import { FormInstance } from "antd/lib";
 
 import FormActionsEnum from "@enums/form-actions.enum";
-import { useRelationTables } from "@hooks/relation-tables-reducer";
+import { useRelationTables } from "@hooks/relation-tables-reducer/relation-tables-context";
 import { FormModalProps } from "./types";
 
 export default function FormModal<C, U>({

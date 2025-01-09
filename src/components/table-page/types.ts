@@ -7,7 +7,7 @@ import {
 	MergedFormModalProps,
 } from "@components/form-modal/types";
 import TableFiltersObject from "@components/table-filter/table-filters-object";
-import { RelationTableComponentProps } from "@hooks/relation-tables-reducer/types";
+import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/relation-table-component-props";
 import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";

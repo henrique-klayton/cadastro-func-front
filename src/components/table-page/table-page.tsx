@@ -22,12 +22,13 @@ import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilterComponent from "@components/table-filter";
 import FormActionsEnum from "@enums/form-actions.enum";
-import relationTablesReducer, {
+import relationTablesReducer from "@hooks/relation-tables-reducer";
+import {
 	createRelationTablesContext,
 	createRelationTablesDispatchContext,
-} from "@hooks/relation-tables-reducer";
+} from "@hooks/relation-tables-reducer/relation-tables-context";
 import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
-import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
+import ActionTypeEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@interfaces/partial-nullable.type";
@@ -264,7 +265,7 @@ export default function TablePageComponent<
 	const closeFormModal = () => {
 		setFormOpen(false);
 		setFormData(formReset);
-		relationsDispatch({ type: ActionType.RESET_ALL });
+		relationsDispatch({ type: ActionTypeEnum.RESET_ALL });
 	};
 
 	const handleFormModalCancel = () => {
@@ -293,7 +294,7 @@ export default function TablePageComponent<
 				elements.push(element);
 			}
 			relationsDispatch({
-				type: ActionType.RENDER_ALL,
+				type: ActionTypeEnum.RENDER_ALL,
 				elements,
 			});
 		}
@@ -312,7 +313,7 @@ export default function TablePageComponent<
 				) as RelationTypeIds<U>;
 			}
 			relationsDispatch({
-				type: ActionType.INITIAL_LOAD,
+				type: ActionTypeEnum.INITIAL_LOAD,
 				dataKey: key,
 				data,
 				total,

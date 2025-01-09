@@ -1,7 +1,7 @@
 "use client";
 
 // biome-ignore lint/style/useEnumInitializers: The enum members value doesn't matter
-enum ActionType {
+enum ActionTypeEnum {
 	RENDER_ALL,
 	SET_LOADING,
 	SET_PAGINATION,
@@ -10,4 +10,4 @@ enum ActionType {
 	SET_SELECTED_KEYS,
 	RESET_ALL,
 }
-export default ActionType;
+export default ActionTypeEnum;

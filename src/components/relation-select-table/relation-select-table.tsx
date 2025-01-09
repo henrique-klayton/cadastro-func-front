@@ -7,8 +7,8 @@ import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids
 import {
 	useRelationTable,
 	useRelationTablesDispatch,
-} from "@hooks/relation-tables-reducer";
-import ActionType from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
+} from "@hooks/relation-tables-reducer/relation-tables-context";
+import ActionTypeEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
 import Flatten from "@interfaces/flatten.type";
 import { RelationSelectTableProps } from "./types";
 
@@ -22,7 +22,7 @@ export default function RelationSelectTable<T>({
 		columnWidth: "48x",
 		onChange: (selectedDataKeys) => {
 			dispatch({
-				type: ActionType.SET_SELECTED_KEYS,
+				type: ActionTypeEnum.SET_SELECTED_KEYS,
 				dataKey,
 				selectedDataKeys: selectedDataKeys as RelationTypeIds<T>,
 			});

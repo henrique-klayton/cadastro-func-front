@@ -5,11 +5,7 @@ import Flatten from "@interfaces/flatten.type";
 import PaginationQueryFuncType from "@interfaces/pagination-query-type";
 import StringKeyof from "@interfaces/string-keyof.type";
 
-export type RelationTableComponentProps<Item> = {
-	dataKey: StringKeyof<Item>;
-};
-
-export interface RelationTableConfig<
+export default interface RelationTableConfig<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
 	RelationType = Flatten<Item[Key]>,
@@ -23,10 +19,3 @@ export interface RelationTableConfig<
 	pagination: TablePaginationConfig;
 	queryRelatedAction: PaginationQueryFuncType<RelationType>;
 }
-
-export type RelationTablesConfigsObject<
-	Item,
-	Key extends StringKeyof<Item> = StringKeyof<Item>,
-> = {
-	[Property in keyof Item]: RelationTableConfig<Item, Key>;
-};

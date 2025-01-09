@@ -2,17 +2,13 @@
 import buildPaginationConfig from "@components/table-page/build-pagination-config";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
+import { Action, Config, RelatedItem, Relation, State } from "./types/aliases";
 import {
-	Action,
-	ActionType,
-	Config,
 	InitialLoadAction,
 	PageLoadAction,
-	RelatedItem,
-	Relation,
 	RenderAction,
-	State,
-} from "./types";
+} from "./types/relation-tables-action";
+import ActionTypeEnum from "./types/relation-tables-action-type";
 
 export default function relationTablesReducer<T>(
 	state: State<T>,
@@ -20,24 +16,24 @@ export default function relationTablesReducer<T>(
 ): State<T> {
 	const config = state.config;
 	switch (action.type) {
-		case ActionType.RENDER_ALL:
+		case ActionTypeEnum.RENDER_ALL:
 			return handleRender(state, config, action);
-		case ActionType.SET_LOADING:
+		case ActionTypeEnum.SET_LOADING:
 			setLoading(config[action.dataKey], action.loading);
 			break;
-		case ActionType.SET_PAGINATION:
+		case ActionTypeEnum.SET_PAGINATION:
 			setPagination(config[action.dataKey], action.pagination);
 			break;
-		case ActionType.SET_SELECTED_KEYS:
+		case ActionTypeEnum.SET_SELECTED_KEYS:
 			setSelectedDataKeys(config[action.dataKey], action.selectedDataKeys);
 			break;
-		case ActionType.INITIAL_LOAD:
+		case ActionTypeEnum.INITIAL_LOAD:
 			handleInitialLoad(config[action.dataKey], action);
 			break;
-		case ActionType.PAGINATION_LOAD:
+		case ActionTypeEnum.PAGINATION_LOAD:
 			handlePageLoad(config[action.dataKey], action);
 			break;
-		case ActionType.RESET_ALL:
+		case ActionTypeEnum.RESET_ALL:
 			handleReset(config);
 			break;
 		default:
@@ -99,13 +95,13 @@ function handleInitialLoad<T>(
 		total: action.total,
 		onChange: (page: number, pageSize: number) => {
 			action.dispatcher({
-				type: ActionType.SET_LOADING,
+				type: ActionTypeEnum.SET_LOADING,
 				dataKey: relation.dataKey,
 				loading: true,
 			});
 			relation.queryRelatedAction(page, pageSize).then(({ data, total }) => {
 				action.dispatcher({
-					type: ActionType.PAGINATION_LOAD,
+					type: ActionTypeEnum.PAGINATION_LOAD,
 					dataKey: relation.dataKey,
 					data,
 					total,

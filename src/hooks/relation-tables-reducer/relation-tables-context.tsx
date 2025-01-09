@@ -2,7 +2,8 @@
 import { createContext, useContext } from "react";
 
 import StringKeyof from "@interfaces/string-keyof.type";
-import { RelationTablesAction, RelationTablesState } from "./types";
+import RelationTablesState from "./interfaces/relation-tables-state";
+import RelationTablesAction from "./types/relation-tables-action";
 
 export const RelationTablesContext = createContext(
 	{} as RelationTablesState<object>,
