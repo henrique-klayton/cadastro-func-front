@@ -30,9 +30,11 @@
 - [x] Add/remove employee skills
   - [x] Create tables to update entity relations
 - [x] Add table pagination
-- [ ] Add table filtering
+- [x] Add table filtering
   - [x] Status filter
-  - [ ] Other filters
+  - [ ] Employee table filters
+  - [ ] Schedule table filters
+  - [ ] Skill table filters
 - [ ] Fixed rows height at <= 65px
 - [ ] Gerar relatórios em CSV
 - [ ] Dynamic white/dark theme
