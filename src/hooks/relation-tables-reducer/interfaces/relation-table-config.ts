@@ -2,7 +2,7 @@ import TableColumn from "@components/data-table/types/table-column";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import Flatten from "@interfaces/flatten.type";
-import PaginationQueryFuncType from "@interfaces/pagination-query-type";
+import PaginationQueryFunction from "@interfaces/pagination-query-function";
 import StringKeyof from "@interfaces/string-keyof.type";
 
 export default interface RelationTableConfig<
@@ -17,5 +17,5 @@ export default interface RelationTableConfig<
 	loading: boolean;
 	columns: Array<TableColumn<RelationType>>;
 	pagination: TablePaginationConfig;
-	queryRelatedAction: PaginationQueryFuncType<RelationType>;
+	queryRelatedAction: PaginationQueryFunction<RelationType>;
 }

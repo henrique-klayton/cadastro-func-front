@@ -1,7 +1,7 @@
 import TableColumn from "@components/data-table/types/table-column";
 import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/relation-table-component-props";
 import Flatten from "@interfaces/flatten.type";
-import PaginationQueryFuncType from "@interfaces/pagination-query-type";
+import PaginationQueryFunction from "@interfaces/pagination-query-function";
 import StringKeyof from "@interfaces/string-keyof.type";
 import { RelationDataObject } from "./types";
 
@@ -13,7 +13,7 @@ export default function createRelationDataObject<
 >(
 	key: Key,
 	columns: Array<TableColumn<RelationType>>,
-	queryRelatedAction: PaginationQueryFuncType<RelationType>,
+	queryRelatedAction: PaginationQueryFunction<RelationType>,
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>,
 ): RelationDataObject<Item, Key, RelationType, RelationData> {
 	return { key, columns, queryRelatedAction, component };

@@ -12,7 +12,7 @@ import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import Optional from "@interfaces/optional.type";
-import PaginationQueryFuncType from "@interfaces/pagination-query-type";
+import PaginationQueryFunction from "@interfaces/pagination-query-function";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
@@ -57,7 +57,7 @@ export interface ServerActions<
 	CreateItem,
 	UpdateItem,
 > {
-	tableQueryAction: PaginationQueryFuncType<TableItem>;
+	tableQueryAction: PaginationQueryFunction<TableItem>;
 	formQueryAction: (id: TableItem["id"]) => Promise<UpdateItem>;
 	createAction: (
 		data: CreateItem,
@@ -79,6 +79,6 @@ export interface RelationDataObject<
 > {
 	key: Key;
 	columns: Array<TableColumn<RelationType>>;
-	queryRelatedAction: PaginationQueryFuncType<RelationType>;
+	queryRelatedAction: PaginationQueryFunction<RelationType>;
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }
