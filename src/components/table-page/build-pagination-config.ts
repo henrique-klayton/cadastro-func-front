@@ -14,7 +14,7 @@ export default function buildPaginationConfig({
 	const minPageSize = 10;
 	const defaultSizeOptions = [minPageSize, 20, 50, 100];
 	const config = {
-		current: current ?? page ?? 1,
+		current: page ?? current ?? 1,
 		pageSize: pageSize ?? minPageSize,
 		total: total ?? 0,
 		pageSizeOptions: pageSizeOptions ?? defaultSizeOptions,
