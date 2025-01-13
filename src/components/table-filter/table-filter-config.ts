@@ -11,5 +11,5 @@ export default interface TableFilterConfig<
 	label: string;
 	colSpan: number;
 	options: TableFilterOption<O>[];
-	filterFunction: (value: T[K], data: T, option: O) => boolean;
+	serializer: (value: O) => T[K];
 }

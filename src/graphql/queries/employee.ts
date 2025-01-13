@@ -9,8 +9,8 @@ export const getFullEmployeeQuery = graphql(`
 `);
 
 export const getEmployeesListQuery = graphql(`
-	query GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {
-		employeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+	query GetEmployees($limit: Int, $offset: Int, $filter: EmployeeFilterDto!) {
+		employeeList(limit: $limit, offset: $offset, filter: $filter) {
 			data {...Employee}
 			total
 		}

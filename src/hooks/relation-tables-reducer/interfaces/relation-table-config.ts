@@ -17,5 +17,5 @@ export default interface RelationTableConfig<
 	loading: boolean;
 	columns: Array<TableColumn<RelationType>>;
 	pagination: TablePaginationConfig;
-	queryRelatedAction: PaginationQueryFunction<RelationType>;
+	queryRelatedAction: PaginationQueryFunction<RelationType, { status: true }>;
 }

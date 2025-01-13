@@ -6,7 +6,11 @@ import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-s
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
-import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import {
+	ScheduleCreateDto,
+	ScheduleFilterDto,
+	ScheduleUpdateDto,
+} from "@graphql/types/graphql";
 import { scheduleTableColumns } from "@models/schedule";
 import statusFilterConfig from "@utils/status-filter/status-filter-config";
 import timeParse from "@utils/time/time-parse";
@@ -19,7 +23,7 @@ import {
 } from "./actions";
 
 export default async function SchedulePage() {
-	const schedules = await getSchedules();
+	const schedules = await getSchedules({ status: true });
 
 	const table: DataTableProps<ScheduleFragmentType> = {
 		data: schedules.data,
@@ -27,7 +31,7 @@ export default async function SchedulePage() {
 		rowKey: "id",
 	};
 
-	const filters: TableFilterConfigsObject<ScheduleFragmentType> = {
+	const filters: TableFilterConfigsObject<ScheduleFilterDto> = {
 		status: statusFilterConfig,
 	};
 
@@ -40,7 +44,8 @@ export default async function SchedulePage() {
 		<TablePageComponent<
 			ScheduleFragmentType,
 			ScheduleCreateDto,
-			ScheduleUpdateDto
+			ScheduleUpdateDto,
+			ScheduleFilterDto
 		>
 			table={table}
 			totalCount={schedules.total}

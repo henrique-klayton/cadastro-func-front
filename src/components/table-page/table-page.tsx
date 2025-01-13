@@ -49,6 +49,7 @@ export default function TablePageComponent<
 	T extends HaveId & HaveStatus,
 	C extends U,
 	U extends PartialNullable<HaveId & HaveStatus>,
+	F,
 >({
 	children,
 	table: tableProps,
@@ -65,7 +66,7 @@ export default function TablePageComponent<
 	queryDataParsers: parsers,
 	relationsData,
 	filters: filtersProps,
-}: TablePageProps<T, C, U>) {
+}: TablePageProps<T, C, U, F>) {
 	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(FormActionsEnum.CREATE);
 	const [formOpen, setFormOpen] = useState(false);
@@ -109,7 +110,8 @@ export default function TablePageComponent<
 	const loadTableData = (page: number, pageSize: number) => {
 		setTableLoading(true);
 		setFilteredTableData([]);
-		tableQueryAction(page, pageSize)
+		// FIXME Missing filter
+		tableQueryAction({ status: true } as F, page, pageSize)
 			.then((res) => {
 				updateTableData(res.data);
 				setPagination(
@@ -305,7 +307,9 @@ export default function TablePageComponent<
 		for (const key in relationTablesProps) {
 			console.log(`Getting data to load ${key} table`);
 			const relation = relationTablesProps[key];
-			const { data, total } = await relation.queryRelatedAction();
+			const { data, total } = await relation.queryRelatedAction({
+				status: true,
+			});
 			let relatedData: RelationTypeIds<U> = [];
 			if (formData && Array.isArray(formData[key])) {
 				relatedData = formData[key].map(

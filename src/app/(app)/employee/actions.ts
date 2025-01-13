@@ -7,7 +7,11 @@ import {
 import { FullEmployee, FullEmployeeType } from "@fragments/full-employee";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import { EmployeeCreateDto, EmployeeUpdateDto } from "@graphql/types/graphql";
+import {
+	EmployeeCreateDto,
+	EmployeeFilterDto,
+	EmployeeUpdateDto,
+} from "@graphql/types/graphql";
 import { createSerializer, updateSerializer } from "@models/employee";
 import {
 	createEmployeeMutation,
@@ -39,15 +43,15 @@ export async function getEmployeeWithRelations(
 }
 
 export async function getEmployees(
+	filter: EmployeeFilterDto,
 	page?: number,
 	pageSize?: number,
-	filterStatus?: boolean,
 ): Promise<PaginatedEmployee> {
 	try {
 		const queryResult = await runQuery(
 			getEmployeesListQuery,
 			{
-				filterStatus,
+				filter,
 				...calculateLimitOffset(page, pageSize),
 			},
 			queryTag,

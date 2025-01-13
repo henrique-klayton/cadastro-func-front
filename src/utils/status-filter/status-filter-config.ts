@@ -1,8 +1,14 @@
 import buildFilterConfig from "@components/table-filter/build-filter-config";
 import StatusEnum from "@enums/status.enum";
-import statusFilterFunction from "./status-filter-function";
+import HaveStatus from "@interfaces/have-status";
+import PartialNullable from "@interfaces/partial-nullable.type";
+import statusFilterSerializer from "./status-filter-serializer";
 
-const statusFilterConfig = buildFilterConfig({
+const statusFilterConfig = buildFilterConfig<
+	PartialNullable<HaveStatus>,
+	"status",
+	StatusEnum
+>({
 	initialValue: StatusEnum.ACTIVE,
 	label: "Status",
 	name: "status",
@@ -21,6 +27,6 @@ const statusFilterConfig = buildFilterConfig({
 			value: StatusEnum.INACTIVE,
 		},
 	],
-	filterFunction: statusFilterFunction,
+	serializer: statusFilterSerializer,
 });
 export default statusFilterConfig;

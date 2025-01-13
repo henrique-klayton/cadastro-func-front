@@ -2,7 +2,11 @@
 import { PaginatedSkill, Skill, SkillFragmentType } from "@fragments/skill";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
+import {
+	SkillCreateDto,
+	SkillFilterDto,
+	SkillUpdateDto,
+} from "@graphql/types/graphql";
 import { createSerializer, updateSerializer } from "@models/skill";
 import {
 	createSkillMutation,
@@ -33,15 +37,15 @@ export async function getSkill(id: number): Promise<SkillFragmentType> {
 }
 
 export async function getSkills(
+	filter: SkillFilterDto,
 	page?: number,
 	pageSize?: number,
-	filterStatus?: boolean,
 ): Promise<PaginatedSkill> {
 	try {
 		const queryResult = await runQuery(
 			getSkillsListQuery,
 			{
-				filterStatus,
+				filter,
 				...calculateLimitOffset(page, pageSize),
 			},
 			queryTag,

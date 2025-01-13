@@ -11,7 +11,7 @@ export default function buildFilterConfig<
 	label,
 	colSpan,
 	options,
-	filterFunction,
+	serializer,
 }: TableFilterConfig<T, K, O>) {
 	return {
 		initialValue,
@@ -19,6 +19,6 @@ export default function buildFilterConfig<
 		label,
 		colSpan,
 		options,
-		filterFunction,
+		serializer,
 	};
 }

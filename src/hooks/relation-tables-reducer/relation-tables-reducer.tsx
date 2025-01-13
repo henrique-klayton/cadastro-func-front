@@ -99,14 +99,16 @@ function handleInitialLoad<T>(
 				dataKey: relation.dataKey,
 				loading: true,
 			});
-			relation.queryRelatedAction(page, pageSize).then(({ data, total }) => {
-				action.dispatcher({
-					type: ActionTypeEnum.PAGINATION_LOAD,
-					dataKey: relation.dataKey,
-					data,
-					total,
+			relation
+				.queryRelatedAction({ status: true }, page, pageSize)
+				.then(({ data, total }) => {
+					action.dispatcher({
+						type: ActionTypeEnum.PAGINATION_LOAD,
+						dataKey: relation.dataKey,
+						data,
+						total,
+					});
 				});
-			});
 		},
 	});
 }

@@ -6,7 +6,11 @@ import {
 } from "@fragments/schedule";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
-import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
+import {
+	ScheduleCreateDto,
+	ScheduleFilterDto,
+	ScheduleUpdateDto,
+} from "@graphql/types/graphql";
 import { createSerializer, updateSerializer } from "@models/schedule";
 import {
 	createScheduleMutation,
@@ -36,15 +40,15 @@ export async function getSchedule(id: number): Promise<ScheduleFragmentType> {
 }
 
 export async function getSchedules(
+	filter: ScheduleFilterDto,
 	page?: number,
 	pageSize?: number,
-	filterStatus?: boolean,
 ): Promise<PaginatedSchedule> {
 	try {
 		const queryResult = await runQuery(
 			getSchedulesListQuery,
 			{
-				filterStatus,
+				filter,
 				...calculateLimitOffset(page, pageSize),
 			},
 			queryTag,

@@ -13,7 +13,7 @@ export default function createRelationDataObject<
 >(
 	key: Key,
 	columns: Array<TableColumn<RelationType>>,
-	queryRelatedAction: PaginationQueryFunction<RelationType>,
+	queryRelatedAction: PaginationQueryFunction<RelationType, { status: true }>,
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>,
 ): RelationDataObject<Item, Key, RelationType, RelationData> {
 	return { key, columns, queryRelatedAction, component };

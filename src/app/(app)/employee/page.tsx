@@ -10,7 +10,7 @@ import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
-import { EmployeeCreateDto } from "@graphql/types/graphql";
+import { EmployeeCreateDto, EmployeeFilterDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
 import dateParse from "@utils/date/date-parse";
 import employeeSkillsRelationColumns from "@utils/employee/employee-skills-relation-columns";
@@ -27,7 +27,13 @@ import {
 dayjs.extend(localizedFormat);
 
 export default async function EmployeePage() {
-	const employees = await getEmployees();
+	const filters: TableFilterConfigsObject<EmployeeFilterDto> = {
+		status: statusFilterConfig,
+	};
+
+	const employees = await getEmployees({
+		status: true,
+	});
 
 	const table: DataTableProps<EmployeeFragmentType> = {
 		data: employees.data,
@@ -35,15 +41,12 @@ export default async function EmployeePage() {
 		columns: employeeTableColumns,
 	};
 
-	const filters: TableFilterConfigsObject<EmployeeFragmentType> = {
-		status: statusFilterConfig,
-	};
-
 	return (
 		<TablePageComponent<
 			EmployeeFragmentType,
 			EmployeeCreateDto,
-			Partial<FullEmployeeType>
+			Partial<FullEmployeeType>,
+			EmployeeFilterDto
 		>
 			table={table}
 			totalCount={employees.total}

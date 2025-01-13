@@ -2,26 +2,27 @@ import StringKeyof from "@interfaces/string-keyof.type";
 import { Col, Form, Row, Select, Typography } from "antd";
 import TableFilterProps from "./table-filter-props";
 
-export default function TableFilterComponent<T>({
+export default function TableFilterComponent<T, F>({
 	filters: filtersProps,
 	tableData,
 	onFilterChange,
-}: TableFilterProps<T>) {
+}: TableFilterProps<T, F>) {
 	const { Title } = Typography;
 	const filters: React.ReactNode[] = Object.keys(filtersProps).map(
 		(stringKey) => {
-			const key = stringKey as StringKeyof<T>;
+			const key = stringKey as StringKeyof<F>;
 			const props = filtersProps[key];
 			if (!props) return;
 			const onChange = (option: number) => {
 				// props.initialValue = option;
-				onFilterChange(
-					key,
-					option,
-					tableData.filter((value) =>
-						props.filterFunction(value[key], value, option),
-					),
-				);
+				// FIXME Missing filter
+				// onFilterChange(
+				// 	key,
+				// 	option,
+				// 	tableData.filter((value) =>
+				// 		props.filterFunction(value[key], value, option),
+				// 	),
+				// );
 			};
 			return (
 				<Col key={props.name} span={props.colSpan}>

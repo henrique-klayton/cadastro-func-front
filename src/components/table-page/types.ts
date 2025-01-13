@@ -34,18 +34,19 @@ export interface TablePageProps<
 	TableItem extends HaveId & HaveStatus,
 	CreateItem extends UpdateItem,
 	UpdateItem extends PartialNullable<HaveId & HaveStatus>,
+	FilterType,
 > {
 	children: React.ReactNode;
 	table: DataTableProps<TableItem>;
 	totalCount: number;
-	actions: ServerActions<TableItem, CreateItem, UpdateItem>;
+	actions: ServerActions<TableItem, CreateItem, UpdateItem, FilterType>;
 	title: string;
 	itemName: string;
 	queryDataParsers?: QueryDataParsers<UpdateItem>;
 	relationsData?: Array<
 		RelationDataObject<UpdateItem, StringKeyof<UpdateItem>>
 	>;
-	filters: TableFilterConfigsObject<TableItem>;
+	filters: TableFilterConfigsObject<FilterType>;
 }
 
 export type ServerActionRelations<T> = {
@@ -56,8 +57,9 @@ export interface ServerActions<
 	TableItem extends HaveId,
 	CreateItem,
 	UpdateItem,
+	FilterType,
 > {
-	tableQueryAction: PaginationQueryFunction<TableItem>;
+	tableQueryAction: PaginationQueryFunction<TableItem, FilterType>;
 	formQueryAction: (id: TableItem["id"]) => Promise<UpdateItem>;
 	createAction: (
 		data: CreateItem,
@@ -71,6 +73,7 @@ export interface ServerActions<
 	deleteAction: (id: TableItem["id"]) => Promise<Optional<TableItem>>;
 }
 
+// FIXME Using any type
 export interface RelationDataObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,
@@ -79,6 +82,6 @@ export interface RelationDataObject<
 > {
 	key: Key;
 	columns: Array<TableColumn<RelationType>>;
-	queryRelatedAction: PaginationQueryFunction<RelationType>;
+	queryRelatedAction: PaginationQueryFunction<RelationType, { status: true }>;
 	component: React.FunctionComponent<RelationTableComponentProps<Item>>;
 }

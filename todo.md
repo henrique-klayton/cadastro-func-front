@@ -32,6 +32,7 @@
 - [x] Add table pagination
 - [x] Add table filtering
   - [x] Status filter
+  - [ ] Send filter data correctly
   - [ ] Employee table filters
   - [ ] Schedule table filters
   - [ ] Skill table filters

@@ -41,6 +41,11 @@ export type EmployeeDto = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type EmployeeFilterDto = {
+  scheduleId?: Array<Scalars['Int']['input']>;
+  status?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type EmployeeFullDto = {
   __typename?: 'EmployeeFullDto';
   birthDate: Scalars['DateTime']['output'];
@@ -185,7 +190,7 @@ export type QueryEmployeeArgs = {
 
 
 export type QueryEmployeeListArgs = {
-  filterStatus?: Scalars['Boolean']['input'];
+  filter: EmployeeFilterDto;
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
 };
@@ -202,7 +207,7 @@ export type QueryScheduleArgs = {
 
 
 export type QueryScheduleListArgs = {
-  filterStatus?: Scalars['Boolean']['input'];
+  filter: ScheduleFilterDto;
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
 };
@@ -214,7 +219,7 @@ export type QuerySkillArgs = {
 
 
 export type QuerySkillListArgs = {
-  filterStatus?: Scalars['Boolean']['input'];
+  filter: SkillFilterDto;
   limit?: Scalars['Int']['input'];
   offset?: Scalars['Int']['input'];
 };
@@ -233,6 +238,11 @@ export type ScheduleDto = {
   startTime: Scalars['Time']['output'];
   status: Scalars['Boolean']['output'];
   type: ScheduleType;
+};
+
+export type ScheduleFilterDto = {
+  status?: InputMaybe<Scalars['Boolean']['input']>;
+  type?: Array<ScheduleType>;
 };
 
 export enum ScheduleType {
@@ -258,6 +268,10 @@ export type SkillDto = {
   description: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   status: Scalars['Boolean']['output'];
+};
+
+export type SkillFilterDto = {
+  status?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SkillUpdateDto = {
@@ -400,7 +414,7 @@ export type GetFullEmployeeQuery = { __typename: 'Query', employeeWithRelations:
 export type GetEmployeesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+  filter: EmployeeFilterDto;
 }>;
 
 
@@ -460,7 +474,7 @@ export type GetScheduleQuery = { __typename: 'Query', schedule: (
 export type GetSchedulesQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+  filter: ScheduleFilterDto;
 }>;
 
 
@@ -513,7 +527,7 @@ export type GetSkillQuery = { __typename: 'Query', skill: (
 export type GetSkillsQueryVariables = Exact<{
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  filterStatus?: InputMaybe<Scalars['Boolean']['input']>;
+  filter: SkillFilterDto;
 }>;
 
 
@@ -671,9 +685,9 @@ fragment Skill on SkillDto {
   status
 }`) as unknown as TypedDocumentString<GetFullEmployeeQuery, GetFullEmployeeQueryVariables>;
 export const GetEmployeesDocument = new TypedDocumentString(`
-    query GetEmployees($limit: Int, $offset: Int, $filterStatus: Boolean) {
+    query GetEmployees($limit: Int, $offset: Int, $filter: EmployeeFilterDto!) {
   __typename
-  employeeList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+  employeeList(limit: $limit, offset: $offset, filter: $filter) {
     __typename
     data {
       __typename
@@ -783,9 +797,9 @@ export const GetScheduleDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<GetScheduleQuery, GetScheduleQueryVariables>;
 export const GetSchedulesDocument = new TypedDocumentString(`
-    query GetSchedules($limit: Int, $offset: Int, $filterStatus: Boolean) {
+    query GetSchedules($limit: Int, $offset: Int, $filter: ScheduleFilterDto!) {
   __typename
-  scheduleList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+  scheduleList(limit: $limit, offset: $offset, filter: $filter) {
     __typename
     data {
       __typename
@@ -865,9 +879,9 @@ export const GetSkillDocument = new TypedDocumentString(`
   status
 }`) as unknown as TypedDocumentString<GetSkillQuery, GetSkillQueryVariables>;
 export const GetSkillsDocument = new TypedDocumentString(`
-    query GetSkills($limit: Int, $offset: Int, $filterStatus: Boolean) {
+    query GetSkills($limit: Int, $offset: Int, $filter: SkillFilterDto!) {
   __typename
-  skillList(limit: $limit, offset: $offset, filterStatus: $filterStatus) {
+  skillList(limit: $limit, offset: $offset, filter: $filter) {
     __typename
     data {
       __typename

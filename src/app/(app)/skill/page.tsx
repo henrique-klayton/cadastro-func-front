@@ -5,7 +5,11 @@ import DataTableProps from "@components/data-table/interfaces/data-table-props";
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
-import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
+import {
+	SkillCreateDto,
+	SkillFilterDto,
+	SkillUpdateDto,
+} from "@graphql/types/graphql";
 import { sKillTableColumns } from "@models/skill";
 import statusFilterConfig from "@utils/status-filter/status-filter-config";
 import {
@@ -17,7 +21,7 @@ import {
 } from "./actions";
 
 export default async function SchedulePage() {
-	const skills = await getSkills();
+	const skills = await getSkills({ status: true });
 
 	const table: DataTableProps<SkillFragmentType> = {
 		data: skills.data,
@@ -25,12 +29,17 @@ export default async function SchedulePage() {
 		columns: sKillTableColumns,
 	};
 
-	const filters: TableFilterConfigsObject<SkillFragmentType> = {
+	const filters: TableFilterConfigsObject<SkillFilterDto> = {
 		status: statusFilterConfig,
 	};
 
 	return (
-		<TablePageComponent<SkillFragmentType, SkillCreateDto, SkillUpdateDto>
+		<TablePageComponent<
+			SkillFragmentType,
+			SkillCreateDto,
+			SkillUpdateDto,
+			SkillFilterDto
+		>
 			table={table}
 			totalCount={skills.total}
 			title="Habilidades"
