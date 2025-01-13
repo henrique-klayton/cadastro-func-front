@@ -15,7 +15,7 @@ import {
 	getSchedulesListQuery,
 	updateScheduleMutation,
 } from "@queries/schedule";
-import { calculateLimitOffset } from "@utils/calculate-limit-offset";
+import calculateLimitOffset from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
 import { revalidateTag } from "next/cache";
 

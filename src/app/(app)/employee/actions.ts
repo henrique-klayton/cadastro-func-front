@@ -16,7 +16,7 @@ import {
 	getFullEmployeeQuery,
 	updateEmployeeMutation,
 } from "@queries/employee";
-import { calculateLimitOffset } from "@utils/calculate-limit-offset";
+import calculateLimitOffset from "@utils/calculate-limit-offset";
 import catchGraphQLError from "@utils/catch-graphql-error";
 import { revalidateTag } from "next/cache";
 
