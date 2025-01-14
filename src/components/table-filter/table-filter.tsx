@@ -2,41 +2,28 @@ import StringKeyof from "@interfaces/string-keyof.type";
 import { Col, Form, Row, Select, Typography } from "antd";
 import TableFilterProps from "./table-filter-props";
 
-export default function TableFilterComponent<T, F>({
-	filters: filtersProps,
-	tableData,
+export default function TableFilterComponent<F>({
+	filters,
 	onFilterChange,
-}: TableFilterProps<T, F>) {
+}: TableFilterProps<F>) {
 	const { Title } = Typography;
-	const filters: React.ReactNode[] = Object.keys(filtersProps).map(
-		(stringKey) => {
-			const key = stringKey as StringKeyof<F>;
-			const props = filtersProps[key];
-			if (!props) return;
-			const onChange = (option: number) => {
-				// props.initialValue = option;
-				// FIXME Missing filter
-				// onFilterChange(
-				// 	key,
-				// 	option,
-				// 	tableData.filter((value) =>
-				// 		props.filterFunction(value[key], value, option),
-				// 	),
-				// );
-			};
-			return (
-				<Col key={props.name} span={props.colSpan}>
-					<Form.Item label={props.label} name={props.name as string}>
-						<Select
-							defaultValue={props.initialValue}
-							options={props.options}
-							onChange={onChange}
-						/>
-					</Form.Item>
-				</Col>
-			);
-		},
-	);
+	const elements: React.ReactNode[] = Object.keys(filters).map((stringKey) => {
+		const key = stringKey as StringKeyof<F>;
+		const props = filters[key];
+		if (!props) return;
+
+		return (
+			<Col key={props.name} span={props.colSpan}>
+				<Form.Item label={props.label} name={props.name as string}>
+					<Select
+						defaultValue={props.initialValue}
+						options={props.options}
+						onChange={(option: number) => onFilterChange(key, option)}
+					/>
+				</Form.Item>
+			</Col>
+		);
+	});
 
 	return (
 		<Form layout="vertical">
@@ -46,7 +33,7 @@ export default function TableFilterComponent<T, F>({
 						Filtros:
 					</Title>
 				</Col>
-				{filters}
+				{elements}
 			</Row>
 		</Form>
 	);

@@ -28,14 +28,17 @@ import {
 	createRelationTablesDispatchContext,
 } from "@hooks/relation-tables-reducer/relation-tables-context";
 import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
-import ActionTypeEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
+import RelationActionEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
+import TableDataInitializerConfig from "@hooks/table-data-reducer/interfaces/table-data-intializer-config";
+import tableDataInitializer from "@hooks/table-data-reducer/table-data-initializer";
+import tableDataReducer from "@hooks/table-data-reducer/table-data-reducer";
+import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@interfaces/partial-nullable.type";
 import StringKeyof from "@interfaces/string-keyof.type";
-import buildPaginationConfig from "./build-pagination-config";
+import serializeFilterValues from "@utils/serialize-filter-values";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
-import TablePaginationConfig from "./interfaces/table-pagination-config";
 import {
 	FormModalStateProps,
 	ServerActionRelations,
@@ -65,7 +68,7 @@ export default function TablePageComponent<
 	},
 	queryDataParsers: parsers,
 	relationsData,
-	filters: filtersProps,
+	filters: filterConfig,
 }: TablePageProps<T, C, U, F>) {
 	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(FormActionsEnum.CREATE);
@@ -88,82 +91,57 @@ export default function TablePageComponent<
 	const RelationTablesDispatchContext =
 		createRelationTablesDispatchContext<U>();
 
-	// TableFilter State
-	type FilterValues = { [P in keyof T]?: number };
-	const [filterValues, setFilterValues] = useState<FilterValues>(() => {
-		const obj: FilterValues = {};
-		for (const key in filtersProps) {
-			obj[key] = filtersProps[key]?.initialValue;
-		}
-		return obj;
-	});
-
 	// Delete Confirm Modal
 	const { modal: confirmModal, message } = App.useApp();
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 
 	// DataTable Component States & Functions
-	const [tableLoading, setTableLoading] = useState(false);
-	const [tableData, setTableData] = useState(tableProps.data);
-	const [filteredTableData, setFilteredTableData] = useState(tableProps.data);
-
-	const loadTableData = (page: number, pageSize: number) => {
-		setTableLoading(true);
-		setFilteredTableData([]);
-		// FIXME Missing filter
-		tableQueryAction({ status: true } as F, page, pageSize)
-			.then((res) => {
-				updateTableData(res.data);
-				setPagination(
-					buildPaginationConfig({ ...pagination, page: page, pageSize }),
-				);
-				setTableLoading(false);
-			})
-			.catch(() => {
-				message.error("Erro ao atualizar a tabela!");
-				setTableLoading(false);
+	// TODO Separate load and reload functions
+	const loadTableData = async (page: number, pageSize: number) => {
+		try {
+			tableDispatcher({
+				type: TableDataActionEnum.CLEAR_PAGE,
 			});
-	};
-	// FIXME Update total when filter changes
-	const [pagination, setPagination] = useState<TablePaginationConfig>(
-		buildPaginationConfig({ total, onChange: loadTableData }),
-	);
-
-	// FIXME Update pagination total
-	const addItemToTable = (item: T) => {
-		if (item.status) {
-			setTableData([...tableData, item]);
-			if (filterWithAllFilters(item))
-				setFilteredTableData([...filteredTableData, item]);
+			const { data, total } = await tableQueryAction(
+				serializeFilterValues(table.filterValues, table.filterConfig),
+				page,
+				pageSize,
+			);
+			tableDispatcher({
+				type: TableDataActionEnum.CHANGE_PAGE,
+				page,
+				pageSize,
+				data,
+				total,
+			});
+		} catch (err: unknown) {
+			message.error("Erro ao atualizar a tabela!");
+		} finally {
+			tableDispatcher({
+				type: TableDataActionEnum.SHOW_PAGE,
+			});
 		}
 	};
 
-	// FIXME Update pagination total if data is filtered
-	// BUG Check if item should be removed by filter before updating table
-	const updateItemOnTable = (item: T) => {
-		const itemIndex = tableData.findIndex((old) => old.id === item.id);
-		const filteredItemIndex = filteredTableData.findIndex(
-			(old) => old.id === item.id,
-		);
-		const data = [...tableData];
-		const filteredData = [...filteredTableData];
-		Object.assign(data[itemIndex], item);
-		Object.assign(filteredData[filteredItemIndex], item);
-		setTableData(data);
-		setFilteredTableData(filteredData);
+	const reloadDataTable = () => {
+		// biome-ignore lint/style/noNonNullAssertion: Existing pagination always includes page and pageSize values
+		loadTableData(table.pagination.page!, table.pagination.pageSize!);
 	};
 
-	// FIXME Update pagination total
-	const removeItemFromTable = (id: T["id"]) => {
-		const itemIndex = tableData.findIndex((item) => item.id === id);
-		const filteredItemIndex = filteredTableData.findIndex(
-			(item) => item.id === id,
-		);
-		setTableData(tableData.toSpliced(itemIndex, 1));
-		setFilteredTableData(filteredTableData.toSpliced(filteredItemIndex, 1));
-	};
+	// TODO Set total, loading  and data inside tableDataInitializer (data will be loaded after init)
+	const [table, tableDispatcher] = useReducer(
+		tableDataReducer<T, F>,
+		{
+			tableData: tableProps.data,
+			total,
+			tableLoading: false,
+			paginationChangeHandler: loadTableData,
+			filterConfig,
+		} satisfies TableDataInitializerConfig<T, F>,
+		tableDataInitializer<T, F>,
+	);
 
-	const actions: DataTableActions<T> = {
+	const dataTableActions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			setFormId(id);
 			const item = formQueryAction(id).then((obj) => {
@@ -186,7 +164,7 @@ export default function TablePageComponent<
 					return handleDeleteConfirm(id, true)
 						.then(() => {
 							message.success(`${itemName} removido(a) com sucesso!`);
-							removeItemFromTable(id);
+							reloadDataTable();
 						})
 						.catch((err: Error) => {
 							message.error(err.message);
@@ -213,7 +191,7 @@ export default function TablePageComponent<
 					createAction(data, relations)
 						.then((item) => {
 							message.success(`${itemName} criado(a) com sucesso!`);
-							if (item) addItemToTable(item);
+							reloadDataTable();
 						})
 						.catch((err: Error) => {
 							closeFormModal();
@@ -225,7 +203,7 @@ export default function TablePageComponent<
 					updateAction(id, data, relations)
 						.then((item) => {
 							message.success(`${itemName} atualizado(a) com sucesso!`);
-							if (item) updateItemOnTable(item);
+							reloadDataTable();
 						})
 						.catch((err: Error) => {
 							closeFormModal();
@@ -267,7 +245,7 @@ export default function TablePageComponent<
 	const closeFormModal = () => {
 		setFormOpen(false);
 		setFormData(formReset);
-		relationsDispatch({ type: ActionTypeEnum.RESET_ALL });
+		relationsDispatch({ type: RelationActionEnum.RESET_ALL });
 	};
 
 	const handleFormModalCancel = () => {
@@ -296,7 +274,7 @@ export default function TablePageComponent<
 				elements.push(element);
 			}
 			relationsDispatch({
-				type: ActionTypeEnum.RENDER_ALL,
+				type: RelationActionEnum.RENDER_ALL,
 				elements,
 			});
 		}
@@ -317,7 +295,7 @@ export default function TablePageComponent<
 				) as RelationTypeIds<U>;
 			}
 			relationsDispatch({
-				type: ActionTypeEnum.INITIAL_LOAD,
+				type: RelationActionEnum.INITIAL_LOAD,
 				dataKey: key,
 				data,
 				total,
@@ -333,31 +311,15 @@ export default function TablePageComponent<
 		if (confirm) return deleteAction(id);
 	};
 
-	// Filter Inputs and Functions
-	const filterWithAllFilters = (value: T) => {
-		for (const key in filtersProps) {
-			const props = filtersProps[key];
-			if (!props) continue;
-			// biome-ignore lint/style/noNonNullAssertion: filterValues is built from filterProps keys
-			if (!props.filterFunction(value[key], value, filterValues[key]!)) {
-				return false;
-			}
-		}
-		return true;
-	};
-
-	const handleFilterChanges = (
-		key: StringKeyof<T>,
-		value: number,
-		filteredData: T[],
-	) => {
-		if (filteredData) setFilteredTableData(filteredData);
-		setFilterValues({ ...filterValues, [key]: value });
-	};
-
-	const updateTableData = (data: T[]) => {
-		setTableData(data);
-		setFilteredTableData(data.filter(filterWithAllFilters));
+	// Filter Functions
+	const handleFilterChanges = (key: StringKeyof<F>, value: number) => {
+		tableDispatcher({
+			type: TableDataActionEnum.FILTER_CHANGED,
+			key,
+			value,
+		});
+		table.filterValues[key] = value;
+		reloadDataTable();
 	};
 
 	// Form Modal Props
@@ -385,16 +347,15 @@ export default function TablePageComponent<
 				<Card title={title}>
 					<Flex className="w-full h-full" vertical>
 						<TableFilterComponent
-							tableData={tableData}
-							filters={filtersProps}
+							filters={table.filterConfig}
 							onFilterChange={handleFilterChanges}
 						/>
 						<DataTable<T>
 							{...tableProps}
-							data={filteredTableData}
-							loading={tableLoading}
-							actions={actions}
-							pagination={pagination}
+							data={table.tableData}
+							loading={table.tableLoading}
+							actions={dataTableActions}
+							pagination={table.pagination}
 							registerName={itemName}
 						/>
 						{/* TODO Create component */}

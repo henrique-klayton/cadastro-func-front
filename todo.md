@@ -32,7 +32,7 @@
 - [x] Add table pagination
 - [x] Add table filtering
   - [x] Status filter
-  - [ ] Send filter data correctly
+  - [x] Send filter data correctly
   - [ ] Employee table filters
   - [ ] Schedule table filters
   - [ ] Skill table filters
@@ -41,6 +41,7 @@
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
 - [x] Fix sidebar menu current route without active decoration
+- [ ] Load table data inside TablePageComponent
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?
