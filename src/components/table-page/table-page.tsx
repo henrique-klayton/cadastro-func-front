@@ -97,6 +97,7 @@ export default function TablePageComponent<
 
 	// DataTable Component States & Functions
 	// TODO Separate load and reload functions
+	// FIXME Fix table refreshing when data is changed
 	const loadTableData = async (page: number, pageSize: number) => {
 		try {
 			tableDispatcher({
@@ -116,7 +117,6 @@ export default function TablePageComponent<
 			});
 		} catch (err) {
 			message.error("Erro ao atualizar a tabela!");
-		} finally {
 			tableDispatcher({
 				type: TableDataActionEnum.SHOW_PAGE,
 			});
