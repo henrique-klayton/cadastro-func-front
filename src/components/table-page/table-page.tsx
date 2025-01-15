@@ -114,7 +114,7 @@ export default function TablePageComponent<
 				data,
 				total,
 			});
-		} catch (err: unknown) {
+		} catch (err) {
 			message.error("Erro ao atualizar a tabela!");
 		} finally {
 			tableDispatcher({
@@ -232,7 +232,7 @@ export default function TablePageComponent<
 			setFormLoading(false);
 
 			await loadRelationsListData(data);
-		} catch (err: unknown) {
+		} catch (err) {
 			const error =
 				err instanceof Error ? err : new Error(String(err), { cause: err });
 			console.error(error);
