@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": ["./src/graphql/types/**"]
+		"ignore": ["./src/graphql/types/**", ".vscode/**"]
 	},
 	"formatter": {
 		"enabled": true,
