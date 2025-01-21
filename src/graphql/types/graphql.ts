@@ -68,6 +68,17 @@ export type EmployeeUpdateDto = {
   status?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export enum ErrorCodes {
+  ACTIVE_RELATIONS = 'ACTIVE_RELATIONS',
+  CREATE_ERROR = 'CREATE_ERROR',
+  DELETE_ERROR = 'DELETE_ERROR',
+  ERROR = 'ERROR',
+  INACTIVE_REGISTER = 'INACTIVE_REGISTER',
+  NOT_FOUND = 'NOT_FOUND',
+  READ_ERROR = 'READ_ERROR',
+  UPDATE_ERROR = 'UPDATE_ERROR'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   createEmployee: EmployeeDto;
@@ -246,9 +257,9 @@ export type ScheduleFilterDto = {
 };
 
 export enum ScheduleType {
-  Schedule_5x2 = 'SCHEDULE_5x2',
-  Schedule_6x1 = 'SCHEDULE_6x1',
-  Schedule_12x36 = 'SCHEDULE_12x36'
+  SCHEDULE_5X2 = 'SCHEDULE_5x2',
+  SCHEDULE_6X1 = 'SCHEDULE_6x1',
+  SCHEDULE_12X36 = 'SCHEDULE_12x36'
 }
 
 export type ScheduleUpdateDto = {
@@ -332,21 +343,21 @@ export type __TypeInputFieldsArgs = {
 /** An enum describing what kind of type a given `__Type` is. */
 export enum __TypeKind {
   /** Indicates this type is a scalar. */
-  Scalar = 'SCALAR',
+  SCALAR = 'SCALAR',
   /** Indicates this type is an object. `fields` and `interfaces` are valid fields. */
-  Object = 'OBJECT',
+  OBJECT = 'OBJECT',
   /** Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields. */
-  Interface = 'INTERFACE',
+  INTERFACE = 'INTERFACE',
   /** Indicates this type is a union. `possibleTypes` is a valid field. */
-  Union = 'UNION',
+  UNION = 'UNION',
   /** Indicates this type is an enum. `enumValues` is a valid field. */
-  Enum = 'ENUM',
+  ENUM = 'ENUM',
   /** Indicates this type is an input object. `inputFields` is a valid field. */
-  InputObject = 'INPUT_OBJECT',
+  INPUT_OBJECT = 'INPUT_OBJECT',
   /** Indicates this type is a list. `ofType` is a valid field. */
-  List = 'LIST',
+  LIST = 'LIST',
   /** Indicates this type is a non-null. `ofType` is a valid field. */
-  NonNull = 'NON_NULL'
+  NON_NULL = 'NON_NULL'
 }
 
 /** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */

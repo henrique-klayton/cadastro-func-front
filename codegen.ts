@@ -12,6 +12,9 @@ const config: CodegenConfig = {
 			config: {
 				fragmentMasking: { unmaskFunctionName: "getFragmentData" },
 				documentMode: "string",
+				namingConvention: {
+					enumValues: "change-case-all#upperCase",
+				},
 			},
 			documentTransforms: [addTypenameSelectionDocumentTransform],
 		},
