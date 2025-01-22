@@ -1,10 +1,10 @@
 import TableColumn from "@components/data-table/types/table-column";
 import { FormDataSerializer } from "@components/table-page/types";
 import { ScheduleFragmentType } from "@fragments/schedule";
+import scheduleTypeFormat from "@functions/schedule/schedule-type-format";
+import timeSerialize from "@functions/time/time-serialize";
+import timeTableFormat from "@functions/time/time-table-format";
 import { ScheduleCreateDto, ScheduleUpdateDto } from "@graphql/types/graphql";
-import scheduleTypeFormat from "@utils/schedule/schedule-type-format";
-import timeSerialize from "@utils/time/time-serialize";
-import timeTableFormat from "@utils/time/time-table-format";
 
 export const scheduleTableColumns: Array<TableColumn<ScheduleFragmentType>> = [
 	{

@@ -5,13 +5,13 @@ import FromTablePageProps from "@components/data-table/interfaces/from-table-pag
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
+import statusFilterConfig from "@functions/status-filter/status-filter-config";
 import {
 	SkillCreateDto,
 	SkillFilterDto,
 	SkillUpdateDto,
 } from "@graphql/types/graphql";
 import { sKillTableColumns } from "@models/skill";
-import statusFilterConfig from "@utils/status-filter/status-filter-config";
 import {
 	createSkill,
 	deleteSkill,

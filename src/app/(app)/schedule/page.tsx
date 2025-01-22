@@ -6,14 +6,14 @@ import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-s
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
+import statusFilterConfig from "@functions/status-filter/status-filter-config";
+import timeParse from "@functions/time/time-parse";
 import {
 	ScheduleCreateDto,
 	ScheduleFilterDto,
 	ScheduleUpdateDto,
 } from "@graphql/types/graphql";
 import { scheduleTableColumns } from "@models/schedule";
-import statusFilterConfig from "@utils/status-filter/status-filter-config";
-import timeParse from "@utils/time/time-parse";
 import {
 	createSchedule,
 	deleteSchedule,

@@ -32,7 +32,7 @@
       "@interfaces/*": [ "./src/interfaces/*" ],
       "@consts/*": [ "./src/constants/*" ],
       "@enums/*": [ "./src/enums/*" ],
-      "@utils/*": [ "./src/utils/*" ],
+      "@functions/*": [ "./src/functions/*" ],
       // GraphQL
       "@fragments/*": [ "./src/graphql/fragments/*" ],
       "@queries/*": [ "./src/graphql/queries/*" ],

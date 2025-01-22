@@ -10,11 +10,11 @@ import TablePageComponent from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
+import dateParse from "@functions/date/date-parse";
+import employeeSkillsRelationColumns from "@functions/employee/employee-skills-relation-columns";
+import statusFilterConfig from "@functions/status-filter/status-filter-config";
 import { EmployeeCreateDto, EmployeeFilterDto } from "@graphql/types/graphql";
 import { employeeTableColumns } from "@models/employee";
-import dateParse from "@utils/date/date-parse";
-import employeeSkillsRelationColumns from "@utils/employee/employee-skills-relation-columns";
-import statusFilterConfig from "@utils/status-filter/status-filter-config";
 import { getSkills } from "../skill/actions";
 import {
 	createEmployee,

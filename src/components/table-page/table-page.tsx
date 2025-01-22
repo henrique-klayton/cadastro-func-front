@@ -23,6 +23,7 @@ import RelationSelectTable from "@components/relation-select-table";
 import TableFilterComponent from "@components/table-filter";
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
+import serializeFilterValues from "@functions/serialize-filter-values";
 import relationTablesReducer from "@hooks/relation-tables-reducer";
 import {
 	createRelationTablesContext,
@@ -38,7 +39,6 @@ import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@typings/partial-nullable";
 import StringKeyof from "@typings/string-keyof";
-import serializeFilterValues from "@utils/serialize-filter-values";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import {
 	FormModalStateProps,

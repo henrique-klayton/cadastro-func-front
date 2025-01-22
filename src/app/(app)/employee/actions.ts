@@ -5,6 +5,8 @@ import {
 	PaginatedEmployee,
 } from "@fragments/employee";
 import { FullEmployee, FullEmployeeType } from "@fragments/full-employee";
+import calculateLimitOffset from "@functions/calculate-limit-offset";
+import catchGraphQLError from "@functions/catch-graphql-error";
 import runMutation from "@graphql/run-mutation";
 import runQuery from "@graphql/run-query";
 import {
@@ -20,8 +22,6 @@ import {
 	getFullEmployeeQuery,
 	updateEmployeeMutation,
 } from "@queries/employee";
-import calculateLimitOffset from "@utils/calculate-limit-offset";
-import catchGraphQLError from "@utils/catch-graphql-error";
 import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Funcionário!";
