@@ -26,11 +26,13 @@
     "paths": {
       "@components/*": [ "./src/components/*" ],
       "@models/*": [ "./src/models/*" ],
+      "@hooks/*": [ "./src/hooks/*" ],
+      // Typing
       "@interfaces/*": [ "./src/interfaces/*" ],
       "@consts/*": [ "./src/constants/*" ],
       "@enums/*": [ "./src/enums/*" ],
-      "@hooks/*": [ "./src/hooks/*" ],
       "@utils/*": [ "./src/utils/*" ],
+      // GraphQL
       "@fragments/*": [ "./src/graphql/fragments/*" ],
       "@queries/*": [ "./src/graphql/queries/*" ],
       "@graphql/*": [ "./src/graphql/*" ]

@@ -41,7 +41,7 @@
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
 - [x] Fix sidebar menu current route without active decoration
-- [ ] Load table data inside TablePageComponent
+- [x] Load table data inside TablePageComponent
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?

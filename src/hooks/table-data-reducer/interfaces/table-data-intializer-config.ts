@@ -2,9 +2,6 @@ import TableFilterConfigsObject from "@components/table-filter/table-filter-conf
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 
 export default interface TableDataInitializerConfig<T, F> {
-	tableData: T[];
-	total: number;
-	tableLoading: boolean;
 	paginationChangeHandler: TablePaginationConfig["onChange"];
 	filterConfig: TableFilterConfigsObject<F>;
 }

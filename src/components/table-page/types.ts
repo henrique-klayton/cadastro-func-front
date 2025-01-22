@@ -38,7 +38,6 @@ export interface TablePageProps<
 > {
 	children: React.ReactNode;
 	table: FromTablePageProps<TableItem>;
-	totalCount: number;
 	actions: ServerActions<TableItem, CreateItem, UpdateItem, FilterType>;
 	title: string;
 	itemName: string;

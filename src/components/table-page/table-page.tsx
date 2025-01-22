@@ -12,7 +12,7 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
-import { useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
@@ -21,6 +21,7 @@ import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilterComponent from "@components/table-filter";
+import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
 import relationTablesReducer from "@hooks/relation-tables-reducer";
 import {
@@ -56,7 +57,6 @@ export default function TablePageComponent<
 >({
 	children,
 	table: tableProps,
-	totalCount: total,
 	title,
 	itemName,
 	actions: {
@@ -96,50 +96,55 @@ export default function TablePageComponent<
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 
 	// DataTable Component States & Functions
-	// TODO Separate load and reload functions
-	// FIXME Fix table refreshing when data is changed
-	const loadTableData = async (page: number, pageSize: number) => {
-		try {
+	const loadTableData = async (page?: number, pageSize?: number) => {
+		tableDispatcher({
+			type: TableDataActionEnum.SET_LOADING,
+			loading: true,
+		});
+		return tableQueryAction(
+			serializeFilterValues(table.filterValues, table.filterConfig),
+			page,
+			pageSize,
+		).catch((err: unknown) => {
+			message.error("Erro ao atualizar a tabela!");
 			tableDispatcher({
-				type: TableDataActionEnum.CLEAR_PAGE,
+				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
 			});
-			const { data, total } = await tableQueryAction(
-				serializeFilterValues(table.filterValues, table.filterConfig),
-				page,
-				pageSize,
-			);
+			throw err;
+		});
+	};
+
+	const reloadTableData = async (page?: number, pageSize?: number) => {
+		loadTableData(page, pageSize).then(({ data, total }) => {
 			tableDispatcher({
 				type: TableDataActionEnum.CHANGE_PAGE,
-				page,
-				pageSize,
+				page: page ?? table.pagination.page ?? 1,
+				pageSize: pageSize ?? table.pagination.pageSize ?? MIN_PAGE_SIZE,
 				data,
 				total,
 			});
-		} catch (err) {
-			message.error("Erro ao atualizar a tabela!");
-			tableDispatcher({
-				type: TableDataActionEnum.SHOW_PAGE,
-			});
-		}
+		});
 	};
 
-	const reloadDataTable = () => {
-		// biome-ignore lint/style/noNonNullAssertion: Existing pagination always includes page and pageSize values
-		loadTableData(table.pagination.page!, table.pagination.pageSize!);
-	};
-
-	// TODO Set total, loading  and data inside tableDataInitializer (data will be loaded after init)
 	const [table, tableDispatcher] = useReducer(
 		tableDataReducer<T, F>,
 		{
-			tableData: tableProps.data,
-			total,
-			tableLoading: false,
-			paginationChangeHandler: loadTableData,
+			paginationChangeHandler: reloadTableData,
 			filterConfig,
 		} satisfies TableDataInitializerConfig<T, F>,
 		tableDataInitializer<T, F>,
 	);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
+	useEffect(() => {
+		loadTableData().then(({ data, total }) => {
+			return tableDispatcher({
+				type: TableDataActionEnum.INIT,
+				data,
+				total,
+			});
+		});
+	}, []);
 
 	const dataTableActions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
@@ -164,7 +169,7 @@ export default function TablePageComponent<
 					return handleDeleteConfirm(id, true)
 						.then(() => {
 							message.success(`${itemName} removido(a) com sucesso!`);
-							reloadDataTable();
+							reloadTableData();
 						})
 						.catch((err: Error) => {
 							message.error(err.message);
@@ -191,7 +196,7 @@ export default function TablePageComponent<
 					createAction(data, relations)
 						.then((item) => {
 							message.success(`${itemName} criado(a) com sucesso!`);
-							reloadDataTable();
+							reloadTableData();
 						})
 						.catch((err: Error) => {
 							closeFormModal();
@@ -203,7 +208,7 @@ export default function TablePageComponent<
 					updateAction(id, data, relations)
 						.then((item) => {
 							message.success(`${itemName} atualizado(a) com sucesso!`);
-							reloadDataTable();
+							reloadTableData();
 						})
 						.catch((err: Error) => {
 							closeFormModal();
@@ -311,7 +316,7 @@ export default function TablePageComponent<
 		if (confirm) return deleteAction(id);
 	};
 
-	// Filter Functions
+	// TableFilter Functions
 	const handleFilterChanges = (key: StringKeyof<F>, value: number) => {
 		tableDispatcher({
 			type: TableDataActionEnum.FILTER_CHANGED,
@@ -319,7 +324,7 @@ export default function TablePageComponent<
 			value,
 		});
 		table.filterValues[key] = value;
-		reloadDataTable();
+		reloadTableData();
 	};
 
 	// Form Modal Props

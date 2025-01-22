@@ -23,10 +23,7 @@ import {
 } from "./actions";
 
 export default async function SchedulePage() {
-	const schedules = await getSchedules({ status: true });
-
 	const table: FromTablePageProps<ScheduleFragmentType> = {
-		data: schedules.data,
 		columns: scheduleTableColumns,
 		rowKey: "id",
 	};
@@ -48,7 +45,6 @@ export default async function SchedulePage() {
 			ScheduleFilterDto
 		>
 			table={table}
-			totalCount={schedules.total}
 			title="Escalas"
 			itemName="Escala"
 			actions={{

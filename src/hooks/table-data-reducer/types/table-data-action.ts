@@ -4,14 +4,27 @@ import StringKeyof from "@interfaces/string-keyof.type";
 import ActionTypeEnum from "./table-data-action-type";
 
 type TableDataAction<T extends HaveId & HaveStatus, F> =
-	| ClearPageAction
+	| InitAction<T>
+	| SetLoadingAction
+	| ShowCleanPageAction
 	| ShowPageAction
 	| ChangePageAction<T>
 	| FilterChangeAction<F, number>;
 export default TableDataAction;
 
-export interface ClearPageAction {
-	type: ActionTypeEnum.CLEAR_PAGE;
+export interface InitAction<T> {
+	type: ActionTypeEnum.INIT;
+	data: T[];
+	total: number;
+}
+
+export interface SetLoadingAction {
+	type: ActionTypeEnum.SET_LOADING;
+	loading: boolean;
+}
+
+export interface ShowCleanPageAction {
+	type: ActionTypeEnum.SHOW_CLEAN_PAGE;
 }
 
 export interface ShowPageAction {

@@ -5,6 +5,7 @@ import { Action, State } from "./types/aliases";
 import {
 	ChangePageAction,
 	FilterChangeAction,
+	InitAction,
 } from "./types/table-data-action";
 import ActionTypeEnum from "./types/table-data-action-type";
 
@@ -13,8 +14,14 @@ export default function tableDataReducer<T extends HaveId & HaveStatus, F>(
 	action: Action<T, F>,
 ): State<T, F> {
 	switch (action.type) {
-		case ActionTypeEnum.CLEAR_PAGE:
-			handleClearPage<T, F>(state);
+		case ActionTypeEnum.INIT:
+			handleInit<T, F>(state, action);
+			break;
+		case ActionTypeEnum.SET_LOADING:
+			setLoading<T, F>(state, action.loading);
+			break;
+		case ActionTypeEnum.SHOW_CLEAN_PAGE:
+			handleShowCleanPage<T, F>(state);
 			break;
 		case ActionTypeEnum.SHOW_PAGE:
 			handleShowPage<T, F>(state);
@@ -31,9 +38,22 @@ export default function tableDataReducer<T extends HaveId & HaveStatus, F>(
 	return { ...state };
 }
 
-function handleClearPage<T, F>(state: State<T, F>) {
+function handleInit<T, F>(state: State<T, F>, action: InitAction<T>) {
+	state.tableData = action.data;
+	state.pagination = buildPaginationConfig({
+		...state.pagination,
+		total: action.total,
+	});
+	state.tableLoading = false;
+}
+
+function setLoading<T, F>(state: State<T, F>, loading: boolean) {
+	state.tableLoading = loading;
+}
+
+function handleShowCleanPage<T, F>(state: State<T, F>) {
 	state.tableData = [];
-	state.tableLoading = true;
+	state.tableLoading = false;
 }
 
 function handleShowPage<T, F>(state: State<T, F>) {

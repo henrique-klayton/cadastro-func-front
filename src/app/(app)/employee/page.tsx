@@ -31,12 +31,7 @@ export default async function EmployeePage() {
 		status: statusFilterConfig,
 	};
 
-	const employees = await getEmployees({
-		status: true,
-	});
-
 	const table: FromTablePageProps<EmployeeFragmentType> = {
-		data: employees.data,
 		rowKey: "id",
 		columns: employeeTableColumns,
 	};
@@ -49,7 +44,6 @@ export default async function EmployeePage() {
 			EmployeeFilterDto
 		>
 			table={table}
-			totalCount={employees.total}
 			title="Funcionários"
 			itemName="Funcionário"
 			actions={{

@@ -21,10 +21,7 @@ import {
 } from "./actions";
 
 export default async function SchedulePage() {
-	const skills = await getSkills({ status: true });
-
 	const table: FromTablePageProps<SkillFragmentType> = {
-		data: skills.data,
 		rowKey: "id",
 		columns: sKillTableColumns,
 	};
@@ -41,7 +38,6 @@ export default async function SchedulePage() {
 			SkillFilterDto
 		>
 			table={table}
-			totalCount={skills.total}
 			title="Habilidades"
 			itemName="Habilidade"
 			actions={{
