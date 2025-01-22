@@ -2,7 +2,7 @@ import { Button, Flex, Table, Tag, Tooltip } from "antd";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
 import HaveId from "@interfaces/have-id";
-import DataTablePageProps from "./interfaces/data-table-page-props";
+import DataTableProps from "./interfaces/data-table-props";
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";
@@ -21,7 +21,7 @@ export default function DataTable<T extends HaveId>({
 	pagination,
 	registerName,
 	loading,
-}: DataTablePageProps<T>) {
+}: DataTableProps<T>) {
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
 		if (property === "status")
