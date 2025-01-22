@@ -27,6 +27,7 @@
       "@components/*": [ "./src/components/*" ],
       "@models/*": [ "./src/models/*" ],
       "@interfaces/*": [ "./src/interfaces/*" ],
+      "@consts/*": [ "./src/constants/*" ],
       "@enums/*": [ "./src/enums/*" ],
       "@hooks/*": [ "./src/hooks/*" ],
       "@utils/*": [ "./src/utils/*" ],
