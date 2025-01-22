@@ -1,4 +1,4 @@
-import TableFilterConfig from "@components/table-filter/table-filter-config";
+import TableFilterConfig from "@components/table-filter/interfaces/table-filter-config";
 import StringKeyof from "@typings/string-keyof";
 
 export default function buildFilterConfig<

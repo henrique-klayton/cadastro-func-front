@@ -1,4 +1,4 @@
-import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
+import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
 import FilterValues from "@hooks/table-data-reducer/types/filter-values";
 
 export default function serializeFilterValues<F>(

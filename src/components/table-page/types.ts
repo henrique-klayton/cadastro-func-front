@@ -6,7 +6,7 @@ import {
 	FormModalUpdateProps,
 	MergedFormModalProps,
 } from "@components/form-modal/types";
-import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
+import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
 import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/relation-table-component-props";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";

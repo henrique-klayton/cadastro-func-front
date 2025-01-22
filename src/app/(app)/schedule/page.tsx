@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 
 import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
-import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
+import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import statusFilterConfig from "@functions/status-filter/status-filter-config";

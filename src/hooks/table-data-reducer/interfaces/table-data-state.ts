@@ -1,4 +1,4 @@
-import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
+import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import FilterValues from "../types/filter-values";
 
