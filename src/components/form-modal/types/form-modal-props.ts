@@ -1,7 +1,7 @@
 import { FormInstance } from "antd/lib";
 
 import FormActionsEnum from "@enums/form-actions.enum";
-import Merge from "@interfaces/merge.type";
+import Merge from "@typings/merge";
 import { FormFieldList } from "./form-field";
 import { FormCreateData, FormUpdateData } from "./form-submit";
 

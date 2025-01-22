@@ -1,9 +1,9 @@
 import TableColumn from "@components/data-table/types/table-column";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
-import Flatten from "@interfaces/flatten.type";
 import PaginationQueryFunction from "@interfaces/pagination-query-function";
-import StringKeyof from "@interfaces/string-keyof.type";
+import Flatten from "@typings/flatten";
+import StringKeyof from "@typings/string-keyof";
 
 export default interface RelationTableConfig<
 	Item,

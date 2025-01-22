@@ -8,13 +8,12 @@ import {
 } from "@components/form-modal/types";
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/relation-table-component-props";
-import Flatten from "@interfaces/flatten.type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
-import Optional from "@interfaces/optional.type";
 import PaginationQueryFunction from "@interfaces/pagination-query-function";
-import PartialNullable from "@interfaces/partial-nullable.type";
-import StringKeyof from "@interfaces/string-keyof.type";
+import Flatten from "@typings/flatten";
+import PartialNullable from "@typings/partial-nullable";
+import StringKeyof from "@typings/string-keyof";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 
 // biome-ignore lint/suspicious/noExplicitAny: Impossible to know formatter return value beforehand
@@ -63,16 +62,15 @@ export interface ServerActions<
 	createAction: (
 		data: CreateItem,
 		relations?: ServerActionRelations<UpdateItem>,
-	) => Promise<Optional<TableItem>>;
+	) => Promise<TableItem>;
 	updateAction: (
 		id: TableItem["id"],
 		data: UpdateItem,
 		relations?: ServerActionRelations<UpdateItem>,
-	) => Promise<Optional<TableItem>>;
-	deleteAction: (id: TableItem["id"]) => Promise<Optional<TableItem>>;
+	) => Promise<TableItem>;
+	deleteAction: (id: TableItem["id"]) => Promise<TableItem>;
 }
 
-// FIXME Using any type
 export interface RelationDataObject<
 	Item,
 	Key extends StringKeyof<Item> = StringKeyof<Item>,

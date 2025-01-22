@@ -36,8 +36,8 @@ import tableDataReducer from "@hooks/table-data-reducer/table-data-reducer";
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
-import PartialNullable from "@interfaces/partial-nullable.type";
-import StringKeyof from "@interfaces/string-keyof.type";
+import PartialNullable from "@typings/partial-nullable";
+import StringKeyof from "@typings/string-keyof";
 import serializeFilterValues from "@utils/serialize-filter-values";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import {

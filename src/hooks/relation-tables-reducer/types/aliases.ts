@@ -1,5 +1,5 @@
-import Flatten from "@interfaces/flatten.type";
-import StringKeyof from "@interfaces/string-keyof.type";
+import Flatten from "@typings/flatten";
+import StringKeyof from "@typings/string-keyof";
 import RelationTableConfig from "../interfaces/relation-table-config";
 import RelationTablesState from "../interfaces/relation-tables-state";
 import RelationTablesAction from "./relation-tables-action";

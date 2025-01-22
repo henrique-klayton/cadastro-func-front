@@ -1,7 +1,7 @@
 "use client";
 import { createContext, useContext } from "react";
 
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import RelationTablesState from "./interfaces/relation-tables-state";
 import RelationTablesAction from "./types/relation-tables-action";
 

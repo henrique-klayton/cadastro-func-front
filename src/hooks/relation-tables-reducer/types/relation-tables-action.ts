@@ -1,7 +1,7 @@
 "use client";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import { Relation } from "./aliases";
 import ActionTypeEnum from "./relation-tables-action-type";
 

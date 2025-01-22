@@ -9,7 +9,7 @@ import {
 	useRelationTablesDispatch,
 } from "@hooks/relation-tables-reducer/relation-tables-context";
 import ActionTypeEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
-import Flatten from "@interfaces/flatten.type";
+import Flatten from "@typings/flatten";
 import { RelationSelectTableProps } from "./types";
 
 export default function RelationSelectTable<T>({

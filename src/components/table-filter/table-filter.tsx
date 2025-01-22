@@ -1,4 +1,4 @@
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import { Col, Form, Row, Select, Typography } from "antd";
 import TableFilterProps from "./table-filter-props";
 

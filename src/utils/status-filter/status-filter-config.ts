@@ -1,7 +1,7 @@
 import buildFilterConfig from "@components/table-filter/build-filter-config";
 import StatusEnum from "@enums/status.enum";
 import HaveStatus from "@interfaces/have-status";
-import PartialNullable from "@interfaces/partial-nullable.type";
+import PartialNullable from "@typings/partial-nullable";
 import statusFilterSerializer from "./status-filter-serializer";
 
 const statusFilterConfig = buildFilterConfig<

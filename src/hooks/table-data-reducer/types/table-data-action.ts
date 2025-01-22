@@ -1,6 +1,6 @@
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import ActionTypeEnum from "./table-data-action-type";
 
 type TableDataAction<T extends HaveId & HaveStatus, F> =

@@ -1,4 +1,4 @@
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import TableFilterConfigsObject from "./table-filter-configs-object";
 
 export default interface TableFilterProps<F> {

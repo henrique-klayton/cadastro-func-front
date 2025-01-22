@@ -28,6 +28,7 @@
       "@models/*": [ "./src/models/*" ],
       "@hooks/*": [ "./src/hooks/*" ],
       // Typing
+      "@typings/*": [ "./src/types/*" ],
       "@interfaces/*": [ "./src/interfaces/*" ],
       "@consts/*": [ "./src/constants/*" ],
       "@enums/*": [ "./src/enums/*" ],

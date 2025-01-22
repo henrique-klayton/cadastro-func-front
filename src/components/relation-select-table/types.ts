@@ -1,4 +1,4 @@
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 
 export interface RelationSelectTableProps<T> {
 	dataKey: StringKeyof<T>;

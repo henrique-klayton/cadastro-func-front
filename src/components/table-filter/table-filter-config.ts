@@ -1,4 +1,4 @@
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import TableFilterOption from "./table-filter-option";
 
 export default interface TableFilterConfig<

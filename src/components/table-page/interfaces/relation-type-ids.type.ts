@@ -1,5 +1,5 @@
 import HaveId from "@interfaces/have-id";
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 import RelationType from "./relation-type.type";
 
 type RelationTypeIds<

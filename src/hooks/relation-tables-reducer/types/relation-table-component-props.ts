@@ -1,4 +1,4 @@
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 
 type RelationTableComponentProps<Item> = {
 	dataKey: StringKeyof<Item>;

@@ -1,6 +1,6 @@
 import { ColumnProps } from "antd/lib/table";
 
-import StringKeyof from "@interfaces/string-keyof.type";
+import StringKeyof from "@typings/string-keyof";
 
 type TableColumn<T> = ColumnProps<T> & RequiredColumnProps<T>;
 export default TableColumn;
