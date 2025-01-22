@@ -1,7 +1,7 @@
 import { Switch, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import DataTableProps from "@components/data-table/interfaces/data-table-props";
+import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
@@ -25,7 +25,7 @@ import {
 export default async function SchedulePage() {
 	const schedules = await getSchedules({ status: true });
 
-	const table: DataTableProps<ScheduleFragmentType> = {
+	const table: FromTablePageProps<ScheduleFragmentType> = {
 		data: schedules.data,
 		columns: scheduleTableColumns,
 		rowKey: "id",

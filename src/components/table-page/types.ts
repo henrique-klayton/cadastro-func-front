@@ -1,4 +1,4 @@
-import DataTableProps from "@components/data-table/interfaces/data-table-props";
+import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import TableColumn from "@components/data-table/types/table-column";
 import {
 	FormData,
@@ -37,7 +37,7 @@ export interface TablePageProps<
 	FilterType,
 > {
 	children: React.ReactNode;
-	table: DataTableProps<TableItem>;
+	table: FromTablePageProps<TableItem>;
 	totalCount: number;
 	actions: ServerActions<TableItem, CreateItem, UpdateItem, FilterType>;
 	title: string;

@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 
-import DataTableProps from "@components/data-table/interfaces/data-table-props";
+import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
@@ -35,7 +35,7 @@ export default async function EmployeePage() {
 		status: true,
 	});
 
-	const table: DataTableProps<EmployeeFragmentType> = {
+	const table: FromTablePageProps<EmployeeFragmentType> = {
 		data: employees.data,
 		rowKey: "id",
 		columns: employeeTableColumns,

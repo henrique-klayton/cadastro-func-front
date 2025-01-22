@@ -1,7 +1,7 @@
 import { Input, Switch } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
-import DataTableProps from "@components/data-table/interfaces/data-table-props";
+import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import TableFilterConfigsObject from "@components/table-filter/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
@@ -23,7 +23,7 @@ import {
 export default async function SchedulePage() {
 	const skills = await getSkills({ status: true });
 
-	const table: DataTableProps<SkillFragmentType> = {
+	const table: FromTablePageProps<SkillFragmentType> = {
 		data: skills.data,
 		rowKey: "id",
 		columns: sKillTableColumns,
