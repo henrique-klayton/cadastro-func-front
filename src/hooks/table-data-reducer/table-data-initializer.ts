@@ -1,6 +1,6 @@
 "use client";
 import buildPaginationConfig from "@components/table-page/build-pagination-config";
-import TableDataInitializerConfig from "./interfaces/table-data-intializer-config";
+import TableDataInitializerConfig from "./interfaces/table-data-initializer-config";
 import TableDataState from "./interfaces/table-data-state";
 import FilterValues from "./types/filter-values";
 export default function tableDataInitializer<T, F>({

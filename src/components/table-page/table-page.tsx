@@ -31,7 +31,7 @@ import {
 } from "@hooks/relation-tables-reducer/relation-tables-context";
 import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
 import RelationActionEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
-import TableDataInitializerConfig from "@hooks/table-data-reducer/interfaces/table-data-intializer-config";
+import TableDataInitializerConfig from "@hooks/table-data-reducer/interfaces/table-data-initializer-config";
 import tableDataInitializer from "@hooks/table-data-reducer/table-data-initializer";
 import tableDataReducer from "@hooks/table-data-reducer/table-data-reducer";
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
