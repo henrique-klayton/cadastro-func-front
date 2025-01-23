@@ -2,6 +2,7 @@ import { Switch, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
 
 import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
+import { FormItemConfigArray } from "@components/form-modal/types/form-item-config";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
 import TablePageComponent from "@components/table-page";
@@ -32,10 +33,66 @@ export default async function SchedulePage() {
 		status: statusFilterConfig,
 	};
 
-	// const config: FormItemConfig<ScheduleCreateDto, ScheduleUpdateDto> = {
-	// 	input: <TimePicker format="HH:mm" />,
-	// 	inputProps: {}
-	// }
+	// const config = buildFormItemConfig<ScheduleCreateDto, ScheduleUpdateDto, "text">(
+	// 	"startTime",
+	// 	{
+	// 		label: "Horário Início",
+	// 		name: "startTime",
+	// 		required: true,
+	// 		hasFeedback: true,
+	// 		rules: [{ required: true }],
+	// 	},
+	// 	"text",
+	// 	{
+	// 		format: "HH:mm",
+	// 	},
+	// );
+
+	// const config = buildFormItemConfig<ScheduleCreateDto, ScheduleUpdateDto>({
+	// 	key: "endTime",
+	// 	formInput: {
+	// 		label: "Horário Início",
+	// 		name: "startTime",
+	// 		required: true,
+	// 		hasFeedback: true,
+	// 		rules: [{ required: true }],
+	// 	},
+	// 	inputType: "text",
+	// 	inputProps: {
+	// 		format: "HH:mm",
+	// 	},
+	// });
+
+	const config: FormItemConfigArray<ScheduleCreateDto, ScheduleUpdateDto> = [
+		{
+			key: "startTime",
+			formItem: {
+				label: "Horário Início",
+				name: "startTime",
+				required: true,
+				hasFeedback: true,
+				rules: [{ required: true }],
+			},
+			inputType: "time",
+			inputProps: {
+				format: "HH:mm",
+			},
+		},
+		{
+			key: "startTime",
+			formItem: {
+				label: "Horário Início",
+				name: "startTime",
+				required: true,
+				hasFeedback: true,
+				rules: [{ required: true }],
+			},
+			inputType: "time",
+			inputProps: {
+				format: "HH:mm",
+			},
+		},
+	];
 
 	return (
 		<TablePageComponent<
