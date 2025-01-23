@@ -33,36 +33,6 @@ export default async function SchedulePage() {
 		status: statusFilterConfig,
 	};
 
-	// const config = buildFormItemConfig<ScheduleCreateDto, ScheduleUpdateDto, "text">(
-	// 	"startTime",
-	// 	{
-	// 		label: "Horário Início",
-	// 		name: "startTime",
-	// 		required: true,
-	// 		hasFeedback: true,
-	// 		rules: [{ required: true }],
-	// 	},
-	// 	"text",
-	// 	{
-	// 		format: "HH:mm",
-	// 	},
-	// );
-
-	// const config = buildFormItemConfig<ScheduleCreateDto, ScheduleUpdateDto>({
-	// 	key: "endTime",
-	// 	formInput: {
-	// 		label: "Horário Início",
-	// 		name: "startTime",
-	// 		required: true,
-	// 		hasFeedback: true,
-	// 		rules: [{ required: true }],
-	// 	},
-	// 	inputType: "text",
-	// 	inputProps: {
-	// 		format: "HH:mm",
-	// 	},
-	// });
-
 	const config: FormItemConfigArray<ScheduleCreateDto, ScheduleUpdateDto> = [
 		{
 			key: "startTime",
