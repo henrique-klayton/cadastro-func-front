@@ -1,4 +1,3 @@
-"use client";
 import buildPaginationConfig from "@components/table-page/build-pagination-config";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
 import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";

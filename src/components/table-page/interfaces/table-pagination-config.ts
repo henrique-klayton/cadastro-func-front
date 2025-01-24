@@ -1,4 +1,3 @@
-"use client";
 import { TablePaginationConfig as AntdTablePaginationConfig } from "antd/lib";
 
 export default interface TablePaginationConfig {

@@ -1,4 +1,3 @@
-"use client";
 import { createContext, useContext } from "react";
 
 import StringKeyof from "@typings/string-keyof";

@@ -1,5 +1,3 @@
-"use client";
-
 // biome-ignore lint/style/useEnumInitializers: The enum members value doesn't matter
 enum ActionTypeEnum {
 	RENDER_ALL,

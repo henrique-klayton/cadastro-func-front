@@ -1,4 +1,3 @@
-"use client";
 import buildPaginationConfig from "@components/table-page/build-pagination-config";
 import TableDataInitializerConfig from "./interfaces/table-data-initializer-config";
 import TableDataState from "./interfaces/table-data-state";
