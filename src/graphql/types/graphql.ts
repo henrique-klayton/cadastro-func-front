@@ -24,7 +24,7 @@ export type EmployeeCreateDto = {
   birthDate: Scalars['DateTime']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
-  scheduleId?: InputMaybe<Scalars['Int']['input']>;
+  scheduleId: Scalars['Int']['input'];
   status?: Scalars['Boolean']['input'];
 };
 
@@ -69,11 +69,12 @@ export type EmployeeUpdateDto = {
 };
 
 export enum ErrorCodes {
-  ACTIVE_RELATIONS = 'ACTIVE_RELATIONS',
   CREATE_ERROR = 'CREATE_ERROR',
   DELETE_ERROR = 'DELETE_ERROR',
   ERROR = 'ERROR',
-  INACTIVE_REGISTER = 'INACTIVE_REGISTER',
+  HAS_ACTIVE_RELATIONS = 'HAS_ACTIVE_RELATIONS',
+  INACTIVE_REGISTER_RELATIONS = 'INACTIVE_REGISTER_RELATIONS',
+  MISSING_SCHEDULE = 'MISSING_SCHEDULE',
   NOT_FOUND = 'NOT_FOUND',
   READ_ERROR = 'READ_ERROR',
   UPDATE_ERROR = 'UPDATE_ERROR'
