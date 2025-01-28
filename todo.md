@@ -43,14 +43,18 @@
 - [ ] Disable relations selection when entity is marked as inactive
 - [ ] Remove relations data when entity is marked as inactive (maybe on serializer)
 - [ ] Add employees relation table to schedule form modal
-- [ ] Set fixed row height at <= 65px for tables
-- [ ] Dynamic white/dark theme (default to system theme)
-- [ ] Add button to switch theme
 - [ ] Refactor TablePageComponent
   - [ ] Remove relation tables context and pass state as props
   - [ ] Create form modal reducer
   - [x] Create components for floating buttons
-- [ ] Form modal height limit and disable scroll
+- [ ] Styling
+  - [ ] Fix floating buttons above table pagination
+  - [ ] Form modal height limit and disable scroll
+  - [ ] Make table page card use whole screen height (maintain scroll)
+  - [ ] Increase main content margin and fix right margin size
+  - [ ] Set fixed row height at <= 65px for tables
+  - [ ] Dynamic white/dark theme (default to system theme)
+  - [ ] Add button to switch theme
 - [ ] Authentication/Authorization
   - [ ] Catch error code, maybe using a middleware
 
