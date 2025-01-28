@@ -13,7 +13,6 @@ import {
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
 import { useEffect, useReducer, useState } from "react";
-import { AiFillFileExcel, AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -39,6 +38,8 @@ import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@typings/partial-nullable";
 import StringKeyof from "@typings/string-keyof";
+import CreateButton from "./components/create-button";
+import ReportButton from "./components/report-button";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
 import {
 	FormModalStateProps,
@@ -46,8 +47,6 @@ import {
 	TablePageFormModalProps,
 	TablePageProps,
 } from "./types";
-
-import "./table-page.css";
 
 export default function TablePageComponent<
 	T extends HaveId & HaveStatus,
@@ -374,24 +373,9 @@ export default function TablePageComponent<
 							pagination={table.pagination}
 							registerName={itemName}
 						/>
-						{/* TODO Create component */}
 						<FloatButton.Group>
-							<FloatButton
-								className="floating-button"
-								type="primary"
-								tooltip={`Gerar Relatório de ${itemName}`}
-								icon={<AiFillFileExcel />}
-								onClick={generateReport}
-							/>
-							<FloatButton
-								className="floating-button"
-								type="primary"
-								tooltip={`Criar ${itemName}`}
-								icon={<AiOutlinePlus />}
-								onClick={() => {
-									openFormModal(FormActionsEnum.CREATE);
-								}}
-							/>
+							<ReportButton itemName={itemName} onClick={generateReport} />
+							<CreateButton itemName={itemName} onClick={openFormModal} />
 						</FloatButton.Group>
 					</Flex>
 				</Card>

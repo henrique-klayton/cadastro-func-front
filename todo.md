@@ -48,8 +48,9 @@
 - [ ] Add button to switch theme
 - [ ] Refactor TablePageComponent
   - [ ] Remove relation tables context and pass state as props
-  - [ ] Create form (modal) reducer
-  - [ ] Create components for floating buttons
+  - [ ] Create form modal reducer
+  - [x] Create components for floating buttons
+- [ ] Form modal height limit and disable scroll
 - [ ] Authentication/Authorization
   - [ ] Catch error code, maybe using a middleware
 
