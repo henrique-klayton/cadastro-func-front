@@ -33,15 +33,25 @@
 - [x] Add table filtering
   - [x] Status filter
   - [x] Send filter data correctly
+  - [ ] Text filtering with debounce on inputs
   - [ ] Employee table filters
   - [ ] Schedule table filters
   - [ ] Skill table filters
-- [ ] Fixed rows height at <= 65px
 - [x] Gerar relatórios em CSV
-- [ ] Dynamic white/dark theme
-- [ ] Authentication
 - [x] Fix sidebar menu current route without active decoration
 - [x] Load table data inside TablePageComponent
+- [ ] Disable relations selection when entity is marked as inactive
+- [ ] Remove relations data when entity is marked as inactive (maybe on serializer)
+- [ ] Add employees relation table to schedule form modal
+- [ ] Set fixed row height at <= 65px for tables
+- [ ] Dynamic white/dark theme (default to system theme)
+- [ ] Add button to switch theme
+- [ ] Refactor TablePageComponent
+  - [ ] Remove relation tables context and pass state as props
+  - [ ] Create form (modal) reducer
+  - [ ] Create components for floating buttons
+- [ ] Authentication/Authorization
+  - [ ] Catch error code, maybe using a middleware
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?
