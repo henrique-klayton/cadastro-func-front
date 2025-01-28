@@ -1,15 +1,6 @@
 "use client";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import {
-	App,
-	Card,
-	Col,
-	Flex,
-	FloatButton,
-	Form,
-	ModalFuncProps,
-	Row,
-} from "antd";
+import { App, Card, Col, Flex, FloatButton, Form, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
 import { useEffect, useReducer, useState } from "react";
@@ -78,6 +69,16 @@ export default function TablePageComponent<
 	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
 	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
 
+	// Messages const
+	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
+	const tableLoadError = "Erro ao carregar a tabela!";
+	const tableReloadError = "Erro ao atualizar a tabela!";
+	const formLoadError = "Erro ao carregar formulário!";
+
+	const createSuccess = `${itemName} criado(a) com sucesso!`;
+	const updateSuccess = `${itemName} atualizado(a) com sucesso!`;
+	const removeSuccess = `${itemName} removido(a) com sucesso!`;
+
 	// Relation Tables Reducer & Context
 	const [relationTablesState, relationsDispatch] = useReducer(
 		relationTablesReducer<U>,
@@ -91,9 +92,8 @@ export default function TablePageComponent<
 	const RelationTablesDispatchContext =
 		createRelationTablesDispatchContext<U>();
 
-	// Delete Confirm Modal
+	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
-	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 
 	// DataTable Component States & Functions
 	const loadTableData = async (page?: number, pageSize?: number) => {
@@ -105,17 +105,12 @@ export default function TablePageComponent<
 			serializeFilterValues(table.filterValues, table.filterConfig),
 			page,
 			pageSize,
-		).catch((err: unknown) => {
-			message.error("Erro ao atualizar a tabela!");
-			tableDispatcher({
-				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
-			});
-			throw err;
-		});
+		);
 	};
 
 	const reloadTableData = async (page?: number, pageSize?: number) => {
-		loadTableData(page, pageSize).then(({ data, total }) => {
+		try {
+			const { data, total } = await loadTableData(page, pageSize);
 			tableDispatcher({
 				type: TableDataActionEnum.CHANGE_PAGE,
 				page: page ?? table.pagination.page ?? 1,
@@ -123,7 +118,12 @@ export default function TablePageComponent<
 				data,
 				total,
 			});
-		});
+		} catch (err) {
+			message.error(tableReloadError);
+			tableDispatcher({
+				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
+			});
+		}
 	};
 
 	const [table, tableDispatcher] = useReducer(
@@ -137,52 +137,55 @@ export default function TablePageComponent<
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
 	useEffect(() => {
-		loadTableData().then(({ data, total }) => {
-			return tableDispatcher({
-				type: TableDataActionEnum.INIT,
-				data,
-				total,
+		loadTableData()
+			.then(({ data, total }) => {
+				return tableDispatcher({
+					type: TableDataActionEnum.INIT,
+					data,
+					total,
+				});
+			})
+			.catch((err: unknown) => {
+				message.error(tableLoadError);
+				tableDispatcher({
+					type: TableDataActionEnum.SHOW_CLEAN_PAGE,
+				});
 			});
-		});
 	}, []);
 
 	const dataTableActions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
 			setFormId(id);
-			const item = formQueryAction(id).then((obj) => {
-				if (parsers) {
-					for (const key in parsers) {
-						obj[key] = parsers[key](obj[key]);
-					}
+			const item = await formQueryAction(id);
+			if (parsers) {
+				for (const key in parsers) {
+					item[key] = parsers[key](item[key]);
 				}
-				return obj;
-			});
-			openFormModal(FormActionsEnum.UPDATE, item as Promise<U>);
+			}
+			openFormModal(FormActionsEnum.UPDATE, Promise.resolve(item));
 		},
 		onDeleteClick: async (id: T["id"]) => {
-			const confirmModalProps: ModalFuncProps = {
+			await confirmModal.confirm({
 				icon: <ExclamationCircleFilled />,
 				okText: "Remover",
 				okType: "danger",
 				title: confirmQuestion,
-				onOk: () => {
-					return handleDeleteConfirm(id, true)
-						.then(() => {
-							message.success(`${itemName} removido(a) com sucesso!`);
-							reloadTableData();
-						})
-						.catch((err: Error) => {
-							message.error(err.message);
-						});
+				onOk: async () => {
+					try {
+						await handleDeleteConfirm(id);
+						message.success(removeSuccess);
+						reloadTableData();
+					} catch (err) {
+						if (err instanceof Error) message.error(err.message);
+					}
 				},
-			};
-			await confirmModal.confirm(confirmModalProps);
+			});
 		},
 	};
 
 	// Form Modal Functions
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
-		form.validateFields().then(() => {
+		form.validateFields().then(async () => {
 			const relations: ServerActionRelations<U> = {};
 			if (relationsData) {
 				for (const relation of relationsData) {
@@ -191,31 +194,22 @@ export default function TablePageComponent<
 				}
 			}
 
-			switch (action) {
-				case FormActionsEnum.CREATE:
-					createAction(data, relations)
-						.then((item) => {
-							message.success(`${itemName} criado(a) com sucesso!`);
-							reloadTableData();
-						})
-						.catch((err: Error) => {
-							closeFormModal();
-							message.error(err.message);
-						});
-					break;
+			try {
+				switch (action) {
+					case FormActionsEnum.CREATE:
+						await createAction(data, relations);
+						message.success(createSuccess);
+						break;
 
-				case FormActionsEnum.UPDATE:
-					updateAction(id, data, relations)
-						.then((item) => {
-							message.success(`${itemName} atualizado(a) com sucesso!`);
-							reloadTableData();
-						})
-						.catch((err: Error) => {
-							closeFormModal();
-							message.error(err.message);
-						});
-					break;
+					case FormActionsEnum.UPDATE:
+						await updateAction(id, data, relations);
+						message.success(updateSuccess);
+						break;
+				}
+			} catch (err: unknown) {
+				if (err instanceof Error) message.error(err.message);
 			}
+			reloadTableData();
 			closeFormModal();
 		});
 	};
@@ -241,8 +235,7 @@ export default function TablePageComponent<
 			const error =
 				err instanceof Error ? err : new Error(String(err), { cause: err });
 			console.error(error);
-			console.error(error.message);
-			message.error("Erro ao carregar formulário!");
+			message.error(formLoadError);
 			closeFormModal();
 		}
 	};
@@ -311,9 +304,9 @@ export default function TablePageComponent<
 	};
 
 	// Delete Confirm Modal Functions
-	const handleDeleteConfirm = async (id: T["id"], confirm: boolean) => {
+	const handleDeleteConfirm = async (id: T["id"]) => {
 		setAction(FormActionsEnum.DELETE);
-		if (confirm) return deleteAction(id);
+		return deleteAction(id);
 	};
 
 	// TableFilter Functions

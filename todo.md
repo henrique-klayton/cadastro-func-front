@@ -40,6 +40,7 @@
 - [x] Gerar relatórios em CSV
 - [x] Fix sidebar menu current route without active decoration
 - [x] Load table data inside TablePageComponent
+- [ ] Fix no input validation when form modal is opened for the first time to update an item
 - [ ] Disable relations selection when entity is marked as inactive
 - [ ] Remove relations data when entity is marked as inactive (maybe on serializer)
 - [ ] Add employees relation table to schedule form modal
@@ -47,6 +48,8 @@
   - [ ] Remove relation tables context and pass state as props
   - [ ] Create form modal reducer
   - [x] Create components for floating buttons
+  - [x] Convert then/catch to async/await and try/catch
+  - [ ] Maybe use slots to separate components/elements
 - [ ] Styling
   - [ ] Fix floating buttons above table pagination
   - [ ] Form modal height limit and disable scroll
