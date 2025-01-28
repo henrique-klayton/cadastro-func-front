@@ -10,6 +10,7 @@ import {
 	SkillUpdateDto,
 } from "@graphql/types/graphql";
 import { createSerializer, updateSerializer } from "@models/skill";
+import { skillsReport } from "@queries/report";
 import {
 	createSkillMutation,
 	deleteSkillMutation,
@@ -56,6 +57,12 @@ export async function getSkills(
 	} catch (err) {
 		catchGraphQLError(err, queryManyErrorMsg);
 	}
+}
+
+export async function generateSkillReport() {
+	const queryResult = await runQuery(skillsReport, undefined, queryTag);
+	const report = queryResult.generateSkillReport;
+	return report;
 }
 
 export async function createSkill(

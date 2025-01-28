@@ -15,6 +15,7 @@ import { sKillTableColumns } from "@models/skill";
 import {
 	createSkill,
 	deleteSkill,
+	generateSkillReport,
 	getSkill,
 	getSkills,
 	updateSkill,
@@ -46,6 +47,7 @@ export default async function SchedulePage() {
 				createAction: createSkill,
 				updateAction: updateSkill,
 				deleteAction: deleteSkill,
+				reportAction: generateSkillReport,
 			}}
 			queryDataParsers={{}}
 			filters={filters}

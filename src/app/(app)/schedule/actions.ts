@@ -14,6 +14,7 @@ import {
 	ScheduleUpdateDto,
 } from "@graphql/types/graphql";
 import { createSerializer, updateSerializer } from "@models/schedule";
+import { schedulesReport } from "@queries/report";
 import {
 	createScheduleMutation,
 	deleteScheduleMutation,
@@ -59,6 +60,12 @@ export async function getSchedules(
 	} catch (err) {
 		catchGraphQLError(err, queryManyErrorMsg);
 	}
+}
+
+export async function generateScheduleReport() {
+	const queryResult = await runQuery(schedulesReport, undefined, queryTag);
+	const report = queryResult.generateScheduleReport;
+	return report;
 }
 
 export async function createSchedule(

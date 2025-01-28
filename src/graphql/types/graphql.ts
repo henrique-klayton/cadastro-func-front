@@ -24,7 +24,7 @@ export type EmployeeCreateDto = {
   birthDate: Scalars['DateTime']['input'];
   firstName: Scalars['String']['input'];
   lastName: Scalars['String']['input'];
-  scheduleId: Scalars['Int']['input'];
+  scheduleId?: InputMaybe<Scalars['Int']['input']>;
   status?: Scalars['Boolean']['input'];
 };
 
@@ -77,6 +77,8 @@ export enum ErrorCodes {
   MISSING_SCHEDULE = 'MISSING_SCHEDULE',
   NOT_FOUND = 'NOT_FOUND',
   READ_ERROR = 'READ_ERROR',
+  SCHEDULE_NOT_FOUND = 'SCHEDULE_NOT_FOUND',
+  SKILL_NOT_FOUND = 'SKILL_NOT_FOUND',
   UPDATE_ERROR = 'UPDATE_ERROR'
 }
 
@@ -189,6 +191,9 @@ export type Query = {
   employee: EmployeeDto;
   employeeList: PaginatedEmployeeDto;
   employeeWithRelations: EmployeeFullDto;
+  generateEmployeeReport: Scalars['String']['output'];
+  generateScheduleReport: Scalars['String']['output'];
+  generateSkillReport: Scalars['String']['output'];
   schedule: ScheduleDto;
   scheduleList: PaginatedScheduleDto;
   skill: SkillDto;
@@ -467,6 +472,21 @@ export type DeleteEmployeeMutation = { __typename: 'Mutation', deleteEmployee: (
     { __typename: 'EmployeeDto' }
     & { ' $fragmentRefs'?: { 'EmployeeFragment': EmployeeFragment } }
   ) };
+
+export type EmployeesReportQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type EmployeesReportQuery = { __typename: 'Query', generateEmployeeReport: string };
+
+export type SchedulesReportQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SchedulesReportQuery = { __typename: 'Query', generateScheduleReport: string };
+
+export type SkillsReportQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SkillsReportQuery = { __typename: 'Query', generateSkillReport: string };
 
 export type ScheduleTypeValuesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -780,6 +800,24 @@ export const DeleteEmployeeDocument = new TypedDocumentString(`
     type
   }
 }`) as unknown as TypedDocumentString<DeleteEmployeeMutation, DeleteEmployeeMutationVariables>;
+export const EmployeesReportDocument = new TypedDocumentString(`
+    query EmployeesReport {
+  __typename
+  generateEmployeeReport
+}
+    `) as unknown as TypedDocumentString<EmployeesReportQuery, EmployeesReportQueryVariables>;
+export const SchedulesReportDocument = new TypedDocumentString(`
+    query SchedulesReport {
+  __typename
+  generateScheduleReport
+}
+    `) as unknown as TypedDocumentString<SchedulesReportQuery, SchedulesReportQueryVariables>;
+export const SkillsReportDocument = new TypedDocumentString(`
+    query SkillsReport {
+  __typename
+  generateSkillReport
+}
+    `) as unknown as TypedDocumentString<SkillsReportQuery, SkillsReportQueryVariables>;
 export const ScheduleTypeValuesDocument = new TypedDocumentString(`
     query ScheduleTypeValues {
   __typename

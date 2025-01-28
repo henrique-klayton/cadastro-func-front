@@ -24,6 +24,9 @@ const documents = {
     "\n\tmutation CreateEmployee($employee: EmployeeCreateDto!, $skills: [Int!]) {\n\t\tcreateEmployee(employee: $employee, skills: $skills) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.CreateEmployeeDocument,
     "\n\tmutation UpdateEmployee($id: ID!, $employee: EmployeeUpdateDto!, $skills: [Int!]) {\n\t\tupdateEmployee(id: $id, employee: $employee, skills: $skills) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.UpdateEmployeeDocument,
     "\n\tmutation DeleteEmployee($id: ID!) {\n\t\tdeleteEmployee(id: $id) {\n\t\t\t...Employee\n\t\t}\n\t}\n": types.DeleteEmployeeDocument,
+    "\n\tquery EmployeesReport {\n\t\tgenerateEmployeeReport\n\t}\n": types.EmployeesReportDocument,
+    "\n\tquery SchedulesReport {\n\t\tgenerateScheduleReport\n\t}\n": types.SchedulesReportDocument,
+    "\n\tquery SkillsReport {\n\t\tgenerateSkillReport\n\t}\n": types.SkillsReportDocument,
     "\n\tquery ScheduleTypeValues {\n\t\t__type(name: \"ScheduleType\") {\n\t\t\tenumValues {\n\t\t\t\tname\n\t\t\t}\n\t\t}\n\t}\n": types.ScheduleTypeValuesDocument,
     "\n\tquery GetSchedule($id: Int!) {\n\t\tschedule(id: $id) {\n\t\t\t...Schedule\n\t\t}\n\t}\n": types.GetScheduleDocument,
     "\n\tquery GetSchedules($limit: Int, $offset: Int, $filter: ScheduleFilterDto!) {\n\t\tscheduleList(limit: $limit, offset: $offset, filter: $filter) {\n\t\t\tdata {...Schedule}\n\t\t\ttotal\n\t\t}\n\t}\n": types.GetSchedulesDocument,
@@ -73,6 +76,18 @@ export function graphql(source: "\n\tmutation UpdateEmployee($id: ID!, $employee
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n\tmutation DeleteEmployee($id: ID!) {\n\t\tdeleteEmployee(id: $id) {\n\t\t\t...Employee\n\t\t}\n\t}\n"): typeof import('./graphql').DeleteEmployeeDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery EmployeesReport {\n\t\tgenerateEmployeeReport\n\t}\n"): typeof import('./graphql').EmployeesReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery SchedulesReport {\n\t\tgenerateScheduleReport\n\t}\n"): typeof import('./graphql').SchedulesReportDocument;
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n\tquery SkillsReport {\n\t\tgenerateSkillReport\n\t}\n"): typeof import('./graphql').SkillsReportDocument;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

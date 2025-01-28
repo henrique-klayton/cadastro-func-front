@@ -37,7 +37,7 @@
   - [ ] Schedule table filters
   - [ ] Skill table filters
 - [ ] Fixed rows height at <= 65px
-- [ ] Gerar relatórios em CSV
+- [x] Gerar relatórios em CSV
 - [ ] Dynamic white/dark theme
 - [ ] Authentication
 - [x] Fix sidebar menu current route without active decoration

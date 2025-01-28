@@ -19,6 +19,7 @@ import { getSkills } from "../skill/actions";
 import {
 	createEmployee,
 	deleteEmployee,
+	generateEmployeeReport,
 	getEmployeeWithRelations,
 	getEmployees,
 	updateEmployee,
@@ -52,6 +53,7 @@ export default async function EmployeePage() {
 				createAction: createEmployee,
 				updateAction: updateEmployee,
 				deleteAction: deleteEmployee,
+				reportAction: generateEmployeeReport,
 			}}
 			queryDataParsers={{
 				birthDate: dateParse,

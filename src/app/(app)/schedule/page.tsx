@@ -18,6 +18,7 @@ import { scheduleTableColumns } from "@models/schedule";
 import {
 	createSchedule,
 	deleteSchedule,
+	generateScheduleReport,
 	getSchedule,
 	getSchedules,
 	updateSchedule,
@@ -80,6 +81,7 @@ export default async function SchedulePage() {
 				createAction: createSchedule,
 				updateAction: updateSchedule,
 				deleteAction: deleteSchedule,
+				reportAction: generateScheduleReport,
 			}}
 			queryDataParsers={{
 				startTime: timeParse,

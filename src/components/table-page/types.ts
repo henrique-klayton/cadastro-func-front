@@ -69,6 +69,7 @@ export interface ServerActions<
 		relations?: ServerActionRelations<UpdateItem>,
 	) => Promise<TableItem>;
 	deleteAction: (id: TableItem["id"]) => Promise<TableItem>;
+	reportAction: () => Promise<string>;
 }
 
 export interface RelationDataObject<

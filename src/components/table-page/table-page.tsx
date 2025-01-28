@@ -13,7 +13,7 @@ import {
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
 import { useEffect, useReducer, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiFillFileExcel, AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -65,6 +65,7 @@ export default function TablePageComponent<
 		createAction,
 		updateAction,
 		deleteAction,
+		reportAction,
 	},
 	queryDataParsers: parsers,
 	relationsData,
@@ -327,6 +328,16 @@ export default function TablePageComponent<
 		reloadTableData();
 	};
 
+	// Report Button
+	const generateReport = async () => {
+		const report = await reportAction();
+		const data = `data:text/csv;base64,${btoa(report)}`;
+		const anchor = document.createElement("a");
+		anchor.href = data;
+		anchor.download = `Relatório ${itemName}.csv`;
+		anchor.click();
+	};
+
 	// Form Modal Props
 	const formModalStates = {
 		action: action as FormModalActions,
@@ -364,15 +375,24 @@ export default function TablePageComponent<
 							registerName={itemName}
 						/>
 						{/* TODO Create component */}
-						<FloatButton
-							className="create-button"
-							type="primary"
-							tooltip={`Criar ${itemName}`}
-							icon={<AiOutlinePlus />}
-							onClick={() => {
-								openFormModal(FormActionsEnum.CREATE);
-							}}
-						/>
+						<FloatButton.Group>
+							<FloatButton
+								className="floating-button"
+								type="primary"
+								tooltip={`Gerar Relatório de ${itemName}`}
+								icon={<AiFillFileExcel />}
+								onClick={generateReport}
+							/>
+							<FloatButton
+								className="floating-button"
+								type="primary"
+								tooltip={`Criar ${itemName}`}
+								icon={<AiOutlinePlus />}
+								onClick={() => {
+									openFormModal(FormActionsEnum.CREATE);
+								}}
+							/>
+						</FloatButton.Group>
 					</Flex>
 				</Card>
 			</RelationTablesDispatchContext.Provider>

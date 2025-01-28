@@ -22,6 +22,7 @@ import {
 	getFullEmployeeQuery,
 	updateEmployeeMutation,
 } from "@queries/employee";
+import { employeesReport } from "@queries/report";
 import { revalidateTag } from "next/cache";
 
 const queryErrorMsg = "Erro ao carregar Funcionário!";
@@ -79,6 +80,12 @@ export async function createEmployee(
 	} catch (err) {
 		catchGraphQLError(err, createErrorMsg);
 	}
+}
+
+export async function generateEmployeeReport() {
+	const queryResult = await runQuery(employeesReport, undefined, queryTag);
+	const report = queryResult.generateEmployeeReport;
+	return report;
 }
 
 export async function updateEmployee(
