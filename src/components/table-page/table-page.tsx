@@ -373,12 +373,12 @@ export default function TablePageComponent<
 							pagination={table.pagination}
 							registerName={itemName}
 						/>
-						<FloatButton.Group>
-							<ReportButton itemName={itemName} onClick={generateReport} />
-							<CreateButton itemName={itemName} onClick={openFormModal} />
-						</FloatButton.Group>
 					</Flex>
 				</Card>
+				<FloatButton.Group>
+					<ReportButton itemName={itemName} onClick={generateReport} />
+					<CreateButton itemName={itemName} onClick={openFormModal} />
+				</FloatButton.Group>
 			</RelationTablesDispatchContext.Provider>
 		</RelationTablesContext.Provider>
 	);
