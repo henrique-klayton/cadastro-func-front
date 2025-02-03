@@ -59,7 +59,12 @@
   - [ ] Dynamic white/dark theme (default to system theme)
   - [ ] Add button to switch theme
 - [ ] Authentication/Authorization
+  - [ ] Create login/register page
+  - [ ] Manage auth data
   - [ ] Catch error code, maybe using a middleware
+  - [ ] Show user profile
+  - [ ] Create profile page
+  - [ ] Create change password form
 
 - [ ] Perguntar sobre como enviar mensagens de erro do servidor para o cliente
 Usar códigos de erro?
