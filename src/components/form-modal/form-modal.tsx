@@ -17,6 +17,7 @@ export default function FormModal<C, U>({
 	onCancel,
 	onSubmit,
 	onFieldsChange,
+	queryAction,
 }: FormModalProps<C, U>) {
 	form.setFieldsValue(initialData as object);
 	const state = useRelationTables<U>();

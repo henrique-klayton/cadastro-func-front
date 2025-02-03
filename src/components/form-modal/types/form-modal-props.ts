@@ -36,6 +36,7 @@ export interface FormModalCreateProps<C> {
 		changedFields: FormFieldList<C>,
 		allFields: FormFieldList<C>,
 	) => void;
+	queryAction: (id: string | number) => Promise<C>;
 }
 
 export interface FormModalUpdateProps<U> {
@@ -48,4 +49,5 @@ export interface FormModalUpdateProps<U> {
 		changedFields: FormFieldList<U>,
 		allFields: FormFieldList<U>,
 	) => void;
+	queryAction: (id: string | number) => Promise<U>;
 }

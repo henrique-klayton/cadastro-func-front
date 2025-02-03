@@ -95,6 +95,7 @@ export default function TablePageComponent<
 	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
 
+	// TODO Move to DataTable
 	// DataTable Component States & Functions
 	const loadTableData = async (page?: number, pageSize?: number) => {
 		tableDispatcher({
@@ -126,6 +127,7 @@ export default function TablePageComponent<
 		}
 	};
 
+	// TODO Create new action to pass reloadTableData to pagination onChange
 	const [table, tableDispatcher] = useReducer(
 		tableDataReducer<T, F>,
 		{
@@ -135,6 +137,7 @@ export default function TablePageComponent<
 		tableDataInitializer<T, F>,
 	);
 
+	// TODO Move to DataTable
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
 	useEffect(() => {
 		loadTableData()
@@ -338,6 +341,7 @@ export default function TablePageComponent<
 		currentId: formId,
 		onSubmit: formSubmit,
 		onFieldsChange: undefined,
+		queryAction: formQueryAction,
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
