@@ -1,14 +1,14 @@
 import FormActionsEnum from "@enums/form-actions.enum";
 import HaveId from "@interfaces/have-id";
-import { DeleteState } from "./form-modal-state";
 import { Action, State } from "./types/aliases";
 import {
 	DeleteAction,
 	LoadDataAction,
 	OpenAction,
 	SetLoadingAction,
-} from "./types/table-data-action";
-import ActionTypeEnum from "./types/table-data-action-type";
+} from "./types/form-modal-action";
+import ActionTypeEnum from "./types/form-modal-action-type";
+import { DeleteState } from "./types/form-modal-state";
 
 export default function formModalReducer<T extends HaveId, C, U>(
 	state: State<T, C, U>,

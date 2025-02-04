@@ -1,9 +1,9 @@
 import { FormModalActions } from "@components/form-modal/types";
 import FormActionsEnum from "@enums/form-actions.enum";
 import HaveId from "@interfaces/have-id";
-import ActionTypeEnum from "./table-data-action-type";
+import ActionTypeEnum from "./form-modal-action-type";
 
-type TableDataAction<T extends HaveId, C, U> =
+type FormModalAction<T extends HaveId, C, U> =
 	| SetLoadingAction
 	| OpenAction
 	| OpenCreateAction<C>
@@ -11,7 +11,7 @@ type TableDataAction<T extends HaveId, C, U> =
 	| DeleteAction<T>
 	| CloseAction
 	| LoadDataAction<C, U>;
-export default TableDataAction;
+export default FormModalAction;
 
 export interface SetLoadingAction {
 	type: ActionTypeEnum.LOADING;
