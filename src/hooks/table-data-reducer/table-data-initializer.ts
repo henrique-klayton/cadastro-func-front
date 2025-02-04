@@ -3,7 +3,6 @@ import TableDataInitializerConfig from "./interfaces/table-data-initializer-conf
 import TableDataState from "./interfaces/table-data-state";
 import FilterValues from "./types/filter-values";
 export default function tableDataInitializer<T, F>({
-	paginationChangeHandler,
 	filterConfig,
 }: TableDataInitializerConfig<T, F>): TableDataState<T, F> {
 	const filterValues: FilterValues<F> = {};
@@ -16,8 +15,6 @@ export default function tableDataInitializer<T, F>({
 		tableLoading: true,
 		filterConfig,
 		filterValues,
-		pagination: buildPaginationConfig({
-			onChange: paginationChangeHandler,
-		}),
+		pagination: buildPaginationConfig({}),
 	};
 }

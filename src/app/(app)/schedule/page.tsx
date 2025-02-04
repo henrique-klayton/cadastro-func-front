@@ -5,7 +5,7 @@ import FromTablePageProps from "@components/data-table/interfaces/from-table-pag
 import { FormItemConfigArray } from "@components/form-modal/types/form-item-config";
 import ScheduleTypeSelect from "@components/schedule-type-select/schedule-type-select";
 import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
-import TablePageComponent from "@components/table-page";
+import TablePage from "@components/table-page";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import statusFilterConfig from "@functions/status-filter/status-filter-config";
 import timeParse from "@functions/time/time-parse";
@@ -66,7 +66,7 @@ export default async function SchedulePage() {
 	];
 
 	return (
-		<TablePageComponent<
+		<TablePage<
 			ScheduleFragmentType,
 			ScheduleCreateDto,
 			ScheduleUpdateDto,
@@ -119,6 +119,6 @@ export default async function SchedulePage() {
 			<FormItem label="Status" name="status" required>
 				<Switch />
 			</FormItem>
-		</TablePageComponent>
+		</TablePage>
 	);
 }

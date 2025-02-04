@@ -1,6 +1,7 @@
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import StringKeyof from "@typings/string-keyof";
+import { TablePaginationConfig } from "antd";
 import ActionTypeEnum from "./table-data-action-type";
 
 type TableDataAction<T extends HaveId & HaveStatus, F> =
@@ -16,6 +17,7 @@ export interface InitAction<T> {
 	type: ActionTypeEnum.INIT;
 	data: T[];
 	total: number;
+	paginationChangeHandler: NonNullable<TablePaginationConfig["onChange"]>;
 }
 
 export interface SetLoadingAction {

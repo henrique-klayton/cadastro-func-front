@@ -1,9 +1,8 @@
-"use client";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Col, Flex, FloatButton, Form, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { FormInstance } from "antd/lib";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -14,16 +13,15 @@ import TableFilterComponent from "@components/table-filter";
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
 import serializeFilterValues from "@functions/serialize-filter-values";
-import relationTablesReducer from "@hooks/relation-tables-reducer";
 import {
-	createRelationTablesContext,
-	createRelationTablesDispatchContext,
+	useRelationTables,
+	useRelationTablesDispatch,
 } from "@hooks/relation-tables-reducer/relation-tables-context";
-import relationTablesInitializer from "@hooks/relation-tables-reducer/relation-tables-initializer";
 import RelationActionEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
-import TableDataInitializerConfig from "@hooks/table-data-reducer/interfaces/table-data-initializer-config";
-import tableDataInitializer from "@hooks/table-data-reducer/table-data-initializer";
-import tableDataReducer from "@hooks/table-data-reducer/table-data-reducer";
+import {
+	useTableData,
+	useTableDataDispatch,
+} from "@hooks/table-data-reducer/table-data-context";
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
@@ -59,7 +57,7 @@ export default function TablePageComponent<
 	},
 	queryDataParsers: parsers,
 	relationsData,
-	filters: filterConfig,
+	filters: _filterConfig,
 }: TablePageProps<T, C, U, F>) {
 	const formReset = { status: false } as Partial<U>;
 	const [action, setAction] = useState(FormActionsEnum.CREATE);
@@ -79,18 +77,13 @@ export default function TablePageComponent<
 	const updateSuccess = `${itemName} atualizado(a) com sucesso!`;
 	const removeSuccess = `${itemName} removido(a) com sucesso!`;
 
-	// Relation Tables Reducer & Context
-	const [relationTablesState, relationsDispatch] = useReducer(
-		relationTablesReducer<U>,
-		relationsData ?? [],
-		relationTablesInitializer<U>,
-	);
+	// Reducer Contexts
 	const { loaded: relationTablesLoaded, config: relationTablesProps } =
-		relationTablesState;
+		useRelationTables<U>();
+	const relationsDispatch = useRelationTablesDispatch<U>();
 
-	const RelationTablesContext = createRelationTablesContext<U>();
-	const RelationTablesDispatchContext =
-		createRelationTablesDispatchContext<U>();
+	const table = useTableData<T, F>();
+	const tableDispatch = useTableDataDispatch<T, F>();
 
 	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
@@ -98,7 +91,7 @@ export default function TablePageComponent<
 	// TODO Move to DataTable
 	// DataTable Component States & Functions
 	const loadTableData = async (page?: number, pageSize?: number) => {
-		tableDispatcher({
+		tableDispatch({
 			type: TableDataActionEnum.SET_LOADING,
 			loading: true,
 		});
@@ -112,7 +105,7 @@ export default function TablePageComponent<
 	const reloadTableData = async (page?: number, pageSize?: number) => {
 		try {
 			const { data, total } = await loadTableData(page, pageSize);
-			tableDispatcher({
+			tableDispatch({
 				type: TableDataActionEnum.CHANGE_PAGE,
 				page: page ?? table.pagination.page ?? 1,
 				pageSize: pageSize ?? table.pagination.pageSize ?? MIN_PAGE_SIZE,
@@ -121,36 +114,27 @@ export default function TablePageComponent<
 			});
 		} catch (err) {
 			message.error(tableReloadError);
-			tableDispatcher({
+			tableDispatch({
 				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
 			});
 		}
 	};
-
-	// TODO Create new action to pass reloadTableData to pagination onChange
-	const [table, tableDispatcher] = useReducer(
-		tableDataReducer<T, F>,
-		{
-			paginationChangeHandler: reloadTableData,
-			filterConfig,
-		} satisfies TableDataInitializerConfig<T, F>,
-		tableDataInitializer<T, F>,
-	);
 
 	// TODO Move to DataTable
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
 	useEffect(() => {
 		loadTableData()
 			.then(({ data, total }) => {
-				return tableDispatcher({
+				return tableDispatch({
 					type: TableDataActionEnum.INIT,
 					data,
 					total,
+					paginationChangeHandler: reloadTableData,
 				});
 			})
 			.catch((err: unknown) => {
 				message.error(tableLoadError);
-				tableDispatcher({
+				tableDispatch({
 					type: TableDataActionEnum.SHOW_CLEAN_PAGE,
 				});
 			});
@@ -314,7 +298,7 @@ export default function TablePageComponent<
 
 	// TableFilter Functions
 	const handleFilterChanges = (key: StringKeyof<F>, value: number) => {
-		tableDispatcher({
+		tableDispatch({
 			type: TableDataActionEnum.FILTER_CHANGED,
 			key,
 			value,
@@ -345,38 +329,36 @@ export default function TablePageComponent<
 	} satisfies FormModalStateProps<C, U> as TablePageFormModalProps<C, U>;
 
 	return (
-		<RelationTablesContext.Provider value={relationTablesState}>
-			<RelationTablesDispatchContext.Provider value={relationsDispatch}>
-				<FormModal<C, U>
-					{...formModalStates}
-					objectName={itemName}
-					loading={formLoading}
-					open={formOpen}
-					onCancel={handleFormModalCancel}
-				>
-					{children}
-				</FormModal>
-				<Card title={title}>
-					<Flex className="w-full h-full" vertical>
-						<TableFilterComponent
-							filters={table.filterConfig}
-							onFilterChange={handleFilterChanges}
-						/>
-						<DataTable<T>
-							{...tableProps}
-							data={table.tableData}
-							loading={table.tableLoading}
-							actions={dataTableActions}
-							pagination={table.pagination}
-							registerName={itemName}
-						/>
-					</Flex>
-				</Card>
-				<FloatButton.Group>
-					<ReportButton itemName={itemName} onClick={generateReport} />
-					<CreateButton itemName={itemName} onClick={openFormModal} />
-				</FloatButton.Group>
-			</RelationTablesDispatchContext.Provider>
-		</RelationTablesContext.Provider>
+		<>
+			<FormModal<C, U>
+				{...formModalStates}
+				objectName={itemName}
+				loading={formLoading}
+				open={formOpen}
+				onCancel={handleFormModalCancel}
+			>
+				{children}
+			</FormModal>
+			<Card title={title}>
+				<Flex className="w-full h-full" vertical>
+					<TableFilterComponent
+						filters={table.filterConfig}
+						onFilterChange={handleFilterChanges}
+					/>
+					<DataTable<T>
+						{...tableProps}
+						data={table.tableData}
+						loading={table.tableLoading}
+						actions={dataTableActions}
+						pagination={table.pagination}
+						registerName={itemName}
+					/>
+				</Flex>
+			</Card>
+			<FloatButton.Group>
+				<ReportButton itemName={itemName} onClick={generateReport} />
+				<CreateButton itemName={itemName} onClick={openFormModal} />
+			</FloatButton.Group>
+		</>
 	);
 }

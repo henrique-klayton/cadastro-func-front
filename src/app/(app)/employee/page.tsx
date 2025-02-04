@@ -6,7 +6,7 @@ import localizedFormat from "dayjs/plugin/localizedFormat";
 import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
-import TablePageComponent from "@components/table-page";
+import TablePage from "@components/table-page";
 import createRelationDataObject from "@components/table-page/create-relation-data-object";
 import { EmployeeFragmentType } from "@fragments/employee";
 import { FullEmployeeType } from "@fragments/full-employee";
@@ -38,7 +38,7 @@ export default async function EmployeePage() {
 	};
 
 	return (
-		<TablePageComponent<
+		<TablePage<
 			EmployeeFragmentType,
 			EmployeeCreateDto,
 			Partial<FullEmployeeType>,
@@ -104,6 +104,6 @@ export default async function EmployeePage() {
 			<FormItem label="Status" name="status" required>
 				<Switch />
 			</FormItem>
-		</TablePageComponent>
+		</TablePage>
 	);
 }

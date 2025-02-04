@@ -38,11 +38,15 @@ export default function tableDataReducer<T extends HaveId & HaveStatus, F>(
 	return { ...state };
 }
 
-function handleInit<T, F>(state: State<T, F>, action: InitAction<T>) {
-	state.tableData = action.data;
+function handleInit<T, F>(
+	state: State<T, F>,
+	{ data, total, paginationChangeHandler }: InitAction<T>,
+) {
+	state.tableData = data;
 	state.pagination = buildPaginationConfig({
 		...state.pagination,
-		total: action.total,
+		total,
+		onChange: paginationChangeHandler,
 	});
 	state.tableLoading = false;
 }

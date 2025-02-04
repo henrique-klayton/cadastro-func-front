@@ -45,7 +45,8 @@
 - [ ] Remove relations data when entity is marked as inactive (maybe on serializer)
 - [ ] Add employees relation table to schedule form modal
 - [ ] Refactor TablePageComponent
-  - [ ] Remove relation tables context and pass state as props
+  - [x] Create a component for contexts
+  - [ ] Use contexts directly inside DataTable, FormModal and TableFilter
   - [ ] Create form modal reducer
   - [x] Create components for floating buttons
   - [x] Convert then/catch to async/await and try/catch

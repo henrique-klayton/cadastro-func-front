@@ -3,7 +3,7 @@ import FormItem from "antd/es/form/FormItem";
 
 import FromTablePageProps from "@components/data-table/interfaces/from-table-page-props";
 import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
-import TablePageComponent from "@components/table-page";
+import TablePage from "@components/table-page";
 import { SkillFragmentType } from "@fragments/skill";
 import statusFilterConfig from "@functions/status-filter/status-filter-config";
 import {
@@ -32,7 +32,7 @@ export default async function SchedulePage() {
 	};
 
 	return (
-		<TablePageComponent<
+		<TablePage<
 			SkillFragmentType,
 			SkillCreateDto,
 			SkillUpdateDto,
@@ -64,6 +64,6 @@ export default async function SchedulePage() {
 			<FormItem label="Status" name="status" required>
 				<Switch />
 			</FormItem>
-		</TablePageComponent>
+		</TablePage>
 	);
 }
