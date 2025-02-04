@@ -1,8 +1,6 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Col, Flex, FloatButton, Form, Row } from "antd";
-import { useForm } from "antd/es/form/Form";
-import { FormInstance } from "antd/lib";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -13,6 +11,11 @@ import TableFilter from "@components/table-filter";
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
 import serializeFilterValues from "@functions/serialize-filter-values";
+import {
+	useFormModal,
+	useFormModalDispatch,
+} from "@hooks/form-modal-reducer/form-modal-context";
+import FormModalActionEnum from "@hooks/form-modal-reducer/types/form-modal-action-type";
 import {
 	useRelationTables,
 	useRelationTablesDispatch,
@@ -59,14 +62,6 @@ export default function TablePageComponent<
 	relationsData,
 	filters: _filterConfig,
 }: TablePageProps<T, C, U, F>) {
-	const formReset = { status: false } as Partial<U>;
-	const [action, setAction] = useState(FormActionsEnum.CREATE);
-	const [formOpen, setFormOpen] = useState(false);
-	const [formLoading, setFormLoading] = useState(false);
-	const [formData, setFormData] = useState<Partial<C> | Partial<U>>(formReset);
-	const [formId, setFormId] = useState<T["id"] | undefined>(undefined);
-	const [form] = useForm() as [FormInstance<C> | FormInstance<U>];
-
 	// Messages const
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
 	const tableLoadError = "Erro ao carregar a tabela!";
@@ -84,6 +79,9 @@ export default function TablePageComponent<
 
 	const table = useTableData<T, F>();
 	const tableDispatch = useTableDataDispatch<T, F>();
+
+	const modal = useFormModal<T, C, U>();
+	const modalDispatch = useFormModalDispatch<T, C, U>();
 
 	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
@@ -142,16 +140,16 @@ export default function TablePageComponent<
 
 	const dataTableActions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
-			setFormId(id);
 			const item = await formQueryAction(id);
 			if (parsers) {
 				for (const key in parsers) {
 					item[key] = parsers[key](item[key]);
 				}
 			}
-			openFormModal(FormActionsEnum.UPDATE, Promise.resolve(item));
+			openFormModal(FormActionsEnum.UPDATE, item, id);
 		},
 		onDeleteClick: async (id: T["id"]) => {
+			modalDispatch({ type: FormModalActionEnum.DELETE, id });
 			await confirmModal.confirm({
 				icon: <ExclamationCircleFilled />,
 				okText: "Remover",
@@ -172,7 +170,7 @@ export default function TablePageComponent<
 
 	// Form Modal Functions
 	const formSubmit: FormSubmitFunc<C, U> = ({ action, data, id }) => {
-		form.validateFields().then(async () => {
+		modal.form.validateFields().then(async () => {
 			const relations: ServerActionRelations<U> = {};
 			if (relationsData) {
 				for (const relation of relationsData) {
@@ -203,21 +201,18 @@ export default function TablePageComponent<
 
 	const openFormModal = async (
 		action: FormModalActions,
-		initialData: Promise<U | undefined> = Promise.resolve(undefined),
+		initialData?: U,
+		id?: T["id"],
 	) => {
 		try {
-			setAction(action);
-			setFormLoading(true);
-			setFormOpen(true);
-			// Render tables before form load
-			renderRelationTables();
-
-			const data = await initialData;
-			if (data) setFormData(data);
-			else setFormData(formReset);
-			setFormLoading(false);
-
-			await loadRelationsListData(data);
+			modalDispatch({ type: FormModalActionEnum.OPEN, action });
+			renderRelationTables(); // Render tables before form load
+			modalDispatch({
+				type: FormModalActionEnum.LOAD_DATA,
+				data: initialData,
+				id,
+			});
+			await loadRelationsListData(initialData);
 		} catch (err) {
 			const error =
 				err instanceof Error ? err : new Error(String(err), { cause: err });
@@ -228,8 +223,7 @@ export default function TablePageComponent<
 	};
 
 	const closeFormModal = () => {
-		setFormOpen(false);
-		setFormData(formReset);
+		modalDispatch({ type: FormModalActionEnum.CLOSE });
 		relationsDispatch({ type: RelationActionEnum.RESET_ALL });
 	};
 
@@ -292,7 +286,6 @@ export default function TablePageComponent<
 
 	// Delete Confirm Modal Functions
 	const handleDeleteConfirm = async (id: T["id"]) => {
-		setAction(FormActionsEnum.DELETE);
 		return deleteAction(id);
 	};
 
@@ -317,12 +310,13 @@ export default function TablePageComponent<
 		anchor.click();
 	};
 
+	// FIXME Remove typing workaround
 	// Form Modal Props
 	const formModalStates = {
-		action: action as FormModalActions,
-		form: form,
-		initialData: formData,
-		currentId: formId,
+		action: modal.action as FormModalActions,
+		form: modal.form,
+		initialData: modal.initialData ?? modal.formReset,
+		currentId: modal.itemId,
 		onSubmit: formSubmit,
 		onFieldsChange: undefined,
 		queryAction: formQueryAction,
@@ -333,8 +327,8 @@ export default function TablePageComponent<
 			<FormModal<C, U>
 				{...formModalStates}
 				objectName={itemName}
-				loading={formLoading}
-				open={formOpen}
+				loading={modal.loading}
+				open={modal.open}
 				onCancel={handleFormModalCancel}
 			>
 				{children}

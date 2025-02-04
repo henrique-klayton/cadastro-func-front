@@ -1,16 +1,13 @@
 import { FormModalActions } from "@components/form-modal/types";
-import FormActionsEnum from "@enums/form-actions.enum";
 import HaveId from "@interfaces/have-id";
 import ActionTypeEnum from "./form-modal-action-type";
 
 type FormModalAction<T extends HaveId, C, U> =
 	| SetLoadingAction
 	| OpenAction
-	| OpenCreateAction<C>
-	| OpenUpdateAction<U>
 	| DeleteAction<T>
 	| CloseAction
-	| LoadDataAction<C, U>;
+	| LoadDataAction<T, C, U>;
 export default FormModalAction;
 
 export interface SetLoadingAction {
@@ -23,17 +20,6 @@ export interface OpenAction {
 	action: FormModalActions;
 }
 
-export interface OpenCreateAction<C> {
-	type: ActionTypeEnum.OPEN;
-	action: FormActionsEnum.CREATE;
-}
-
-export interface OpenUpdateAction<U> {
-	type: ActionTypeEnum.OPEN;
-	action: FormActionsEnum.UPDATE;
-	data: U;
-}
-
 export interface DeleteAction<T extends HaveId> {
 	type: ActionTypeEnum.DELETE;
 	id: T["id"];
@@ -43,7 +29,8 @@ export interface CloseAction {
 	type: ActionTypeEnum.CLOSE;
 }
 
-export interface LoadDataAction<C, U> {
+export interface LoadDataAction<T extends HaveId, C, U> {
 	type: ActionTypeEnum.LOAD_DATA;
-	data: Partial<C> | Partial<U>;
+	data?: Partial<C> | Partial<U>;
+	id?: T["id"];
 }

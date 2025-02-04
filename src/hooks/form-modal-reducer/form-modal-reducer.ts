@@ -72,8 +72,15 @@ function handleClose<T extends HaveId, C, U>(state: State<T, C, U>) {
 
 function handleLoadData<T extends HaveId, C, U>(
 	state: State<T, C, U>,
-	action: LoadDataAction<C, U>,
+	{ data, id }: LoadDataAction<T, C, U>,
 ) {
-	state.initialData = action.data;
+	if (state.action === FormActionsEnum.UPDATE && (data == null || id == null)) {
+		const message = "Form with update action without action.data or action.id!";
+		console.error(message);
+		throw Error(message);
+	}
+
+	state.initialData = data ?? state.formReset;
+	state.itemId = id;
 	state.loading = false;
 }

@@ -47,7 +47,7 @@
 - [ ] Refactor TablePageComponent
   - [x] Create a component for contexts
   - [ ] Use contexts directly inside DataTable, FormModal and TableFilter
-  - [ ] Create form modal reducer
+  - [x] Create form modal reducer
   - [x] Create components for floating buttons
   - [x] Convert then/catch to async/await and try/catch
   - [ ] Maybe use slots to separate components/elements

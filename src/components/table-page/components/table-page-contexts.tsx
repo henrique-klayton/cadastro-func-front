@@ -1,6 +1,12 @@
 import { useReducer } from "react";
 
 import TableFilterConfigsObject from "@components/table-filter/types/table-filter-configs-object";
+import {
+	createFormModalContext,
+	createFormModalDispatchContext,
+} from "@hooks/form-modal-reducer/form-modal-context";
+import formModalReducer from "@hooks/form-modal-reducer/form-modal-reducer";
+import FormModalState from "@hooks/form-modal-reducer/types/form-modal-state";
 import relationTablesReducer from "@hooks/relation-tables-reducer";
 import {
 	createRelationTablesContext,
@@ -17,6 +23,7 @@ import tableDataReducer from "@hooks/table-data-reducer/table-data-reducer";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@typings/partial-nullable";
+import { FormInstance, useForm } from "antd/es/form/Form";
 import { RelationDataObject } from "../types";
 
 export interface TablePageContextsProps<
@@ -40,19 +47,38 @@ export default function TablePageContexts<
 	relationsData,
 	filterConfig,
 }: TablePageContextsProps<T, C, U, F>) {
+	const [form] = useForm() as [FormInstance<U>];
+	const formReset = { status: false } as Partial<U>;
+
+	const tableDataConfig: TableDataInitializerConfig<T, F> = {
+		filterConfig,
+	};
+
+	const formModalState: FormModalState<T, C, U> = {
+		action: undefined,
+		form,
+		formReset,
+		initialData: undefined,
+		itemId: undefined,
+		loading: true,
+		open: false,
+	};
+
 	const [relationTablesState, relationsDispatch] = useReducer(
 		relationTablesReducer<U>,
 		relationsData ?? [],
 		relationTablesInitializer<U>,
 	);
 
-	const tableDataConfig: TableDataInitializerConfig<T, F> = {
-		filterConfig,
-	};
 	const [table, tableDispatch] = useReducer(
 		tableDataReducer<T, F>,
 		tableDataConfig,
 		tableDataInitializer<T, F>,
+	);
+
+	const [formModal, formModalDispatch] = useReducer(
+		formModalReducer<T, C, U>,
+		formModalState,
 	);
 
 	const RelationTablesContext = createRelationTablesContext<U>();
@@ -62,12 +88,19 @@ export default function TablePageContexts<
 	const TableDataContext = createTableDataContext<T, F>();
 	const TableDataDispatchContext = createTableDataDispatchContext<T, F>();
 
+	const FormModalContext = createFormModalContext<T, C, U>();
+	const FormModalDispatchContext = createFormModalDispatchContext<T, C, U>();
+
 	return (
 		<RelationTablesContext.Provider value={relationTablesState}>
 			<RelationTablesDispatchContext.Provider value={relationsDispatch}>
 				<TableDataContext.Provider value={table}>
 					<TableDataDispatchContext.Provider value={tableDispatch}>
-						{children}
+						<FormModalContext.Provider value={formModal}>
+							<FormModalDispatchContext.Provider value={formModalDispatch}>
+								{children}
+							</FormModalDispatchContext.Provider>
+						</FormModalContext.Provider>
 					</TableDataDispatchContext.Provider>
 				</TableDataContext.Provider>
 			</RelationTablesDispatchContext.Provider>
