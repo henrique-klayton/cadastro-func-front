@@ -14,7 +14,7 @@ export default function TableFilter<F>({
 
 		return (
 			<Col key={props.name} span={props.colSpan}>
-				<Form.Item label={props.label} name={props.name as string}>
+				<Form.Item label={props.label}>
 					<Select
 						defaultValue={props.initialValue}
 						options={props.options}
