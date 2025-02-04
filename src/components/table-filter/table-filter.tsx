@@ -2,7 +2,7 @@ import StringKeyof from "@typings/string-keyof";
 import { Col, Form, Row, Select, Typography } from "antd";
 import TableFilterProps from "./interfaces/table-filter-props";
 
-export default function TableFilterComponent<F>({
+export default function TableFilter<F>({
 	filters,
 	onFilterChange,
 }: TableFilterProps<F>) {

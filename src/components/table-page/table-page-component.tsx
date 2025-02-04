@@ -9,7 +9,7 @@ import DataTableActions from "@components/data-table/interfaces/data-table-actio
 import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
-import TableFilterComponent from "@components/table-filter";
+import TableFilter from "@components/table-filter";
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
 import serializeFilterValues from "@functions/serialize-filter-values";
@@ -341,7 +341,7 @@ export default function TablePageComponent<
 			</FormModal>
 			<Card title={title}>
 				<Flex className="w-full h-full" vertical>
-					<TableFilterComponent
+					<TableFilter
 						filters={table.filterConfig}
 						onFilterChange={handleFilterChanges}
 					/>
