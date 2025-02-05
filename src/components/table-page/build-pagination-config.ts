@@ -4,16 +4,17 @@ import TablePaginationConfig from "./interfaces/table-pagination-config";
 
 export default function buildPaginationConfig({
 	current,
-	page,
+	page: newPage,
 	pageSize,
 	total,
 	pageSizeOptions,
 	showSizeChanger,
 	onChange,
-}: TablePaginationConfig): TablePaginationConfig {
+}: Partial<TablePaginationConfig>): TablePaginationConfig {
 	const defaultSizeOptions = [MIN_PAGE_SIZE, 20, 50, 100];
+	const page = newPage ?? current ?? 1;
 	const config = {
-		current: page ?? current ?? 1,
+		current: page,
 		pageSize: pageSize ?? MIN_PAGE_SIZE,
 		total: total ?? 0,
 		pageSizeOptions: pageSizeOptions ?? defaultSizeOptions,
@@ -25,5 +26,5 @@ export default function buildPaginationConfig({
 		config.pageSizeOptions = config.pageSizeOptions.filter(
 			(size) => size <= total,
 		);
-	return config;
+	return { ...config, page };
 }
