@@ -48,7 +48,7 @@
   - [x] Create a component for contexts
   - [ ] Move code related to other components to them and use contexts directly
     - [x] TablePageComponent
-    - [ ] DataTable
+    - [x] DataTable
     - [ ] FormModal
     - [ ] TableFilter
   - [x] Create form modal reducer

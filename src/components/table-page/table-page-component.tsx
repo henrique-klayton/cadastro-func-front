@@ -1,6 +1,6 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Col, Flex, FloatButton, Form, Row } from "antd";
-import { useEffect } from "react";
+import { useState } from "react";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -8,9 +8,7 @@ import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilter from "@components/table-filter";
-import MIN_PAGE_SIZE from "@consts/min-page-size";
 import FormActionsEnum from "@enums/form-actions.enum";
-import serializeFilterValues from "@functions/serialize-filter-values";
 import { useFormModalReducer } from "@hooks/form-modal-reducer/form-modal-context";
 import FormModalActionEnum from "@hooks/form-modal-reducer/types/form-modal-action-type";
 import { useRelationTablesReducer } from "@hooks/relation-tables-reducer/relation-tables-context";
@@ -19,6 +17,7 @@ import { useTableDataReducer } from "@hooks/table-data-reducer/table-data-contex
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
+import PaginationInfo from "@interfaces/pagination-info";
 import PartialNullable from "@typings/partial-nullable";
 import StringKeyof from "@typings/string-keyof";
 import CreateButton from "./components/create-button";
@@ -55,8 +54,6 @@ export default function TablePageComponent<
 }: TablePageProps<T, C, U, F>) {
 	// Messages const
 	const confirmQuestion = `Tem certeza que deseja remover esse(a) ${itemName}?`;
-	const tableLoadError = "Erro ao carregar a tabela!";
-	const tableReloadError = "Erro ao atualizar a tabela!";
 	const formLoadError = "Erro ao carregar formulário!";
 
 	const createSuccess = `${itemName} criado(a) com sucesso!`;
@@ -71,60 +68,19 @@ export default function TablePageComponent<
 	const [table, tableDispatch] = useTableDataReducer<T, F>();
 	const [modal, modalDispatch] = useFormModalReducer<T, C, U>();
 
+	// Reload Event
+	const [reloadEvent, setReloadEvent] = useState<PaginationInfo | undefined>(
+		undefined,
+	);
+	const sendReloadEvent = () => {
+		return setReloadEvent({
+			page: table.pagination.page,
+			pageSize: table.pagination.pageSize,
+		});
+	};
+
 	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
-
-	// TODO Move to DataTable
-	// DataTable Component States & Functions
-	const loadTableData = async (page?: number, pageSize?: number) => {
-		tableDispatch({
-			type: TableDataActionEnum.SET_LOADING,
-			loading: true,
-		});
-		return tableQueryAction(
-			serializeFilterValues(table.filterValues, table.filterConfig),
-			page,
-			pageSize,
-		);
-	};
-
-	const reloadTableData = async (page?: number, pageSize?: number) => {
-		try {
-			const { data, total } = await loadTableData(page, pageSize);
-			tableDispatch({
-				type: TableDataActionEnum.CHANGE_PAGE,
-				page: page ?? table.pagination.page ?? 1,
-				pageSize: pageSize ?? table.pagination.pageSize ?? MIN_PAGE_SIZE,
-				data,
-				total,
-			});
-		} catch (err) {
-			message.error(tableReloadError);
-			tableDispatch({
-				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
-			});
-		}
-	};
-
-	// TODO Move to DataTable
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
-	useEffect(() => {
-		loadTableData()
-			.then(({ data, total }) => {
-				return tableDispatch({
-					type: TableDataActionEnum.INIT,
-					data,
-					total,
-					paginationChangeHandler: reloadTableData,
-				});
-			})
-			.catch((err: unknown) => {
-				message.error(tableLoadError);
-				tableDispatch({
-					type: TableDataActionEnum.SHOW_CLEAN_PAGE,
-				});
-			});
-	}, []);
 
 	const dataTableActions: DataTableActions<T> = {
 		onUpdateClick: async (id: T["id"]) => {
@@ -147,7 +103,7 @@ export default function TablePageComponent<
 					try {
 						await handleDeleteConfirm(id);
 						message.success(removeSuccess);
-						reloadTableData();
+						sendReloadEvent();
 					} catch (err) {
 						if (err instanceof Error) message.error(err.message);
 					}
@@ -182,7 +138,7 @@ export default function TablePageComponent<
 			} catch (err: unknown) {
 				if (err instanceof Error) message.error(err.message);
 			}
-			reloadTableData();
+			sendReloadEvent();
 			closeFormModal();
 		});
 	};
@@ -205,8 +161,8 @@ export default function TablePageComponent<
 			const error =
 				err instanceof Error ? err : new Error(String(err), { cause: err });
 			console.error(error);
-			message.error(formLoadError);
 			closeFormModal();
+			message.error(formLoadError);
 		}
 	};
 
@@ -285,7 +241,7 @@ export default function TablePageComponent<
 			value,
 		});
 		table.filterValues[key] = value;
-		reloadTableData();
+		sendReloadEvent();
 	};
 
 	// Report Button
@@ -327,13 +283,12 @@ export default function TablePageComponent<
 						filters={table.filterConfig}
 						onFilterChange={handleFilterChanges}
 					/>
-					<DataTable<T>
+					<DataTable<T, F>
 						{...tableProps}
-						data={table.tableData}
-						loading={table.tableLoading}
 						actions={dataTableActions}
-						pagination={table.pagination}
 						registerName={itemName}
+						queryAction={tableQueryAction}
+						reloadEvent={reloadEvent}
 					/>
 				</Flex>
 			</Card>

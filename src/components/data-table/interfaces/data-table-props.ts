@@ -1,13 +1,14 @@
-import TablePaginationConfig from "@components/table-page/interfaces/table-pagination-config";
 import HaveId from "@interfaces/have-id";
+import PaginationInfo from "@interfaces/pagination-info";
+import PaginationQueryFunction from "@interfaces/pagination-query-function";
 import DataTableActions from "./data-table-actions";
 import FromTablePageProps from "./from-table-page-props";
 
-export default interface DataTableProps<T extends HaveId>
+export default interface DataTableProps<T extends HaveId, F>
 	extends FromTablePageProps<T> {
-	data: T[];
+	className?: string;
 	actions: DataTableActions<T>;
-	pagination: TablePaginationConfig;
 	registerName: string;
-	loading: boolean;
+	reloadEvent: PaginationInfo | undefined;
+	queryAction: PaginationQueryFunction<T, F>;
 }

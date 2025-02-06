@@ -1,7 +1,12 @@
-import { Button, Flex, Table, Tag, Tooltip } from "antd";
+import { App, Button, Flex, Table, Tag, Tooltip } from "antd";
+import { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
+import serializeFilterValues from "@functions/serialize-filter-values";
+import { useTableDataReducer } from "@hooks/table-data-reducer/table-data-context";
+import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
+import HaveStatus from "@interfaces/have-status";
 import DataTableProps from "./interfaces/data-table-props";
 
 const renderStatus = (_: unknown, { status }: { status: boolean }) => {
@@ -13,15 +18,75 @@ const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 	);
 };
 
-export default function DataTable<T extends HaveId>({
-	data,
+export default function DataTable<T extends HaveId & HaveStatus, F>({
 	rowKey,
 	columns: columnsProps,
 	actions,
-	pagination,
 	registerName,
-	loading,
-}: DataTableProps<T>) {
+	reloadEvent,
+	queryAction,
+}: DataTableProps<T, F>) {
+	// Messages const
+	const tableLoadError = "Erro ao carregar a tabela!";
+	const tableReloadError = "Erro ao atualizar a tabela!";
+
+	const [table, tableDispatch] = useTableDataReducer<T, F>();
+	const { message } = App.useApp();
+
+	const loadTableData = async (page?: number, pageSize?: number) => {
+		tableDispatch({
+			type: TableDataActionEnum.SET_LOADING,
+			loading: true,
+		});
+		return queryAction(
+			serializeFilterValues(table.filterValues, table.filterConfig),
+			page,
+			pageSize,
+		);
+	};
+
+	const reloadTableData = async (page: number, pageSize: number) => {
+		try {
+			const { data, total } = await loadTableData(page, pageSize);
+			tableDispatch({
+				type: TableDataActionEnum.CHANGE_PAGE,
+				page,
+				pageSize,
+				data,
+				total,
+			});
+		} catch (err) {
+			message.error(tableReloadError);
+			tableDispatch({
+				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
+			});
+		}
+	};
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Ignore reloadTableData
+	useEffect(() => {
+		if (reloadEvent) reloadTableData(reloadEvent.page, reloadEvent.pageSize);
+	}, [reloadEvent]);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
+	useEffect(() => {
+		loadTableData()
+			.then(({ data, total }) => {
+				return tableDispatch({
+					type: TableDataActionEnum.INIT,
+					data,
+					total,
+					paginationChangeHandler: reloadTableData,
+				});
+			})
+			.catch((err: unknown) => {
+				message.error(tableLoadError);
+				tableDispatch({
+					type: TableDataActionEnum.SHOW_CLEAN_PAGE,
+				});
+			});
+	}, []);
+
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
 		if (property === "status")
@@ -38,26 +103,24 @@ export default function DataTable<T extends HaveId>({
 
 	const renderActions = (_: unknown, { id }: T) => {
 		return (
-			<>
-				<Flex justify="flex-start" align="center" gap="0.5rem">
-					<Tooltip title={`Editar ${registerName}`}>
-						<Button
-							icon={<AiOutlineForm />}
-							color="primary"
-							variant="outlined"
-							onClick={() => actions?.onUpdateClick(id)}
-						/>
-					</Tooltip>
-					<Tooltip title={`Remover ${registerName}`}>
-						<Button
-							danger
-							icon={<AiOutlineDelete />}
-							variant="outlined"
-							onClick={() => actions?.onDeleteClick(id)}
-						/>
-					</Tooltip>
-				</Flex>
-			</>
+			<Flex justify="center" align="center" gap="1rem">
+				<Tooltip title={`Editar ${registerName}`}>
+					<Button
+						icon={<AiOutlineForm />}
+						color="primary"
+						variant="outlined"
+						onClick={() => actions.onUpdateClick(id)}
+					/>
+				</Tooltip>
+				<Tooltip title={`Remover ${registerName}`}>
+					<Button
+						danger
+						icon={<AiOutlineDelete />}
+						variant="outlined"
+						onClick={() => actions.onDeleteClick(id)}
+					/>
+				</Tooltip>
+			</Flex>
 		);
 	};
 
@@ -68,10 +131,10 @@ export default function DataTable<T extends HaveId>({
 	return (
 		<Table<T>
 			className="flex-auto"
-			dataSource={data}
-			pagination={pagination}
 			rowKey={rowKey}
-			loading={loading}
+			dataSource={table.tableData}
+			pagination={{ ...table.pagination, className: "mr-12" }}
+			loading={table.tableLoading}
 		>
 			{columns}
 		</Table>
