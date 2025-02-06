@@ -8,4 +8,5 @@ export default interface TablePaginationConfig {
 	pageSizeOptions: number[];
 	showSizeChanger: boolean;
 	onChange?: AntdTablePaginationConfig["onChange"];
+	lastState?: TablePaginationConfig;
 }

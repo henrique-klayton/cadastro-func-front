@@ -1,4 +1,5 @@
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
+import PAGE_SIZE_OPTIONS from "@consts/page-size-options";
 import { TablePaginationConfig as AntdTablePaginationConfig } from "antd/lib";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
 
@@ -6,25 +7,34 @@ export default function buildPaginationConfig({
 	current,
 	page: newPage,
 	pageSize,
-	total,
-	pageSizeOptions,
+	total: newTotal,
+	pageSizeOptions: _pageSizeOptions,
 	showSizeChanger,
 	onChange,
+	lastState,
 }: Partial<TablePaginationConfig>): TablePaginationConfig {
-	const defaultSizeOptions = [MIN_PAGE_SIZE, 20, 50, 100];
-	const page = newPage ?? current ?? 1;
+	const state = {
+		current: 1,
+		page: 1,
+		pageSize: MIN_PAGE_SIZE,
+		total: 0,
+		onChange: undefined,
+	};
+	if (lastState) Object.assign(state, lastState);
+
+	const page = newPage ?? current ?? state.current;
+	const total = newTotal ?? state.total;
+	const maxSizeIndex = PAGE_SIZE_OPTIONS.findIndex((size) => size >= total);
 	const config = {
 		current: page,
-		pageSize: pageSize ?? MIN_PAGE_SIZE,
-		total: total ?? 0,
-		pageSizeOptions: pageSizeOptions ?? defaultSizeOptions,
-		showSizeChanger: showSizeChanger ?? (total ? total > MIN_PAGE_SIZE : false),
-		onChange,
+		pageSize: pageSize ?? state.pageSize,
+		total,
+		pageSizeOptions: PAGE_SIZE_OPTIONS.slice(0, maxSizeIndex + 1),
+		showSizeChanger: showSizeChanger ?? total > MIN_PAGE_SIZE,
+		onChange: onChange ?? state.onChange,
 	} satisfies AntdTablePaginationConfig;
-
-	if (total)
-		config.pageSizeOptions = config.pageSizeOptions.filter(
-			(size) => size <= total,
-		);
-	return { ...config, page };
+	return {
+		...config,
+		page,
+	};
 }

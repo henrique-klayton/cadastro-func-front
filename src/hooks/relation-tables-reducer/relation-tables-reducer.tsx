@@ -90,7 +90,7 @@ function handleInitialLoad<T>(
 	relation.selectedDataKeys = action.selectedDataKeys;
 	relation.loading = false;
 	relation.pagination = buildPaginationConfig({
-		...relation.pagination,
+		lastState: relation.pagination,
 		total: action.total,
 		onChange: (page: number, pageSize: number) => {
 			action.dispatcher({
@@ -106,6 +106,8 @@ function handleInitialLoad<T>(
 						dataKey: relation.dataKey,
 						data,
 						total,
+						page,
+						pageSize,
 					});
 				});
 		},
@@ -117,7 +119,9 @@ function handlePageLoad<T>(relation: Relation<T>, action: PageLoadAction<T>) {
 	relation.data = action.data;
 	relation.loading = false;
 	relation.pagination = buildPaginationConfig({
-		...relation.pagination,
+		lastState: relation.pagination,
+		page: action.page,
+		pageSize: action.pageSize,
 		total: action.total,
 	});
 }

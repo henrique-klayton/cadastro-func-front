@@ -55,4 +55,6 @@ export interface PageLoadAction<Item> extends BaseAction<Item> {
 	type: ActionTypeEnum.PAGINATION_LOAD;
 	data: Relation<Item>["data"];
 	total: number;
+	page: number;
+	pageSize: number;
 }

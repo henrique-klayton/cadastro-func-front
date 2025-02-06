@@ -44,7 +44,7 @@ function handleInit<T, F>(
 ) {
 	state.tableData = data;
 	state.pagination = buildPaginationConfig({
-		...state.pagination,
+		lastState: state.pagination,
 		total,
 		onChange: paginationChangeHandler,
 	});
@@ -71,7 +71,7 @@ function handleChangePage<T, F>(
 	state.tableData = data;
 	state.tableLoading = false;
 	state.pagination = buildPaginationConfig({
-		...state.pagination,
+		lastState: state.pagination,
 		page,
 		pageSize,
 		total,
