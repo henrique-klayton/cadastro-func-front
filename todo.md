@@ -46,7 +46,11 @@
 - [ ] Add employees relation table to schedule form modal
 - [ ] Refactor TablePageComponent
   - [x] Create a component for contexts
-  - [ ] Use contexts directly inside DataTable, FormModal and TableFilter
+  - [ ] Move code related to other components to them and use contexts directly
+    - [x] TablePageComponent
+    - [ ] DataTable
+    - [ ] FormModal
+    - [ ] TableFilter
   - [x] Create form modal reducer
   - [x] Create components for floating buttons
   - [x] Convert then/catch to async/await and try/catch

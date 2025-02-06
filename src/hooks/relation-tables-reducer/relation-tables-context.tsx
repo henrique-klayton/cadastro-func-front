@@ -36,3 +36,10 @@ export function useRelationTablesDispatch<T>() {
 		RelationTablesAction<T>
 	>;
 }
+
+export function useRelationTablesReducer<T>(): [
+	ReturnType<typeof useRelationTables<T>>,
+	ReturnType<typeof useRelationTablesDispatch<T>>,
+] {
+	return [useRelationTables<T>(), useRelationTablesDispatch<T>()];
+}

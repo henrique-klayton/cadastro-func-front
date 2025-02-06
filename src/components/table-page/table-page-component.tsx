@@ -11,20 +11,11 @@ import TableFilter from "@components/table-filter";
 import MIN_PAGE_SIZE from "@consts/min-page-size.const";
 import FormActionsEnum from "@enums/form-actions.enum";
 import serializeFilterValues from "@functions/serialize-filter-values";
-import {
-	useFormModal,
-	useFormModalDispatch,
-} from "@hooks/form-modal-reducer/form-modal-context";
+import { useFormModalReducer } from "@hooks/form-modal-reducer/form-modal-context";
 import FormModalActionEnum from "@hooks/form-modal-reducer/types/form-modal-action-type";
-import {
-	useRelationTables,
-	useRelationTablesDispatch,
-} from "@hooks/relation-tables-reducer/relation-tables-context";
+import { useRelationTablesReducer } from "@hooks/relation-tables-reducer/relation-tables-context";
 import RelationActionEnum from "@hooks/relation-tables-reducer/types/relation-tables-action-type";
-import {
-	useTableData,
-	useTableDataDispatch,
-} from "@hooks/table-data-reducer/table-data-context";
+import { useTableDataReducer } from "@hooks/table-data-reducer/table-data-context";
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
@@ -72,16 +63,13 @@ export default function TablePageComponent<
 	const updateSuccess = `${itemName} atualizado(a) com sucesso!`;
 	const removeSuccess = `${itemName} removido(a) com sucesso!`;
 
-	// Reducer Contexts
-	const { loaded: relationTablesLoaded, config: relationTablesProps } =
-		useRelationTables<U>();
-	const relationsDispatch = useRelationTablesDispatch<U>();
-
-	const table = useTableData<T, F>();
-	const tableDispatch = useTableDataDispatch<T, F>();
-
-	const modal = useFormModal<T, C, U>();
-	const modalDispatch = useFormModalDispatch<T, C, U>();
+	// Reducers State & Dispatch
+	const [
+		{ loaded: relationTablesLoaded, config: relationTablesProps },
+		relationsDispatch,
+	] = useRelationTablesReducer<U>();
+	const [table, tableDispatch] = useTableDataReducer<T, F>();
+	const [modal, modalDispatch] = useFormModalReducer<T, C, U>();
 
 	// Delete Confirm Modal & Notification Message
 	const { modal: confirmModal, message } = App.useApp();
