@@ -8,7 +8,7 @@ import FormModal from "@components/form-modal";
 import { FormModalActions, FormSubmitFunc } from "@components/form-modal/types";
 import RelationSelectTable from "@components/relation-select-table";
 import TableFilter from "@components/table-filter";
-import MIN_PAGE_SIZE from "@consts/min-page-size.const";
+import MIN_PAGE_SIZE from "@consts/min-page-size";
 import FormActionsEnum from "@enums/form-actions.enum";
 import serializeFilterValues from "@functions/serialize-filter-values";
 import { useFormModalReducer } from "@hooks/form-modal-reducer/form-modal-context";

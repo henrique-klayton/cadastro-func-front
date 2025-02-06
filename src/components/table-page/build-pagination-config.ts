@@ -1,4 +1,4 @@
-import MIN_PAGE_SIZE from "@consts/min-page-size.const";
+import MIN_PAGE_SIZE from "@consts/min-page-size";
 import PAGE_SIZE_OPTIONS from "@consts/page-size-options";
 import { TablePaginationConfig as AntdTablePaginationConfig } from "antd/lib";
 import TablePaginationConfig from "./interfaces/table-pagination-config";
