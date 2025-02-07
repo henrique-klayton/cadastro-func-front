@@ -29,7 +29,7 @@ export function useFormModalDispatch<T extends HaveId, C, U>() {
 	>;
 }
 
-export function useFormModalReducer<T extends HaveId, C, U>(): [
+export default function useFormModalReducer<T extends HaveId, C, U>(): [
 	ReturnType<typeof useFormModal<T, C, U>>,
 	ReturnType<typeof useFormModalDispatch<T, C, U>>,
 ] {

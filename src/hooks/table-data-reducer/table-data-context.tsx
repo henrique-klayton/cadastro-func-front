@@ -35,7 +35,10 @@ export function useTableDataDispatch<T extends HaveId & HaveStatus, F>() {
 	>;
 }
 
-export function useTableDataReducer<T extends HaveId & HaveStatus, F>(): [
+export default function useTableDataReducer<
+	T extends HaveId & HaveStatus,
+	F,
+>(): [
 	ReturnType<typeof useTableData<T, F>>,
 	ReturnType<typeof useTableDataDispatch<T, F>>,
 ] {

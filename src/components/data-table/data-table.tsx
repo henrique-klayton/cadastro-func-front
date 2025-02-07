@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { AiOutlineDelete, AiOutlineForm } from "react-icons/ai";
 
 import serializeFilterValues from "@functions/serialize-filter-values";
-import { useTableDataReducer } from "@hooks/table-data-reducer/table-data-context";
+import useTableDataReducer from "@hooks/table-data-reducer/table-data-context";
 import TableDataActionEnum from "@hooks/table-data-reducer/types/table-data-action-type";
 import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";

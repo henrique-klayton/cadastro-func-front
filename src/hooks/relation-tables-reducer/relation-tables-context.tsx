@@ -37,7 +37,7 @@ export function useRelationTablesDispatch<T>() {
 	>;
 }
 
-export function useRelationTablesReducer<T>(): [
+export default function useRelationTablesReducer<T>(): [
 	ReturnType<typeof useRelationTables<T>>,
 	ReturnType<typeof useRelationTablesDispatch<T>>,
 ] {
