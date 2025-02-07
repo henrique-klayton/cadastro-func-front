@@ -1,6 +1,7 @@
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { App, Card, Col, Flex, FloatButton, Form, Row } from "antd";
 import { useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 
 import DataTable from "@components/data-table";
 import DataTableActions from "@components/data-table/interfaces/data-table-actions";
@@ -292,7 +293,12 @@ export default function TablePageComponent<
 					/>
 				</Flex>
 			</Card>
-			<FloatButton.Group>
+			<FloatButton.Group
+				type="primary"
+				style={{ marginBottom: "-1rem" }}
+				trigger="hover"
+				icon={<AiOutlinePlus />}
+			>
 				<ReportButton itemName={itemName} onClick={generateReport} />
 				<CreateButton itemName={itemName} onClick={openFormModal} />
 			</FloatButton.Group>

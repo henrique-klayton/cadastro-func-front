@@ -56,7 +56,7 @@
   - [x] Convert then/catch to async/await and try/catch
   - [ ] Maybe use slots to separate components/elements
 - [ ] Styling
-  - [ ] Fix floating buttons above table pagination
+  - [x] Fix floating buttons above table pagination
   - [ ] Form modal height limit and disable scroll
   - [ ] Make table page card use whole screen height (maintain scroll)
   - [ ] Increase main content margin and fix right margin size
