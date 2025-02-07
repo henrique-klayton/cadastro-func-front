@@ -278,7 +278,11 @@ export default function TablePageComponent<
 			>
 				{children}
 			</FormModal>
-			<Card title={title}>
+			<Card
+				title={title}
+				className="h-full"
+				styles={{ body: { height: "calc(100% - 56px)" } }}
+			>
 				<Flex className="w-full h-full" vertical>
 					<TableFilter
 						filters={table.filterConfig}

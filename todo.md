@@ -59,7 +59,7 @@
 - [ ] Styling
   - [x] Fix floating buttons above table pagination
   - [ ] Form modal height limit and disable scroll
-  - [ ] Make table page card use whole screen height (maintain scroll)
+  - [x] Make table page card use whole screen height (maintain scroll)
   - [ ] Increase main content margin and fix right margin size
   - [ ] Set fixed row height at <= 65px for tables
   - [ ] Dynamic white/dark theme (default to system theme)

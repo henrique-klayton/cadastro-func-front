@@ -19,6 +19,7 @@ const renderStatus = (_: unknown, { status }: { status: boolean }) => {
 };
 
 export default function DataTable<T extends HaveId & HaveStatus, F>({
+	className,
 	rowKey,
 	columns: columnsProps,
 	actions,
@@ -29,6 +30,13 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 	// Messages const
 	const tableLoadError = "Erro ao carregar a tabela!";
 	const tableReloadError = "Erro ao atualizar a tabela!";
+
+	const heightCalc =
+		16 + // Difference between view height and content height
+		(56 + 1) + // Card header + -1px margin-bottom
+		(945 - 56 - 841) + // Difference between ant-card and ant-card-body (discarding ant-card-header)
+		86 + // Table filters
+		(755 - (636 + 16)); // Discarding table header and (footer + footer margin-y) from table height
 
 	const [table, tableDispatch] = useTableDataReducer<T, F>();
 	const { message } = App.useApp();
@@ -125,12 +133,22 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 	};
 
 	columns.push(
-		<Table.Column title="Ações" key="actions" render={renderActions} />,
+		<Table.Column
+			title="Ações"
+			key="actions"
+			align="center"
+			width={120}
+			render={renderActions}
+		/>,
 	);
 
 	return (
 		<Table<T>
-			className="flex-auto"
+			className={className}
+			scroll={{
+				scrollToFirstRowOnChange: true,
+				y: `calc(100vh - ${heightCalc}px)`,
+			}}
 			rowKey={rowKey}
 			dataSource={table.tableData}
 			pagination={{ ...table.pagination, className: "mr-12" }}
