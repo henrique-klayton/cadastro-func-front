@@ -45,10 +45,27 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 		);
 	};
 
+	const firstTableDataLoad = async () => {
+		try {
+			const { data, total } = await loadTableData();
+			return tableDispatch({
+				type: TableDataActionEnum.INIT,
+				data,
+				total,
+				paginationChangeHandler: reloadTableData,
+			});
+		} catch (err) {
+			message.error(tableLoadError);
+			tableDispatch({
+				type: TableDataActionEnum.SHOW_CLEAN_PAGE,
+			});
+		}
+	};
+
 	const reloadTableData = async (page: number, pageSize: number) => {
 		try {
 			const { data, total } = await loadTableData(page, pageSize);
-			tableDispatch({
+			return tableDispatch({
 				type: TableDataActionEnum.CHANGE_PAGE,
 				page,
 				pageSize,
@@ -63,29 +80,12 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 		}
 	};
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Ignore reloadTableData
+	// biome-ignore lint/correctness/useExhaustiveDependencies: Ignore functions
 	useEffect(() => {
-		if (reloadEvent) reloadTableData(reloadEvent.page, reloadEvent.pageSize);
+		reloadEvent
+			? reloadTableData(reloadEvent.page, reloadEvent.pageSize)
+			: firstTableDataLoad();
 	}, [reloadEvent]);
-
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Must be called once
-	useEffect(() => {
-		loadTableData()
-			.then(({ data, total }) => {
-				return tableDispatch({
-					type: TableDataActionEnum.INIT,
-					data,
-					total,
-					paginationChangeHandler: reloadTableData,
-				});
-			})
-			.catch((err: unknown) => {
-				message.error(tableLoadError);
-				tableDispatch({
-					type: TableDataActionEnum.SHOW_CLEAN_PAGE,
-				});
-			});
-	}, []);
 
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
