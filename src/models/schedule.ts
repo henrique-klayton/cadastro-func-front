@@ -1,5 +1,5 @@
 import TableColumn from "@components/data-table/types/table-column";
-import { FormDataSerializer } from "@components/table-page/types";
+import FormDataSerializer from "@components/form-modal/types/form-data-serializer";
 import { ScheduleFragmentType } from "@fragments/schedule";
 import scheduleTypeFormat from "@functions/schedule/schedule-type-format";
 import timeSerialize from "@functions/time/time-serialize";

@@ -24,12 +24,12 @@ import StringKeyof from "@typings/string-keyof";
 import CreateButton from "./components/create-button";
 import ReportButton from "./components/report-button";
 import RelationTypeIds from "./interfaces/relation-type-ids.type";
+import TablePageProps from "./interfaces/table-page-props";
 import {
 	FormModalStateProps,
-	ServerActionRelations,
 	TablePageFormModalProps,
-	TablePageProps,
-} from "./types";
+} from "./types/form-modal-props";
+import ServerActionRelations from "./types/server-action-relations";
 
 export default function TablePageComponent<
 	T extends HaveId & HaveStatus,

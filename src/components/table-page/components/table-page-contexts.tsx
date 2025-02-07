@@ -24,7 +24,7 @@ import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import PartialNullable from "@typings/partial-nullable";
 import { FormInstance, useForm } from "antd/es/form/Form";
-import { RelationDataObject } from "../types";
+import RelationDataObject from "../interfaces/relation-data-object";
 
 export interface TablePageContextsProps<
 	T extends HaveId & HaveStatus,

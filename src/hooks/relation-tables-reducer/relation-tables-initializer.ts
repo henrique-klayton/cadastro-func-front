@@ -1,6 +1,6 @@
 import buildPaginationConfig from "@components/table-page/build-pagination-config";
+import RelationDataObject from "@components/table-page/interfaces/relation-data-object";
 import RelationTypeIds from "@components/table-page/interfaces/relation-type-ids.type";
-import { RelationDataObject } from "@components/table-page/types";
 import RelationTablesState from "./interfaces/relation-tables-state";
 import { Config, RelatedItem, Relation } from "./types/aliases";
 

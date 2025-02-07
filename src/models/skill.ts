@@ -1,5 +1,5 @@
 import TableColumn from "@components/data-table/types/table-column";
-import { FormDataSerializer } from "@components/table-page/types";
+import FormDataSerializer from "@components/form-modal/types/form-data-serializer";
 import { SkillFragmentType } from "@fragments/skill";
 import { SkillCreateDto, SkillUpdateDto } from "@graphql/types/graphql";
 

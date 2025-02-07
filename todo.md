@@ -54,6 +54,7 @@
   - [x] Create form modal reducer
   - [x] Create components for floating buttons
   - [x] Convert then/catch to async/await and try/catch
+  - [x] Refactor types file
   - [ ] Maybe use slots to separate components/elements
 - [ ] Styling
   - [x] Fix floating buttons above table pagination

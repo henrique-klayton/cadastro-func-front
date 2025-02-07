@@ -3,7 +3,7 @@ import RelationTableComponentProps from "@hooks/relation-tables-reducer/types/re
 import PaginationQueryFunction from "@interfaces/pagination-query-function";
 import Flatten from "@typings/flatten";
 import StringKeyof from "@typings/string-keyof";
-import { RelationDataObject } from "./types";
+import RelationDataObject from "./interfaces/relation-data-object";
 
 export default function createRelationDataObject<
 	Item,
