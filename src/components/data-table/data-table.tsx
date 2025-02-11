@@ -9,7 +9,9 @@ import HaveId from "@interfaces/have-id";
 import HaveStatus from "@interfaces/have-status";
 import DataTableProps from "./interfaces/data-table-props";
 
-const renderStatus = (_: unknown, { status }: { status: boolean }) => {
+import "./data-table.css";
+
+const statusRender = (_: unknown, { status }: { status: boolean }) => {
 	const color = status ? "green" : "red";
 	return (
 		<Tag className="leading-6" color={color}>
@@ -30,13 +32,6 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 	// Messages const
 	const tableLoadError = "Erro ao carregar a tabela!";
 	const tableReloadError = "Erro ao atualizar a tabela!";
-
-	const heightCalc =
-		16 + // Difference between view height and content height
-		(56 + 1) + // Card header + -1px margin-bottom
-		(945 - 56 - 841) + // Difference between ant-card and ant-card-body (discarding ant-card-header)
-		86 + // Table filters
-		(755 - (636 + 16)); // Discarding table header and (footer + footer margin-y) from table height
 
 	const [table, tableDispatch] = useTableDataReducer<T, F>();
 	const { message } = App.useApp();
@@ -97,15 +92,18 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 
 	const columns = columnsProps.map((column) => {
 		const property = column.dataIndex;
-		if (property === "status")
-			column.render = renderStatus as () => React.ReactNode;
-		if (column.align != null) column.align = "center";
+
+		if (property === "status") {
+			if (column.align != null) column.align = "center";
+			if (column.width == null && column.formatter == null) column.width = 100;
+			column.render = statusRender as () => React.ReactNode;
+		}
+
 		if (column.formatter) {
 			const formatter = column.formatter;
-			column.render = (_: unknown, obj: T) => {
-				return formatter(obj[property]);
-			};
+			column.render = (_: unknown, obj: T) => formatter(obj[property]);
 		}
+
 		return <Table.Column {...column} key={column.key ?? property} />;
 	});
 
@@ -134,6 +132,7 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 
 	columns.push(
 		<Table.Column
+			className="actions-column"
 			title="Ações"
 			key="actions"
 			align="center"
@@ -143,18 +142,17 @@ export default function DataTable<T extends HaveId & HaveStatus, F>({
 	);
 
 	return (
-		<Table<T>
-			className={className}
-			scroll={{
-				scrollToFirstRowOnChange: true,
-				y: `calc(100vh - ${heightCalc}px)`,
-			}}
-			rowKey={rowKey}
-			dataSource={table.tableData}
-			pagination={{ ...table.pagination, className: "mr-12" }}
-			loading={table.tableLoading}
-		>
-			{columns}
-		</Table>
+		<Flex className="flex-table-wrapper" vertical>
+			<Table<T>
+				sticky
+				className={className}
+				rowKey={rowKey}
+				dataSource={table.tableData}
+				pagination={{ ...table.pagination, className: "mr-12" }}
+				loading={table.tableLoading}
+			>
+				{columns}
+			</Table>
+		</Flex>
 	);
 }

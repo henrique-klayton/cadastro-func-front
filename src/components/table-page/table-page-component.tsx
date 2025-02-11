@@ -299,7 +299,7 @@ export default function TablePageComponent<
 			</Card>
 			<FloatButton.Group
 				type="primary"
-				style={{ marginBottom: "-1rem" }}
+				style={{ marginBottom: "-1.5rem" }}
 				trigger="hover"
 				icon={<AiOutlinePlus />}
 			>

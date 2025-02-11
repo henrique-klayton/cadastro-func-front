@@ -1,0 +1,44 @@
+
+.flex-table-wrapper {
+	--table-filter-h: 86px;
+	height: calc(100% - var(--table-filter-h));
+
+	.ant-table {
+		--table-header-h: 55px; /* Table header height */
+		--table-footer-h: 2rem; /* Table footer height */
+		--table-footer-my: 2rem; /* Table footer margin top + margin bottom size */
+		--card-py: 1.5rem; /* Card footer padding top + padding bottom size */
+		height: calc(100% - var(--table-footer-h) - var(--table-footer-my) + var(--card-py)); /* Sets height to the borde-box content size  */
+
+		> .ant-table-container {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+
+			> .ant-table-header {
+				height: var(--table-header-h);
+				width: 100%;
+			}
+
+			> .ant-table-body {
+				height: calc(100% - var(--table-header-h) + var(--card-py));
+				width: 100%;
+				overflow-y: scroll;
+
+				.ant-table-cell {
+					padding-top: 1rem;
+					padding-bottom: 1rem;
+
+					&.actions-column{
+						padding-top: 0.5rem;
+						padding-bottom: 0.5rem;
+					}
+				}
+			}
+		}
+	}
+}
+
+.ant-table-wrapper, .ant-spin-nested-loading, .ant-spin-container, .ant-table, .ant-table-container {
+	height: 100%;
+}

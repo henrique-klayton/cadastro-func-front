@@ -42,7 +42,7 @@
 - [x] Load table data inside TablePageComponent
 - [ ] Fix no input validation when form modal is opened for the first time to update an item
 - [ ] Disable relations selection when entity is marked as inactive
-- [ ] Remove relations data when entity is marked as inactive (maybe on serializer)
+- [ ] Remove all relations when entity is marked as inactive (maybe on serializer)
 - [ ] Add employees relation table to schedule form modal
 - [ ] Refactor TablePageComponent
   - [x] Create a component for contexts
@@ -60,8 +60,11 @@
   - [x] Fix floating buttons above table pagination
   - [ ] Form modal height limit and disable scroll
   - [x] Make table page card use whole screen height (maintain scroll)
-  - [ ] Increase main content margin and fix right margin size
-  - [ ] Set fixed row height at <= 65px for tables
+  - [x] Set table scrollable area height correctly
+  - [ ] Fix header without enough height for multiline text
+  - [ ] Increase main content card margin
+  - [x] Fix right margin size by removing scrollbar
+  - [x] Set fixed row height at <= 65px for tables (not fixed but size ok)
   - [ ] Dynamic white/dark theme (default to system theme)
   - [ ] Add button to switch theme
 - [ ] Authentication/Authorization
